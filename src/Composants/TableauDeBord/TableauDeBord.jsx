@@ -334,8 +334,8 @@ export default function TableauDeBord(props) {
                                             label: "Recette Pharmacie",
                                             backgroundColor: "#f5e3a6",
                                             borderColor: "#fac002",
-                                            pointBackgroundColor: "#f5e3a6",
-                                            pointBorderColor: "#f5e3a6",
+                                            pointBackgroundColor: "#fac002",
+                                            pointBorderColor: "#fac002",
                                             data: data2ChartRecettePharmacie
                                         },
                                     ],
