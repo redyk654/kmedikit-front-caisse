@@ -1,0 +1,67 @@
+{
+  "main": "public/electron.js",
+  "homepage": "./",
+  "copyright": "Copyright © 2022 Chrisppo Youmbissi",
+  "name": "Caisse-Bepanda",
+  "author": "Chrisppo Youmbissi Kamdem",
+  "version": "2.1.1",
+  "win": {
+    "icon": "./public/icon.ico"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/user-event": "^12.8.3",
+    "bootstrap": "^4.6.0",
+    "cross-env": "^7.0.3",
+    "electron-is-dev": "^2.0.0",
+    "express": "^4.17.1",
+    "react": "^17.0.2",
+    "react-data-export": "^0.6.0",
+    "react-dom": "^17.0.2",
+    "react-loader-spinner": "^4.0.0",
+    "react-modal": "^3.14.3",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "4.0.3",
+    "react-to-print": "^2.12.6",
+    "react-typewriter": "^0.4.1",
+    "socket.io": "^4.2.0",
+    "socket.io-client": "^4.5.1",
+    "typewriter-effect": "^2.17.0",
+    "web-vitals": "^1.1.1",
+    "xlsx": "^0.17.5"
+  },
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "build": "npm run react-build && npm run electron-build",
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "electron": "^14.0.0",
+    "electron-builder": "^22.11.7",
+    "wait-on": "^6.0.0"
+  }
+}
