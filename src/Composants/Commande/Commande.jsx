@@ -171,9 +171,9 @@ export default function Commande(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', 'http://serveur/backend-cma/recuperer_services.php?urgence=oui');
+                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php?urgence=oui');
             } else {
-                req.open('GET', 'http://serveur/backend-cma/recuperer_services.php');
+                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
             }
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -354,7 +354,7 @@ export default function Commande(props) {
 
     const sauvegarder = () => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cma/backup.php');
+        req.open('POST', 'http://serveur/backend-cmab/backup.php');
 
         req.addEventListener("error", function () {
             // La requête n'a pas réussi à atteindre le serveur
@@ -400,7 +400,7 @@ export default function Commande(props) {
         data.append('statu', statu);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cma/gestion_factures.php');
+        req.open('POST', 'http://serveur/backend-cmab/gestion_factures.php');
 
         req.addEventListener('load', () => {
             setMedoSelect(false);
@@ -434,7 +434,7 @@ export default function Commande(props) {
                 data.append('type_assurance', 0);        
                 
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cma/gestion_patients.php');
+                req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
     
                 req.send(data);
             }
@@ -445,7 +445,7 @@ export default function Commande(props) {
         data.append('quantite', qteDesire);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cma/data_assurance.php');
+        req.open('POST', 'http://serveur/backend-cmab/data_assurance.php');
 
         req.addEventListener("load", function () {
             // La requête n'a pas réussi à atteindre le serveur
@@ -493,7 +493,7 @@ export default function Commande(props) {
 
                 // Envoi des données
                 const req2 = new XMLHttpRequest();
-                req2.open('POST', 'http://serveur/backend-cma/maj_historique_service.php');
+                req2.open('POST', 'http://serveur/backend-cmab/maj_historique_service.php');
                 
                 // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
@@ -597,7 +597,7 @@ export default function Commande(props) {
         setModalPatient(true);
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cma/gestion_patients.php');
+        req.open('GET', 'http://serveur/backend-cmab/gestion_patients.php');
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -633,7 +633,7 @@ export default function Commande(props) {
             data.append('categorie', document.getElementById('categorie').value);
     
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cma/nouveau_service.php');
+            req.open('POST', 'http://serveur/backend-cmab/nouveau_service.php');
     
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
@@ -735,7 +735,7 @@ export default function Commande(props) {
 
         const req = new XMLHttpRequest();
 
-        req.open('GET', `http://serveur/backend-cma/rechercher_patient.php?str=${(e.target.value).trim()}`);
+        req.open('GET', `http://serveur/backend-cmab/rechercher_patient.php?str=${(e.target.value).trim()}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {

@@ -79,10 +79,10 @@ export default function Entete(props) {
             const req = new XMLHttpRequest();
 
             if (d.getHours() >= 5 && d.getHours() <= 12) {
-                req.open('POST', `http://serveur/backend-cma/gestion_pourcentage.php?moment=nuit`);
+                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=nuit`);
                 req.send(data);
             } else if (d.getHours() <= 22 && d.getHours() >= 13) {
-                req.open('POST', `http://serveur/backend-cma/gestion_pourcentage.php?moment=jour`);
+                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=jour`);
                 req.send(data);
             } else {
                 deconnection();
@@ -111,7 +111,7 @@ export default function Entete(props) {
         data.append('montant', recettejour.recette);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cma/gestion_recette.php');
+        req.open('POST', 'http://serveur/backend-cmab/gestion_recette.php');
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -139,7 +139,7 @@ export default function Entete(props) {
             data.append('nouveau', nouveau);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cma/modif_pass_caisse.php');
+            req.open('POST', 'http://serveur/backend-cmab/modif_pass_caisse.php');
 
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {

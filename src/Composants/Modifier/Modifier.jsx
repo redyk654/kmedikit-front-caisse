@@ -61,9 +61,9 @@ export default function Modifier(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', 'http://serveur/backend-cma/recuperer_services.php?urgence=oui');
+                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php?urgence=oui');
             } else {
-                req.open('GET', 'http://serveur/backend-cma/recuperer_services.php');
+                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
             }
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -125,7 +125,7 @@ export default function Modifier(props) {
     const supprimer = () => {
         if (medocSelect) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cma/gestion_services.php?id=${medocSelect[0].id}`);
+            req.open('GET', `http://serveur/backend-cmab/gestion_services.php?id=${medocSelect[0].id}`);
 
             req.addEventListener('load', () => {
                 setRerender(!renrender);
@@ -143,7 +143,7 @@ export default function Modifier(props) {
             data.append('id', medocSelect[0].id);
             
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cma/gestion_services.php');
+            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php');
 
             req.addEventListener('load', () => {
                 fermerModalConfirmation();

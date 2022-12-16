@@ -5,8 +5,10 @@
   "name": "Caisse-Bepanda",
   "author": "Chrisppo Youmbissi Kamdem",
   "version": "2.1.1",
-  "win": {
-    "icon": "./public/icon.ico"
+  "build": {
+    "win": {
+      "icon": "build/icon.ico"
+    }
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.10",
