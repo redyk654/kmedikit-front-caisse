@@ -17,10 +17,10 @@ import Modifier from './Composants/Modifier/Modifier';
 
 function App() {
 
-  const role1 = "admin";
-  const role2 = "caissier";
-  const role3 = "regisseur";
-  const role4 = "secretaire";
+  const admin = "admin";
+  const caissier = "caissier";
+  const regisseur = "regisseur";
+  const secretaire = "secretaire";
 
   const [onglet, setOnglet] = useState(1);
   const [connecter, setConnecter] = useState(false);
@@ -36,11 +36,11 @@ function App() {
     //   setConnecter(false);
     // }
 
-    if(role === role3) {
+    if(role === regisseur) {
       setOnglet(5);
-    } else if (role === role1) {
+    } else if (role === admin) {
       setOnglet(3);
-    } else if (role === role4) {
+    } else if (role === secretaire) {
       setOnglet(9);
     } else {
       setOnglet(1);
@@ -85,7 +85,7 @@ function App() {
   }
 
   if (connecter) {
-    if(role === role1) {
+    if(role === admin) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -104,7 +104,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === role2) {
+    } else if (role === caissier) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -121,7 +121,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === role3) {
+    } else if (role === regisseur) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -140,7 +140,7 @@ function App() {
           </section>
         </main>
       );
-    } else if(role === role4) {
+    } else if(role === secretaire) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
