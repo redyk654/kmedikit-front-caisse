@@ -24,8 +24,8 @@ const customStyles1 = {
 const styleBtnAutre = {
     backgroundColor: '#6d6f94',
     color: '#fff',
-    height: '4vh',
-    width: '35%',
+    height: '5vh',
+    width: '48%',
     marginTop: '5px',
     fontSize: '16px',
     cursor: 'pointer'
@@ -57,7 +57,7 @@ const customStyles3 = {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      background: '#0e771a',
+      background: '#038654',
       width: '400px',
       height: '75vh'
     }, 
@@ -183,7 +183,8 @@ export default function Commande(props) {
                     setListeMedoc(result);
                     setListeMedocSauvegarde(result);
                     stopChargement();
-                    document.getElementById('recherche').focus();
+                    document.querySelector('.recherche').value = "";
+                    document.querySelector('.recherche').focus();
     
                 } else {
                     // Affichage des informations sur l'échec du traitement de la requête
@@ -319,8 +320,8 @@ export default function Commande(props) {
                 // setMedoSelect(false);
             // }
 
-            document.getElementById('recherche').value = "";
-            document.getElementById('recherche').focus();
+            document.querySelector('.recherche').value = "";
+            document.querySelector('.recherche').focus();
 
         }
         setQteDesire(1);
@@ -345,11 +346,12 @@ export default function Commande(props) {
         setresteaPayer(0);
         setverse('');
         setFrais(false);
-        document.getElementById('recherche').value = "";
-        document.getElementById('recherche').focus();
+        document.querySelector('.recherche').value = "";
+        document.querySelector('.recherche').focus();
         setAssurance(assuranceDefaut);
         setTypeAssurance(0);
         setMontantFrais(0);
+        setreduction(false);
     }
 
     const sauvegarder = () => {
@@ -823,10 +825,10 @@ export default function Commande(props) {
             <div className="left-side">
 
                 <p className="search-zone">
-                    <input type="text" id="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
+                    <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
                 </p>
                 <div>
-                    <button style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                    <button className='bootstrap-btn' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
                 </div>
                 <div className="liste-medoc">
                     <h1>Services</h1>
@@ -857,16 +859,16 @@ export default function Commande(props) {
                 </div>
                 <div className="box" style={{marginLeft: 5}}>
                     <div className="detail-item">
-                        <button ref={btnAjout} style={{backgroundColor: '#6d6f94'}} onClick={ajouterMedoc}>ajouter</button>
-                        <button style={{backgroundColor: '#6d6f94', marginLeft: '5px'}} onClick={fraisMateriel}>+500</button>
+                        <button className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}} onClick={ajouterMedoc}>ajouter</button>
+                        <button className='bootstrap-btn' style={{backgroundColor: '#6d6f94', marginLeft: '5px', width: '7%'}} onClick={fraisMateriel}>+500</button>
                     </div>
                     <div style={{textAlign: 'center'}}>
-                        <button style={{backgroundColor: '#6d6f94', width: '30%'}} onClick={infosPatient}>Infos du patient</button>
+                        <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
                     </div>
                     <div>
                         <div>
                             <input type="text" name="reduction" value={valeurReduction} onChange={(e) => {setvaleurReduction(e.target.value)}} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
-                            <button onClick={appliquerReduction} style={{backgroundColor: '#6d6f94'}}>{reduction ? 'appliquer' : 'reduction'}</button>
+                            <button className='bootstrap-btn' onClick={appliquerReduction} style={{backgroundColor: '#6d6f94'}}>{reduction ? 'appliquer' : 'reduction'}</button>
                         </div>
                     </div>
                     <div style={{textAlign: 'center'}}>
@@ -882,7 +884,7 @@ export default function Commande(props) {
                         ) : null}
                         <label htmlFor="">Montant versé : </label>
                         <input type="text" name='verse' value={verse} onChange={(e) => !isNaN(e.target.value) && setverse(e.target.value)} autoComplete='off' />
-                        <button onClick={handleClick} style={{width: '5%'}}>ok</button>
+                        <button className='bootstrap-btn' onClick={handleClick} style={{width: '5%'}}>ok</button>
                     </div>
                 </div>
 
@@ -929,8 +931,8 @@ export default function Commande(props) {
                                 Reste à payer : <span style={{color: "#0e771a", fontWeight: "600"}}>{resteaPayer > 0 ? resteaPayer + ' Fcfa': 0 + ' Fcfa'}</span>
                             </div>
                         </div>
-                        <button onClick={annulerCommande}>Annnuler</button>
-                        <button onClick={demanderConfirmation}>Valider</button>
+                        <button className='bootstrap-btn annuler' onClick={annulerCommande}>Annnuler</button>
+                        <button className='bootstrap-btn valider' onClick={demanderConfirmation}>Valider</button>
 
                     </div>
 

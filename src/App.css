@@ -14,20 +14,25 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #0e771a8a;
+  background-color: #10cf2638;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #0e771a;
+  background-color: #03ca7e;
   border-radius: 150px;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: poppins, Arial, Helvetica, sans-serif;
 }
 
 .app {
   position: relative;
+  font-family: poppins, Impact;
+  letter-spacing: .8px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .app .conteneur-onglets {
@@ -39,35 +44,48 @@ body {
   display: flex;
   justify-content: space-around;
   height: 5vh;
+  margin: 15px;
 }
 
 .app .conteneur-onglets .onglets-blocs .tab {
-  border: 1px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #dddbdb;
+  background: #fff;
   position: relative;
   cursor: pointer;
   width: 100%;
+  padding: 20px;
+  transition: all .4s;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(105, 99, 99, 0.705);
+  letter-spacing: 1px;
+  border-radius: 8px;
 }
 
-.app .conteneur-onglets .onglets-blocs .tab:nth-child(2), .conteneur-onglets .onglets-blocs .tab:nth-child(1) {
-  border-right: 1px solid rgba(0, 0, 0, 0.158);
+.app .conteneur-onglets .onglets-blocs .tab.dark {
+  background: #18202e;
 }
 
 .app .conteneur-onglets .onglets-blocs .tab.active::before {
   content: "";
   position: absolute;
-  width: 100%;
-  height: 6px;
-  background: #012557;
-  top: -2px;
+  width: 0%;
+  height: 2px;
+  background: #07da5f;
+  bottom: -2px;
 }
 
 .app .conteneur-onglets .onglets-blocs .tab.active {
-  background: #fff;
+  background: #dddbdbb9;
   border: none;
+  color: #05a065;
+  transition: all .4s;
+}
+
+.app .conteneur-onglets .onglets-blocs .tab.active.dark {
+  color: #fff;
 }
 
 .erreur-message {
