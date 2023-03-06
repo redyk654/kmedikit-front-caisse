@@ -684,7 +684,7 @@ export default function Assurance() {
                         <div>Couvert par : <span style={{fontWeight: '600'}}>{clientSelect[0].assurance}</span></div>
                         <div>Pourcentage : <span style={{fontWeight: '600'}}>{clientSelect[0].type_assurance}</span></div>
                         <div>Periode : <span style={{fontWeight: '600'}}>{mois2(dateInf)}</span> au <span style={{fontWeight: '600'}}>{mois2(dateSup)}</span></div>
-                        <div>Frais matériel : <span style={{fontWeight: '600'}}>{clientSelect[0].frais + ' Fcfa'}</span></div>
+                        <div>Frais matériel : <span style={{fontWeight: '600'}}>{!isNaN(clientSelect[0].frais) ? clientSelect[0].frais + ' Fcfa' : '0 Fcfa'}</span></div>
                         <div>Total : <span style={{fontWeight: '600'}}>{clientSelect[0].total + ' Fcfa'}</span></div>
                         <div>Restant à payer : <span style={{fontWeight: '600'}}>{(parseInt(clientSelect[0].total) * (parseInt(clientSelect[0].type_assurance) / 100)) + ' Fcfa'}</span></div>
                     </div>
@@ -741,7 +741,7 @@ export default function Assurance() {
                         </tbody>
                     </table>
                     <div className="valider-annuler">
-                        <ExcelFile element={<button style={{backgroundColor: '#1b9d3f'}} filename="test" fileExtension="xlsx">Exporter</button>}>
+                        <ExcelFile element={<button className='bootstrap-btn' style={{backgroundColor: '#1b9d3f'}} filename="test" fileExtension="xlsx">Exporter</button>}>
                             <ExcelSheet data={service} name="Imagerie-Laboratoire">
                                 <ExcelColumn label="DESIGNATION" value={"designation"} />
                                 <ExcelColumn label="QUANTITE" value="qte" />
@@ -759,7 +759,7 @@ export default function Assurance() {
                                 <ExcelColumn label="restant" value="reste" />
                             </ExcelSheet>
                         </ExcelFile>
-                        <button id="btn-save" onClick={sauvegarderFacture}>Terminer</button>
+                        <button className='bootstrap-btn' id="btn-save" onClick={sauvegarderFacture}>Terminer</button>
                     </div>
                 </div>
             </div>

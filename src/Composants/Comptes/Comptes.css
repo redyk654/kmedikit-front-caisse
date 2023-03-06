@@ -33,7 +33,7 @@
     text-align: center;
 }
 
-.comptes button {
+/* .comptes button {
     color: #fff;
     background: #012557;
     font-size: 18px;
@@ -41,7 +41,7 @@
     width: 30%;
     height: 4vh;
     cursor: pointer;
-}
+} */
 
 .comptes .container-gestion ul li {
     color: #0e771a;
@@ -81,7 +81,7 @@
     border-color: #0e771a73;
 }
 
-.comptes .box-2 .recette-jour button {
+/* .comptes .box-2 .recette-jour button {
     color: #fff;
     background: #012557;
     font-size: 18px;
@@ -89,7 +89,7 @@
     width: 10%;
     height: 4vh;
     cursor: pointer;
-}
+} */
 
 .comptes .box-2 .recette-jour button:disabled {
     opacity: .4;

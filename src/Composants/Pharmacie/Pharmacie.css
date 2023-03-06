@@ -6,7 +6,7 @@
 }
 
 .container-facture .liste-medoc .search-zone input:focus {
-    border: 2px solid #0e771a;
+    border: 2px solid #03ca7e;
 }
 
 .container-facture .liste-medoc {
@@ -15,7 +15,7 @@
 }
 
 .container-facture h3 {
-    background-color: #0e771a;
+    background-color: #03ca7e;
     color: #f1f1f1;
     width: 100%;
     text-align: center;
@@ -26,22 +26,10 @@
     height: 5vh;
     outline: none;
     border-radius: 5px;
-    color: #0e771a;
+    color: #038654;
     font-size: 17px;
     margin-bottom: 5px;
 }
-
-
-.container-facture button {
-    color: #fff;
-    background: #012557;
-    font-size: 18px;
-    margin-top: 5px;
-    width: 35%;
-    height: 4vh;
-    cursor: pointer;
-}
-
 
 .container-facture .liste-medoc ul{
     height: 50vh;
@@ -51,14 +39,14 @@
 }
 
 .container-facture .liste-medoc ul li {
-    color: #0e771a;
+    color: #038654;
     font-weight: 600;
     width: 100%;
     line-height: 35px;
 }
 
 .container-facture .liste-medoc ul li:hover {
-    background-color: #0e771a;
+    background-color: rgba(4, 150, 94, 0.795);
     color: #f1f1f1;
     cursor: pointer;
 }

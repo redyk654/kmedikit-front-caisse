@@ -4,6 +4,7 @@ import './Pharmacie.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
+import { FaCheck, FaCross, FaCrosshairs } from 'react-icons/fa';
 
 const customStyles1 = {
     content: {
@@ -326,9 +327,9 @@ export default function GestionFactures(props) {
         const req = new XMLHttpRequest();
 
         if (filtrer) {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value}&caissier=${props.nomConnecte}`);
+            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}&caissier=${props.nomConnecte}`);
         } else {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value}`);
+            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}`);
         }
 
         req.addEventListener('load', () => {
@@ -452,7 +453,7 @@ export default function GestionFactures(props) {
                     <input type="date" ref={date_select2} />
                 </p>
                 <p>
-                    <button onClick={rechercherHistorique}>rechercher</button>
+                    <button className='bootstrap-btn valider' style={{width: '35%', margin: '4px', backgroundColor: '#6d6f94'}} onClick={rechercherHistorique}>rechercher</button>
                 </p>
                 <p>
                     recette du jour : <strong>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</strong>
@@ -485,7 +486,7 @@ export default function GestionFactures(props) {
                 <div className='erreur-message'>{messageErreur}</div>
                 <div style={{textAlign: 'center', paddingTop: 10}}>
                     <div>
-                        <div>Facture N°<span style={{color: '#0e771a', fontWeight: 700}}>{factureSelectionne.length > 0 && factureSelectionne[0].id}</span></div>
+                        <div>Facture N°<span style={{color: '#038654', fontWeight: 700}}>{factureSelectionne.length > 0 && factureSelectionne[0].id}</span></div>
                     </div>
                     <div>
                         <div>Le <strong>{factureSelectionne.length > 0 && mois(factureSelectionne[0].date_heure.substring(0, 11))}</strong> à <strong>{factureSelectionne.length > 0 && factureSelectionne[0].date_heure.substring(11, )}</strong></div>
@@ -513,22 +514,22 @@ export default function GestionFactures(props) {
                         </table>
                     </div>
                     <div style={{marginTop: 15}}>
-                        <div style={{fontWeight: 700}}>Status: {factureSelectionne.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0 ? '❌' : '✔️'}</div>
+                        <div style={{fontWeight: 700}}>Status: {factureSelectionne.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0 ? '' : <FaCheck color='#038654' size={18} />}</div>
                     </div>
                     <div>
-                        <div>Net à payer <span style={{fontWeight: 700, color: '#0e771a'}}>{factureSelectionne.length > 0 && factureSelectionne[0].a_payer + ' Fcfa'}</span></div>
+                        <div>Net à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].a_payer + ' Fcfa'}</span></div>
                     </div>
                     <div>
-                        <div>Reste à payer <span style={{fontWeight: 700, color: '#0e771a'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
+                        <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
                     </div>
                     <div style={{display: `${filtrer ? 'none' : 'block'}`}}>
                         <ReactToPrint
-                            trigger={() => <button style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                            trigger={() => <button className='bootstrap-btn valider' style={{height: '5vh', width: '20%'}}>Imprimer</button>}
                             content={() => componentRef.current}
                         />
                     </div>
                     <div style={{display: `${!filtrer ? 'none' : 'inline'}`}}>
-                        <button style={{width: '20%', height: '5vh', marginLeft: '15px', backgroundColor: '#e14046'}} onClick={() => {if(detailsFacture.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0) setModalConfirmation(true)}}>Annuler</button>
+                        <button className='bootstrap-btn annuler' style={{width: '20%', height: '5vh'}} onClick={() => {if(detailsFacture.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0) setModalConfirmation(true)}}>Annuler</button>
                     </div>
                     <h3 style={{marginTop: 5, display: `${filtrer ? 'block' : 'none'}`}}>Régler la facture</h3>
                     {filtrer ? (
@@ -536,7 +537,7 @@ export default function GestionFactures(props) {
                             <p>
                                 <label htmlFor="">Montant versé: </label>
                                 <input style={{height: '4vh', width: '15%'}} type="text" value={montantVerse} onChange={(e) => !isNaN(e.target.value) && setmontantVerse(e.target.value)} />
-                                <button style={{width: '5%', marginLeft: 5}} onClick={mettreAjourData}>ok</button>
+                                <button className='bootstrap-btn' style={{width: '5%', marginLeft: 5, backgroundColor: '#6d6f94'}} onClick={mettreAjourData}>ok</button>
                             </p>
                             <p>
                                 Montant versé: <span style={{fontWeight: 'bold'}}>{verse + ' Fcfa'}</span>
@@ -549,7 +550,7 @@ export default function GestionFactures(props) {
                             </p>
                         </div>
                     ) : null}
-                    <button ref={btn} style={{display: `${filtrer ? 'inline' : 'none'}`}} onClick={(e) => {if(filtrer && detailsFacture.length > 0) {reglerFacture(e)} else {}}}>Régler</button>
+                    <button ref={btn} className='bootstrap-btn valider' style={{display: `${filtrer ? 'inline' : 'none'}`, width: '20%', height: '5vh'}} onClick={(e) => {if(filtrer && detailsFacture.length > 0) {reglerFacture(e)} else {}}}>Régler</button>
                     <div>
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
