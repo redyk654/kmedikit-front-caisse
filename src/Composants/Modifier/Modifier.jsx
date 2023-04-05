@@ -37,10 +37,6 @@ export default function Modifier(props) {
     const [categorie, setCategorie]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
-    const [modalPatient, setModalPatient] = useState(false);
-    const [modalReussi, setModalReussi] = useState(false);
-    const [statePourRerender, setStatePourRerender] = useState(true);
-    const [state, setState] = useState(false);
     const [renrender, setRerender] = useState(true);
 
 
@@ -218,15 +214,15 @@ export default function Modifier(props) {
                         <div className="service">
                             <div>
                                 <p>Designation</p>
-                                <p style={{fontWeight: '700'}}>{extraireCode(item.designation)}</p>
+                                <p  style={{fontWeight: '700', color: '#000'}}>{extraireCode(item.designation)}</p>
                             </div>
                             <div style={{paddingTop: 10}}>
                                 <p>Prix</p>
-                                <p style={{fontWeight: '700'}}>{item.prix + ' Fcfa'}</p>
+                                <p  style={{fontWeight: '700', color: '#000'}}>{item.prix + ' Fcfa'}</p>
                             </div>
                             <div style={{paddingTop: 10}}>
                                 <p>Catégorie</p>
-                                <p style={{fontWeight: '700'}}>{item.categorie}</p>
+                                <p  style={{fontWeight: '700', color: '#000'}}>{item.categorie}</p>
                             </div>
                         </div>
                     ))}
@@ -234,8 +230,8 @@ export default function Modifier(props) {
                 
                 <div className="details-commande">
                         <div className="valider-annuler">
-                            <button onClick={supprimer}>Supprimer</button>
-                            <button onClick={() => setModalConfirmation(true)}>Modifier</button>
+                            <button className='bootstrap-btn annuler' onClick={supprimer}>Supprimer</button>
+                            <button className='bootstrap-btn valider' onClick={() => setModalConfirmation(true)}>Modifier</button>
 
                         </div>
                     </div>

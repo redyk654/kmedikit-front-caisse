@@ -129,7 +129,7 @@ export default function Commande(props) {
     const [modalPatient, setModalPatient] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
     const [statePourRerender, setStatePourRerender] = useState(true);
-    const [state, setState] = useState(false);
+    const [state, setState] = useState(0);
     const [renrender, setRerender] = useState(true);
 
     const {designation, prix} = autreState;
@@ -335,6 +335,7 @@ export default function Commande(props) {
     }
 
     const annulerCommande = () => {
+        setState(0);
         setMedocCommandes([]);
         setQtePrixTotal({});
         setNomPatient('');
@@ -471,12 +472,12 @@ export default function Commande(props) {
                 - pour la mise à jour des stocks de médicaments
                 - pour la mise à jour de l'historique des commandes
         */
-       if(medocCommandes.length > 0) {
+       const id = idUnique();
+       setidFacture(id);
+       if(medocCommandes.length > 0 && state === 0) {
 
-            const id = idUnique();
-            setidFacture(id);
             let i = 0;
-            document.querySelector('.valider').disabled = true;
+            document.querySelector('.valide').disabled = true;
             annuler.current.disabled = true;
 
             medocCommandes.map(item => {
@@ -517,6 +518,10 @@ export default function Commande(props) {
         
                 req2.send(data2);
             })
+        } else {
+            setModalReussi(true);
+            // Désactivation de la fenêtre modale de confirmation
+            fermerModalConfirmation();
         }
     }
 
@@ -807,7 +812,7 @@ export default function Commande(props) {
                 <h2 style={{color: '#fff'}}>êtes-vous sûr de vouloir valider cette facture ?</h2>
                 <div style={{textAlign: 'center'}} className='modal-button'>
                     <button ref={annuler}  style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px'}} onClick={fermerModalConfirmation}>Annuler</button>
-                    <button className="valider" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={validerCommande}>Confirmer</button>
+                    <button className="valide" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={validerCommande}>Confirmer</button>
                 </div>
             </Modal>
             <Modal
@@ -820,6 +825,7 @@ export default function Commande(props) {
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
+                    onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">
@@ -833,7 +839,7 @@ export default function Commande(props) {
                 <div className="liste-medoc">
                     <h1>Services</h1>
                     <ul>
-                        {chargement ? <div className="loader"><Loader type="Circles" color="#0e771a" height={100} width={100}/></div> : listeMedoc.map(item => (
+                        {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100}/></div> : listeMedoc.map(item => (
                             <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation)}</li>
                         ))}
                     </ul>
@@ -841,6 +847,18 @@ export default function Commande(props) {
             </div>
 
             <div className="right-side">
+                <button
+                    style={{position: 'absolute', 
+                    right: '0%', top: '0%', 
+                    backgroundColor: '#03ca7e',
+                    border: 'none',
+                    opacity: '.9',
+                    width: '50px',
+                    height: '20px',
+                    }}
+                    onClick={() => {setState(s => s+1);}}
+                >
+                </button>
                 <h1>{medocSelect ? "Détails du service" : "Selectionnez un service pour voir les détails"}</h1>
 
                 <div className="infos-medoc">

@@ -23,7 +23,7 @@
 }
 
 .historique h1 {
-    background: #0e771a;
+    background: #03ca7e;
     color: #fff;
     text-align: center;
     padding: 5px 0px;
@@ -64,14 +64,14 @@
 .historique .table-commandes {
     height: 76vh;
     width: 100%;
-    border: 1px solid #0e771a;
+    border: 1px solid #03ca7e;
     overflow-y: auto;
     margin-top: 10px;
 }
 
 .historique .table-commandes table thead {
     font-weight: 600;
-    background: #0e771a;
+    background: #03ca7e;
     color: #f1f1f1;
     position: sticky;
     top: 0;
@@ -79,7 +79,7 @@
 }
 
 .historique .table-commandes table tbody tr:hover {
-    background-color: #0e771a;
+    background-color: #03ca7e;
     color: #f1f1f1;
     font-weight: 600;
 }

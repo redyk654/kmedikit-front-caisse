@@ -426,6 +426,7 @@ export default function GestionFactures(props) {
                         <ReactToPrint
                             trigger={() => <button style={{color: '#000', height: '5vh', width: '65%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                             content={() => componentRef.current}
+                            onAfterPrint={fermerModalReussi}
                         />
                     </Fragment>
                     )

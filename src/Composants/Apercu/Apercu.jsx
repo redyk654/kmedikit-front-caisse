@@ -277,7 +277,7 @@ export default function Apercu(props) {
                                 </select>
                             </p>
                         </div>
-                        <button onClick={rechercherHistorique}>rechercher</button>
+                        <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Total : <span style={{fontWeight: '700'}}>{total ? (total + montantFrais) + ' Fcfa' : '0 Fcfa'}</span></div>
                         <div>Matériel : <span style={{fontWeight: '700'}}>{montantFrais ? montantFrais + ' Fcfa' : '0 Fcfa'}</span></div>
                         <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>

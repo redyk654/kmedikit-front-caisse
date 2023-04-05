@@ -76,7 +76,7 @@
     cursor: pointer;
 }
 
-.commande .right-side .erreur-message {
+.erreur-message {
     width: 100%;
     text-align: center;
     color: rgba(238, 42, 42, 0.952);
