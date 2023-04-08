@@ -136,7 +136,7 @@ export default function Historique(props) {
                                 <input type="date" ref={date_select2} />
                                 <input type="time" ref={heure_select2} />
                             </p>
-                        <button onClick={rechercherHistorique}>rechercher</button>
+                        <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Recette total : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
                     </div>
                     <table>

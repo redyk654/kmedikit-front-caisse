@@ -66,8 +66,8 @@ export default function Modifier(props) {
                     const result = JSON.parse(req.responseText);
     
                     // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
-                    setListeMedoc(result.filter(item => item.categorie.toLowerCase() === "maternité"));
-                    setListeMedocSauvegarde(result.filter(item => item.categorie.toLowerCase() === "maternité"));
+                    setListeMedoc(result);
+                    setListeMedocSauvegarde(result);
                     setListeMedocSauvegarde2(result);
     
                 } else {
@@ -114,8 +114,14 @@ export default function Modifier(props) {
     }
 
     const changerCategorie = (e) => {
-        setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
-        setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
+        if (e.target.value === "tout") {
+            setListeMedoc(listeMedocSauvegarde2)
+            setListeMedocSauvegarde(listeMedocSauvegarde2)
+        } else {
+
+            setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
+            setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
+        }
     }
 
     const supprimer = () => {
@@ -166,6 +172,7 @@ export default function Modifier(props) {
                 <h2 style={{color: '#fff'}}>Modifier la catégorie</h2>
                 <div style={{margin: 10}}>
                     <select name="categorie" id="categorie" onChange={(e) => setCategorie(e.target.value)}>
+                        <option value="tout">Tout les services</option>
                         <option value="maternité">Maternité</option>
                         <option value="imagerie">Imagerie</option>
                         <option value="laboratoire">Laboratoire</option>
@@ -186,6 +193,7 @@ export default function Modifier(props) {
                 <div>
                     <label htmlFor="categorie">Catégorie : </label>
                     <select name="categorie" id="categorie" onChange={changerCategorie}>
+                        <option value="tout">Tout les services</option>
                         <option value="maternité">Maternité</option>
                         <option value="imagerie">Imagerie</option>
                         <option value="laboratoire">Laboratoire</option>

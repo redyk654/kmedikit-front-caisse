@@ -14,7 +14,7 @@
 }
 
 .gestion-recette h1 {
-    background: #0e771a;
+    background: #03ca7e;
     color: #f1f1f1;
     text-align: center;
     font-size: larger;
@@ -60,7 +60,7 @@ li:hover {
 }
 
 .gestion-recette table thead {
-    background: #0e771a;
+    background: #03ca7e;
     color: #f1f1f1;
 }
 

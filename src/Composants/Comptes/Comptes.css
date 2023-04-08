@@ -1,5 +1,5 @@
 .comptes h1 {
-    background: #0e771a;
+    background: #03ca7e;
     color: #f1f1f1;
     text-align: center;
     font-size: larger;
@@ -44,14 +44,14 @@
 } */
 
 .comptes .container-gestion ul li {
-    color: #0e771a;
+    color: #038654;
     font-weight: 600;
     width: 100%;
     padding: 0px 5px;
 }
 
 .comptes .container-gestion ul li:hover {
-    background-color: #0e771a;
+    background-color: rgba(4, 150, 94, 0.795);
     color: #f1f1f1;
     cursor: pointer;
 }

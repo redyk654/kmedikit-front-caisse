@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 
 const customStyles1 = {
     content: {
-      top: '32%',
+      top: '42%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
@@ -28,6 +28,7 @@ const customStyles2 = {
 
 const utilisateur = {
     nom: '',
+    pseudo: '',
     mdp: '',
     confirmation: ''
 }
@@ -45,7 +46,7 @@ export default function Comptes(props) {
     const [modalReussi, setModalReussi] = useState(false);
     const [reussi, setReussi] = useState('supp');
 
-    const { nom, mdp, confirmation } = nvCompte;
+    const { nom, pseudo, mdp, confirmation } = nvCompte;
 
 
     useEffect(() => {
@@ -85,6 +86,10 @@ export default function Comptes(props) {
                         <input type="text" name="nom" value={nom} onChange={handleChange} autoComplete="off" />
                     </p>
                     <p className="input-zone">
+                        <label htmlFor="">Identifiant</label>
+                        <input type="text" name="pseudo" value={pseudo} onChange={handleChange} autoComplete="off" />
+                    </p>
+                    <p className="input-zone">
                         <label htmlFor="">Mot de passe</label>
                         <input type="password" name="mdp" value={mdp} onChange={handleChange} autoComplete="off" />
                     </p>
@@ -121,29 +126,40 @@ export default function Comptes(props) {
         e.preventDefault();
         // Enregistrement du nouveau compte dans la base de données
 
-        if (mdp === confirmation) {
+        if (mdp !== confirmation) {
+            setMsgErreur('Le mot de passe et le mot passe de confirmation doivent être identique');
+        } else if (pseudo.includes(' ')) {
+            setMsgErreur("l'identifiant ne doit pas contenir d'espace");
+        } else if (pseudo.length < 2 || pseudo.length > 4) {
+            setMsgErreur("l'identifiant doit être compris entre 2 et 4 caractères"); 
+        } else if (nom.length === 0) {
+            setMsgErreur('le champ nom ne doit pas être vide');
+        } else if (mdp.length < 3 || mdp.length > 6) {
+            setMsgErreur('le mot de passe doit être compris entre 3 et 6 caractères');
+        } else {
             setMsgErreur('');
 
             const data = new FormData();
-            data.append('nom', nom);
-            data.append('mdp', mdp);
+            data.append('nom', nom.trim());
+            data.append('pseudo', pseudo.trim());
+            data.append('mdp', mdp.trim());
             data.append('role', document.querySelector('form').role.value);
 
             const req = new XMLHttpRequest();
             req.open('POST', 'http://serveur/backend-cmab/enregistrer_caissier.php');
 
             req.addEventListener('load', () => {
-                setNvCompte(utilisateur);
-                fermerModalConfirmation();
-                setReussi('');
-                setModalReussi(true);
+                if (req.response.length === 0) {
+                    setNvCompte(utilisateur);
+                    fermerModalConfirmation();
+                    setReussi('');
+                    setModalReussi(true);
+                } else {
+                    setMsgErreur(req.response);
+                }
             })
 
             req.send(data);
-            
-
-        } else {
-            setMsgErreur('Le mot de passe et le mot passe de confirmation doivent être identique')
         }
     }
 
@@ -245,7 +261,7 @@ export default function Comptes(props) {
                         <li id={item.nom_user} onClick={afficherCompte}>{item.nom_user.toUpperCase()}</li>
                         ))}
                     <div className="nv-compte">
-                        <button onClick={ajouterCompte}>ajouter</button>
+                        <button className='bootstrap-btn' style={{width: '45%', marginBottom: '8px',}} onClick={ajouterCompte}>ajouter</button>
                     </div>
                     </ul>
                 </div>
@@ -262,7 +278,7 @@ export default function Comptes(props) {
                         </div>
                    </div>
                    <div style={{width: '100%', textAlign: 'center',}}>   
-                        <button style={{width: '15%', marginTop: '30px', backgroundColor: '#e14046'}} onClick={supprimerCompte}>Supprimer</button>
+                        <button className='bootstrap-btn annuler' style={{width: '15%', marginTop: '30px',}} onClick={supprimerCompte}>Supprimer</button>
                    </div>
                 </div>
             </div>

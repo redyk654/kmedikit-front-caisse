@@ -50,7 +50,7 @@
 }
 
 .commande .left-side .liste-medoc ul{
-    height: 70vh;
+    height: 55vh;
     border: 1px solid gray;
     overflow: auto;
     position: relative;

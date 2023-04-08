@@ -364,12 +364,12 @@ export default function GestionFactures(props) {
                     <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'flex'}`, justifyContent: 'center'}}>                        
                         <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'block'}`}}>
                             <ReactToPrint
-                                trigger={() => <button style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                                trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                                 content={() => componentRef.current}
                             />
                         </div>
                         <div>
-                            <button style={{width: '15vw', height: '5vh', backgroundColor: '#e14046', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
+                            <button className='bootstrap-btn annuler' style={{width: '15vw', height: '5vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
                         </div>
                     </div>
                     {/* <h3 style={{marginTop: 5}}>Régler la facture</h3>
