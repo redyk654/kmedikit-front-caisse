@@ -8,6 +8,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
+import { extraireCode } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -627,7 +628,7 @@ export default function Commande(props) {
     }
 
     const handleChange = (e) => {
-        setAutreState({...autreState, [e.target.name]: e.target.value.trim()});
+        setAutreState({...autreState, [e.target.name]: e.target.value});
     }
 
     const nouveauService = () => {
@@ -635,7 +636,7 @@ export default function Commande(props) {
         if (autreState.designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
             
             const data = new FormData();
-            data.append('designation', autreState.designation);
+            data.append('designation', autreState.designation.toUpperCase().trim());
             data.append('prix', prix);
             data.append('categorie', document.getElementById('categorie').value);
     
@@ -756,23 +757,6 @@ export default function Commande(props) {
 
         req.send();
     }
-
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
     
     const fermerModalPatient = () => {
         setModalPatient(false);
@@ -840,7 +824,7 @@ export default function Commande(props) {
                     <h1>Services</h1>
                     <ul>
                         {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100}/></div> : listeMedoc.map(item => (
-                            <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation)}</li>
+                            <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation).toUpperCase()}</li>
                         ))}
                     </ul>
                 </div>
@@ -866,7 +850,7 @@ export default function Commande(props) {
                         <div className="service">
                             <div>
                                 <p>Designation</p>
-                                <p style={{fontWeight: '700'}}>{extraireCode(item.designation)}</p>
+                                <p style={{fontWeight: '700'}}>{extraireCode(item.designation).toUpperCase()}</p>
                             </div>
                             <div style={{paddingTop: 10}}>
                                 <p>Prix</p>
@@ -921,7 +905,7 @@ export default function Commande(props) {
                         <tbody>
                             {medocCommandes.map(item => (
                                 <tr style={{cursor: 'pointer'}} onClick={retirerCommande}>
-                                    <td>{extraireCode(item.designation)}</td>
+                                    <td>{extraireCode(item.designation).toUpperCase()}</td>
                                     <td>{item.prix + ' Fcfa' }</td>
                                 </tr>
                             ))}

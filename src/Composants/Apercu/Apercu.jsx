@@ -4,6 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
+import { extraireCode } from '../../shared/Globals';
 
 
 export default function Apercu(props) {
@@ -51,7 +52,7 @@ export default function Apercu(props) {
             const data = new FormData();
             data.append('dateD', dateD);
             data.append('dateF', dateF);
-            data.append('caissier', caissier);
+            data.append('caissier', caissier.toLowerCase());
             data.append('assurance', assurance);
     
             const req = new XMLHttpRequest();
@@ -116,16 +117,16 @@ export default function Apercu(props) {
                 setMessageErreur('');
                 let result = JSON.parse(req.responseText);
 
-                if (props.role === "caissier") {
-                    result = result.filter(item => (item.caissier === props.nomConnecte));
+                if (props.role.toLowerCase() === "caissier") {
+                    result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
                 } else {
-                    result = result.filter(item => (item.caissier === caissier));
+                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
                 }
                 
                 let recette = 0, frais = 0;
                 if (assurance === "non") {
                     result.forEach(item => {
-                        if (item.assurance === "aucune") {
+                        if (item.assurance.toLowerCase() === "aucune") {
                             recette += parseInt(item.a_payer);
                             frais += parseInt(item.frais);
                         }
@@ -191,7 +192,7 @@ export default function Apercu(props) {
     const rechercherHistorique = () => {
         setdateDepart(date_select1.current.value + ' ' + heure_select1.current.value + ':00');
         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
-        setCaissier(document.getElementById('caissier').value);
+        setCaissier(document.getElementById('caissier').value.toLowerCase());
     }
 
     const mois = (str) => {
@@ -224,23 +225,6 @@ export default function Apercu(props) {
         }
     }
 
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
     return (
         <section className="historique">
             <h1>Historique des actes</h1>
@@ -270,10 +254,10 @@ export default function Apercu(props) {
                                 <label htmlFor="">Caissier : </label>
                                 <select name="caissier" id="caissier">
                                     {props.role === "caissier" ? 
-                                    <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> :
+                                    <option value={props.nomConnecte.toLowerCase()}>{props.nomConnecte.toUpperCase()}</option> :
                                     listeComptes.map(item => (
-                                        <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
-                                    ))                               }
+                                        <option value={item.nom_user.toLowerCase()}>{item.nom_user.toUpperCase()}</option>
+                                    ))}
                                 </select>
                             </p>
                         </div>
@@ -281,17 +265,6 @@ export default function Apercu(props) {
                         <div>Total : <span style={{fontWeight: '700'}}>{total ? (total + montantFrais) + ' Fcfa' : '0 Fcfa'}</span></div>
                         <div>Matériel : <span style={{fontWeight: '700'}}>{montantFrais ? montantFrais + ' Fcfa' : '0 Fcfa'}</span></div>
                         <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
-                        <div style={{display: 'none',}}>
-                            <div style={{width: '50%'}}>Laboratoire : <span style={{fontWeight: '700'}}>{reccetteTotal ? labo + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Radiologie : <span style={{fontWeight: '700'}}>{reccetteTotal ? radio + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Médécine : <span style={{fontWeight: '700'}}>{reccetteTotal ? med + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Maternité : <span style={{fontWeight: '700'}}>{reccetteTotal ? mater + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Petite chirurgie : <span style={{fontWeight: '700'}}>{reccetteTotal ? chr + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Consultation : <span style={{fontWeight: '700'}}>{reccetteTotal ? consul + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Echographie : <span style={{fontWeight: '700'}}>{reccetteTotal ? echo + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div style={{width: '50%'}}>Upec : <span style={{fontWeight: '700'}}>{reccetteTotal ? upec + ' Fcfa' : '0 Fcfa'}</span></div>
-                        </div>
-
                     </div>
                     <table>
                         <thead>
@@ -313,7 +286,7 @@ export default function Apercu(props) {
                 {historique.length > 0 && (
                     <div style={{textAlign: 'center'}}>
                         <ReactToPrint
-                            trigger={() => <button style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                            trigger={() => <button className='bootstrap-btn valider' style={{marginTop: '8px', color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                             content={() => componentRef.current}
                         />
                     </div>

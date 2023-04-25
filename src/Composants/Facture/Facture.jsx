@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { extraireCode } from '../../shared/Globals';
 
 const styles = {
     // display: 'flex',
@@ -64,23 +65,6 @@ export default class Facture extends Component {
         }
     }
 
-    extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
     render() {
         return (
             <div style={{display: 'flex', flexDirection: 'column', width: '85%'}}>
@@ -124,7 +108,7 @@ export default class Facture extends Component {
                                     <tbody>
                                         {this.props.medocCommandes.map(item => (
                                             <tr>
-                                                <td style={table_styles1}>{this.extraireCode(item.designation)}</td>
+                                                <td style={table_styles1}>{extraireCode(item.designation)}</td>
                                                 <td style={table_styles2}>{item.prix}</td>
                                             </tr>
                                         ))}
@@ -196,7 +180,7 @@ export default class Facture extends Component {
                                     <tbody>
                                         {this.props.medocCommandes.map(item => (
                                             <tr>
-                                                <td style={table_styles1}>{this.extraireCode(item.designation)}</td>
+                                                <td style={table_styles1}>{extraireCode(item.designation)}</td>
                                                 <td style={table_styles2}>{item.prix}</td>
                                             </tr>
                                         ))}

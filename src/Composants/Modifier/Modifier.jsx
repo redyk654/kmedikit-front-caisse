@@ -4,6 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
+import { extraireCode } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -34,7 +35,7 @@ export default function Modifier(props) {
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
     const [medocSelect, setMedoSelect] = useState(false);
-    const [categorie, setCategorie]= useState('');
+    const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [renrender, setRerender] = useState(true);
@@ -96,23 +97,6 @@ export default function Modifier(props) {
         setListeMedoc(medocFilter);
     }
 
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        })
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
     const changerCategorie = (e) => {
         if (e.target.value === "tout") {
             setListeMedoc(listeMedocSauvegarde2)
@@ -140,8 +124,9 @@ export default function Modifier(props) {
 
     const modifierService = () => {
         if (medocSelect) {
+            document.querySelector('#enregistrer').disabled = true
             const data = new FormData();
-            data.append('categorie', categorie);
+            data.append('prix', nouveauPrix);
             data.append('id', medocSelect[0].id);
             
             const req = new XMLHttpRequest();
@@ -169,21 +154,11 @@ export default function Modifier(props) {
                 onRequestClose={fermerModalConfirmation}
                 contentLabel="validation commande"
             >
-                <h2 style={{color: '#fff'}}>Modifier la catégorie</h2>
+                <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2>
                 <div style={{margin: 10}}>
-                    <select name="categorie" id="categorie" onChange={(e) => setCategorie(e.target.value)}>
-                        <option value="tout">Tout les services</option>
-                        <option value="maternité">Maternité</option>
-                        <option value="imagerie">Imagerie</option>
-                        <option value="laboratoire">Laboratoire</option>
-                        <option value="carnet">Carnet</option>
-                        <option value="medecine">Medecine</option>
-                        <option value="chirurgie">Chirurgie</option>
-                        <option value="upec">Upec</option>
-                        <option value="consultation spécialiste">Consultation Spécialiste</option>
-                    </select>
+                    <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
                 </div>
-                <button style={styleBtnAutre} onClick={modifierService}>Enregistrer</button>
+                <button id='enregistrer' style={styleBtnAutre} onClick={modifierService}>Enregistrer</button>
             </Modal>
             <div className="left-side">
 

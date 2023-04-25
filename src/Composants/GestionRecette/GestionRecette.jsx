@@ -3,6 +3,7 @@ import './GestionRecette.css';
 import Modal from "react-modal";
 import ReactToPrint from 'react-to-print';
 import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
+import { extraireCode } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -157,7 +158,7 @@ export default function GestionRecette(props) {
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
                 let result = JSON.parse(req.responseText);
-                result = result.filter(item => (item.caissier === caissier));
+                result = result.filter(item => (item.caissier.toLowerCase() === caissier.toLowerCase()));
                 
                 let recette = 0, f = 0;
                 result.forEach(item => {
@@ -378,23 +379,6 @@ export default function GestionRecette(props) {
     const fermerModalReussi = () => {
         setModalReussi(false);
         annuler();
-    }
-
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
     }
 
     return (

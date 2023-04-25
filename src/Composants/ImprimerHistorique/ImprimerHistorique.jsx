@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { extraireCode } from '../../shared/Globals';
 
 const styles = {
     // display: 'flex',
@@ -34,23 +35,6 @@ const table_styles = {
 
 export default class ImprimerHistorique extends Component {
 
-    extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-    
     mois = (str) => {
 
         switch(parseInt(str.substring(3, 5))) {
@@ -148,7 +132,7 @@ export default class ImprimerHistorique extends Component {
                                 <tbody>
                                     {this.props.historique.length > 0  ? this.props.historique.map(item => (
                                         <tr>
-                                            <td style={table_styles1}>{this.extraireCode(item.designation)}</td>
+                                            <td style={table_styles1}>{extraireCode(item.designation)}</td>
                                             <td style={table_styles2}>{item.prix_total}</td>
                                         </tr>
                                     )) : null

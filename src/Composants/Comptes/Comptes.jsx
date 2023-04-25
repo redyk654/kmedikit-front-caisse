@@ -140,22 +140,23 @@ export default function Comptes(props) {
             setMsgErreur('');
 
             const data = new FormData();
-            data.append('nom', nom.trim());
-            data.append('pseudo', pseudo.trim());
-            data.append('mdp', mdp.trim());
+            data.append('nom', nom.trim().toLowerCase());
+            data.append('pseudo', pseudo.trim().toLowerCase());
+            data.append('mdp', mdp.trim().toLowerCase());
             data.append('role', document.querySelector('form').role.value);
 
             const req = new XMLHttpRequest();
             req.open('POST', 'http://serveur/backend-cmab/enregistrer_caissier.php');
 
             req.addEventListener('load', () => {
-                if (req.response.length === 0) {
+                if (req.response.toLowerCase() == "Cet identifiant est déjà utilisé. choisissez en un autre".toLowerCase()) {
+                    setMsgErreur(req.response);
+                } else {
+                    console.log(req.response);
                     setNvCompte(utilisateur);
                     fermerModalConfirmation();
                     setReussi('');
                     setModalReussi(true);
-                } else {
-                    setMsgErreur(req.response);
                 }
             })
 
@@ -201,7 +202,7 @@ export default function Comptes(props) {
         // Suppression d'un compte
         if (compteSelectionne.length > 0) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/supprimer_compte.php?compte=${compteSelectionne[0].nom_user}`);
+            req.open('GET', `http://serveur/backend-cmab/supprimer_compte.php?compte=${compteSelectionne[0].pseudo}`);
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
