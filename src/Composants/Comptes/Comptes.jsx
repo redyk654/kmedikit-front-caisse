@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import './Comptes.css';
 import Modal from 'react-modal';
+import { ROLES } from "../../shared/Globals";
 
 const customStyles1 = {
     content: {
@@ -100,10 +101,10 @@ export default function Comptes(props) {
                     <p className="input-zone">
                         <label htmlFor="">Rôle : </label>
                         <select name="role">
-                            <option value="admin">admin</option>
-                            <option value="caissier">caissier</option>
-                            <option value="regisseur">regisseur</option>
-                            <option value="secretaire">sécrétaire</option>
+                            <option value={ROLES.caissier}>caissier</option>
+                            <option value={ROLES.admin}>admin</option>
+                            <option value={ROLES.regisseur}>regisseur</option>
+                            <option value={ROLES.secretaire}>sécrétaire</option>
                         </select>
                     </p>
                 </div>
@@ -140,9 +141,9 @@ export default function Comptes(props) {
             setMsgErreur('');
 
             const data = new FormData();
-            data.append('nom', nom.trim().toLowerCase());
-            data.append('pseudo', pseudo.trim().toLowerCase());
-            data.append('mdp', mdp.trim().toLowerCase());
+            data.append('nom', nom.trim().toUpperCase());
+            data.append('pseudo', pseudo.trim().toUpperCase());
+            data.append('mdp', mdp.trim().toUpperCase());
             data.append('role', document.querySelector('form').role.value);
 
             const req = new XMLHttpRequest();

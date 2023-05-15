@@ -1,5 +1,5 @@
 import './App.css';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useContext } from 'react';
 import Entete from './Composants/Entete/Entete';
 import Connexion from './Composants/Connexion/Connexion';
 import Commande from './Composants/Commande/Commande';
@@ -13,21 +13,19 @@ import Apercu from './Composants/Apercu/Apercu';
 import Assurance from './Composants/Assurance/Assurance';
 import FacturesAssurances from './Composants/FacturesAssurances/FacturesAssurances';
 import Modifier from './Composants/Modifier/Modifier';
-import { FaChartBar, FaClipboardList, FaLayerGroup, FaPlusSquare, FaReceipt, FaStore, FaTr, FaPlusSquareuck, FaUsers } from 'react-icons/fa';
+import { FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
+import { ContextChargement } from './Context/Chargement';
+import { ROLES } from "./shared/Globals";
 
 
 
 function App() {
 
-  const admin = "admin";
-  const caissier = "caissier";
-  const regisseur = "regisseur";
-  const secretaire = "secretaire";
+  const {role, setRole} = useContext(ContextChargement);
 
   const [onglet, setOnglet] = useState(1);
   const [connecter, setConnecter] = useState(false);
   const [nomConnecte, setNomConnecte] = useState('');
-  const [role, setRole] = useState('');
 
   const date_e = new Date('2022-08-26');
   const date_j = new Date();
@@ -38,11 +36,11 @@ function App() {
     //   setConnecter(false);
     // }
 
-    if(role === regisseur) {
+    if(role === ROLES.regisseur) {
       setOnglet(5);
-    } else if (role === admin) {
+    } else if (role === ROLES.admin) {
       setOnglet(3);
-    } else if (role === secretaire) {
+    } else if (role === ROLES.secretaire) {
       setOnglet(9);
     } else {
       setOnglet(1);
@@ -87,7 +85,7 @@ function App() {
   }
 
   if (connecter) {
-    if(role === admin) {
+    if(role.toLowerCase() === ROLES.admin) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -106,7 +104,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === caissier) {
+    } else if (role.toLowerCase() === ROLES.caissier) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -139,7 +137,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === regisseur) {
+    } else if (role.toLowerCase() === ROLES.regisseur) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -158,7 +156,7 @@ function App() {
           </section>
         </main>
       );
-    } else if(role === secretaire) {
+    } else if(role.toLowerCase() === ROLES.secretaire) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />

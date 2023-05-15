@@ -9,6 +9,9 @@ import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
 import { extraireCode } from '../../shared/Globals';
+import AfficherPatient from '../Patients/AfficherPatient';
+import EditerPatient from '../Patients/EditerPatient';
+import ModalPatient from '../Patients/ModalPatient';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -20,6 +23,20 @@ const customStyles1 = {
       transform: 'translate(-50%, -50%)',
       background: '#0e771a',
     }, 
+};
+
+const customStyles4 = {
+    content: {
+      top: '47%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#e5f3fc',
+      color: '#000',
+      width: '65%'
+    },
 };
 
 const styleBtnAutre = {
@@ -52,15 +69,15 @@ const styleItem = {
 
 const customStyles3 = {
     content: {
-      top: '40%',
+      top: '48%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
       background: '#038654',
-      width: '400px',
-      height: '75vh'
+      width: '80%',
+      height: '85vh'
     }, 
 };
 
@@ -84,6 +101,16 @@ const styleBox = {
     padding: '5px',
 }
 
+const detailsDuPatient = {
+    code: '',
+    nom: '',
+    age: '',
+    sexe: '',
+    quartier: '',
+    assurance: 'aucune',
+    type_assurance: '0',
+}
+
 export default function Commande(props) {
 
     const componentRef = useRef();
@@ -97,11 +124,12 @@ export default function Commande(props) {
     const date_e = new Date('2023-12-19');
     const date_j = new Date();
 
+    const [nouveauPatient, setNouveauPatient] = useState(detailsDuPatient);
+    const [patientChoisi, setPatientChoisi] = useState(detailsDuPatient);
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [qteDesire, setQteDesire] = useState(1);
     const [patient, setpatient] = useState('');
-    const [clientSelect, setClientSelect] = useState([]);
     const [nomPatient, setNomPatient] = useState(false);
     const [autreState, setAutreState] = useState(autre);
     const [medocSelect, setMedoSelect] = useState(false);
@@ -122,8 +150,9 @@ export default function Commande(props) {
     const[actualiserQte, setActualiserQte] = useState(false);
     const [listePatient, setlistePatient] = useState([]);
     const [listePatientSauvegarde, setlistePatientSauvegarde] = useState([]);
-    const [assurance, setAssurance] = useState(assuranceDefaut);
-    const [typeAssurance, setTypeAssurance] = useState(0);
+    const [modalEditerPatient, setModalEditerPatient] = useState(false);
+    // const [assurance, setAssurance] = useState(assuranceDefaut);
+    // const [type_assurance, setTypeAssurance] = useState(0);
     const [statu, setStatu] = useState('done');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
@@ -131,9 +160,11 @@ export default function Commande(props) {
     const [modalReussi, setModalReussi] = useState(false);
     const [statePourRerender, setStatePourRerender] = useState(true);
     const [state, setState] = useState(0);
-    const [renrender, setRerender] = useState(true);
+    const [rerender, setRerender] = useState(true);
 
     const {designation, prix} = autreState;
+
+    const { code, nom, age, sexe, quartier, assurance, type_assurance } = nouveauPatient;
 
     useEffect(() => {
         startChargement();
@@ -158,7 +189,7 @@ export default function Commande(props) {
         const d = new Date();
         let urgence;
 
-        if (renrender || !renrender) {
+        if (rerender || !rerender) {
             // Etat d'urgence entre 17h et 8h et les weekends
             
             if (d.getHours() >= 17 || d.getHours() <= 7 || (d.getDay() === 0 || d.getDay() === 6)) {
@@ -199,7 +230,7 @@ export default function Commande(props) {
     
             req.send();
         }
-    }, [renrender]);
+    }, [rerender]);
 
     useEffect(() => {
         /* Hook exécuter lors de la mise à jour de la liste de médicaments commandés,
@@ -230,7 +261,7 @@ export default function Commande(props) {
             });
 
             Object.defineProperty(qtePrixTotal, 'a_payer', {
-                value: prixTotal * ((100 - typeAssurance) / 100),
+                value: prixTotal * ((100 - parseInt(type_assurance)) / 100),
                 configurable: true,
                 enumerable: true,
             });
@@ -252,13 +283,13 @@ export default function Commande(props) {
             }
         }
 
-    }, [montantVerse, medocCommandes, frais, reduction, assurance, nomPatient]);
+    }, [montantVerse, medocCommandes, frais, reduction, patientChoisi, nomPatient]);
 
     useEffect(() => {
         if(assurance.toLowerCase() !== assuranceDefaut) {
             if(parseInt(qtePrixTotal.a_payer)) {
                 Object.defineProperty(qtePrixTotal, 'a_payer', {
-                    value: (parseInt(qtePrixTotal.prix_total) * (100 - typeAssurance)) / 100,
+                    value: (parseInt(qtePrixTotal.prix_total) * (100 - parseInt(type_assurance))) / 100,
                     configurable: true,
                     enumerable: true,
                 });
@@ -339,7 +370,6 @@ export default function Commande(props) {
         setState(0);
         setMedocCommandes([]);
         setQtePrixTotal({});
-        setNomPatient('');
         setpatient('');
         setmontantVerse('')
         setrelicat(0);
@@ -350,10 +380,9 @@ export default function Commande(props) {
         setFrais(false);
         document.querySelector('.recherche').value = "";
         document.querySelector('.recherche').focus();
-        setAssurance(assuranceDefaut);
-        setTypeAssurance(0);
         setMontantFrais(0);
         setreduction(false);
+        setPatientChoisi(detailsDuPatient)
     }
 
     const sauvegarder = () => {
@@ -400,7 +429,7 @@ export default function Commande(props) {
         data.append('relicat', relicat);
         data.append('reste_a_payer', resteaPayer);
         data.append('assurance', assurance);
-        data.append('type_assurance', typeAssurance);
+        data.append('type_assurance', type_assurance);
         data.append('statu', statu);
 
         const req = new XMLHttpRequest();
@@ -430,18 +459,18 @@ export default function Commande(props) {
         // On enregistre le patient dans la base de donnés s'il n'y est pas encore
         if (nomPatient) {
 
-            const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
-            if(patient.length === 0) {
-                const data = new FormData();
-                data.append('nom_patient', nomPatient);
-                data.append('assurance', assuranceDefaut);
-                data.append('type_assurance', 0);        
+            // const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
+            // if(patient.length === 0) {
+            //     const data = new FormData();
+            //     data.append('nom_patient', nomPatient);
+            //     data.append('assurance', assuranceDefaut);
+            //     data.append('type_assurance', 0);        
                 
-                const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
+            //     const req = new XMLHttpRequest();
+            //     req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
     
-                req.send(data);
-            }
+            //     req.send(data);
+            // }
         }
     }
 
@@ -507,7 +536,6 @@ export default function Commande(props) {
                         if (medocCommandes.length === i) {
                             // Toutes les données ont été envoyées
                             enregisterFacture(id);
-                            enregisterPatient();
                         }
                     }
                 });
@@ -566,7 +594,7 @@ export default function Commande(props) {
             if(assurance.toLowerCase() !== assuranceDefaut) {
                 if(parseInt(qtePrixTotal.a_payer)) {
                     Object.defineProperty(qtePrixTotal, 'a_payer', {
-                        value: (parseInt(qtePrixTotal.prix_total) * (100 - typeAssurance)) / 100,
+                        value: (parseInt(qtePrixTotal.prix_total) * (100 - parseInt(type_assurance))) / 100,
                         configurable: true,
                         enumerable: true,
                     });
@@ -600,12 +628,10 @@ export default function Commande(props) {
     const infosPatient = () => {
 
         // Affiche la fenêtre des informations du patient
-        setpatient('');
-        setoption('patient');
-        setModalPatient(true);
+        ouvrirModalPatient();
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/gestion_patients.php');
+        req.open('GET', 'http://serveur/backend-cmab/index.php?tous_les_patient');
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -659,31 +685,24 @@ export default function Commande(props) {
         if (option === 'patient') {
             return (
                 <Fragment>
-                    <h2 style={{color: '#fff'}}>informations du patient</h2>
+                    <h2 style={{color: '#fff', textAlign: 'center'}}>informations du patient</h2>
                     <div className="detail-item">
-                        <div style={{display: 'flex', flexDirection: 'column' , width: '100%', marginTop: 10, color: '#f1f1f1'}}>
-                            <label htmlFor="" style={{display: 'block',}}>Nom et prénom</label>
-                            <div>
-                                <input type="text" name="qteDesire" style={{width: '250px', height: '4vh'}} value={patient} onChange={filtrerPatient} autoComplete='off' />
-                                <button style={{cursor: 'pointer', width: '45px', height: '4vh', marginLeft: '5px'}} onClick={ajouterPatient}>OK</button>
-                            </div>
-                            {
-                                clientSelect.length > 0 && (
-                                    <div style={{marginTop: '10px', lineHeight: '25px', display: `${clientSelect[0].nomAssurance === assuranceDefaut ? 'none' : 'block'}`}}>
-                                        <div>assurance <strong>{clientSelect[0].nomAssurance}</strong></div>
-                                        <div>pourcentage <strong>{clientSelect[0].type_assurance}</strong></div>
-                                    </div>
-                                )
-                            }
-                            <div style={{marginTop: '10px'}}>
-                                <h2>Liste des patients</h2>
-                                <ul style={stylePatient}>
-                                    {listePatient.length > 0 && listePatient.map(item => (
-                                        <li style={{padding: '6px'}} onClick={(e) => selectionnePatient(e, item.assurance, item.type_assurance)} id={item.nom}>{item.nom.toUpperCase()}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
+                        <>
+                            <ModalPatient
+                                patient={patient}
+                                filtrerPatient={filtrerPatient}
+                                stylePatient={stylePatient}
+                                listePatient={listePatient}
+                                selectionnePatient={selectionnePatient}
+                                ouvrirEditerPatient={ouvrirEditerPatient}
+                            />
+                        </>
+                        <>
+                            <AfficherPatient 
+                                patientChoisi={patientChoisi} 
+                                fermerModalPatient={fermerModalPatient}
+                            />
+                        </>
                     </div>
                 </Fragment>
             )
@@ -722,11 +741,9 @@ export default function Commande(props) {
         }
     }
 
-    const selectionnePatient = (e, nomAssurance, type_assurance) => {
-        setpatient(e.target.id)
-        setClientSelect([{nomAssurance: nomAssurance, type_assurance: type_assurance}])
-        setAssurance(nomAssurance);
-        setTypeAssurance(type_assurance);
+    const selectionnePatient = (e) => {
+        const patientSelectionne = listePatient.filter(patient => patient.code === e.target.id)[0];
+        setPatientChoisi(patientSelectionne);
     }
 
     const ajouterService = () => {
@@ -743,7 +760,7 @@ export default function Commande(props) {
 
         const req = new XMLHttpRequest();
 
-        req.open('GET', `http://serveur/backend-cmab/rechercher_patient.php?str=${(e.target.value).trim()}`);
+        req.open('GET', `http://serveur/backend-cmab/index.php?rechercher_patient=${(e.target.value).trim()}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -757,12 +774,21 @@ export default function Commande(props) {
 
         req.send();
     }
+
+    const resetInfosDuPatient = () => {
+        setNouveauPatient(detailsDuPatient);
+    }
+
+    const ouvrirModalPatient = () => {
+        setpatient('');
+        setoption('patient');
+        setModalPatient(true);
+    }
     
     const fermerModalPatient = () => {
         setModalPatient(false);
         setpatient('');
         setAutreState(autre);
-        setClientSelect([]);
     }
 
     const fermerModalConfirmation = () => {
@@ -775,10 +801,71 @@ export default function Commande(props) {
         setNomPatient('');
         setMedocCommandes([]);
         annulerCommande();
+        setPatientChoisi(detailsDuPatient);
+    }
+
+    const fermerEditerPatient = () => {
+        setModalEditerPatient(false)
+    }
+
+    const ouvrirEditerPatient = () => {
+        setModalEditerPatient(true);
+        fermerModalPatient();
+    }
+
+    const handleChangePatient = (e) => {
+        setNouveauPatient({...nouveauPatient, [e.target.name]: e.target.value});
+    }
+
+    const creerCodePatient = () => {
+        // Création d'un identifiant unique pour la facture
+        return Math.floor((1 + Math.random()) * 0x1000000000)
+               .toString(32)
+               .substring(1).toUpperCase();        
+    }
+
+
+    const ajouterNouveauPatient = () => {
+        const req = new XMLHttpRequest();
+        const data = new FormData();
+
+        data.append('code', creerCodePatient());
+        data.append('nouveau_patient', JSON.stringify(nouveauPatient))
+
+        req.open('POST', 'http://serveur/backend-cmab/index.php');
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                setPatientChoisi(nouveauPatient);
+                fermerEditerPatient();
+                resetInfosDuPatient();
+            }
+        });
+
+        req.send(data);
     }
 
     return (
         <section className="commande">
+            <Modal
+                isOpen={modalEditerPatient}
+                style={customStyles4}
+                contentLabel=""
+            >
+                <EditerPatient
+                    handleChange={handleChangePatient}
+                    fermerEditerPatient={fermerEditerPatient}
+                    ouvrirModalPatient={ouvrirModalPatient}
+                    resetInfosDuPatient={resetInfosDuPatient}
+                    ajouterNouveauPatient={ajouterNouveauPatient}
+                    nom={nom}
+                    age={age}
+                    sexe={sexe}
+                    quartier={quartier}
+                    assurance={assurance}
+                    type_assurance={type_assurance}
+                />
+            </Modal>
             <Modal
                 isOpen={modalPatient}
                 style={customStyles3}
@@ -860,9 +947,9 @@ export default function Commande(props) {
                     ))}
                 </div>
                 <div className="box" style={{marginLeft: 5}}>
-                    <div className="detail-item">
+                    <div className="">
                         <button className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}} onClick={ajouterMedoc}>ajouter</button>
-                        <button className='bootstrap-btn' style={{backgroundColor: '#6d6f94', marginLeft: '5px', width: '7%'}} onClick={fraisMateriel}>+500</button>
+                        <button className='bootstrap-btn' style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={fraisMateriel}>+500</button>
                     </div>
                     <div style={{textAlign: 'center'}}>
                         <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
@@ -874,14 +961,14 @@ export default function Commande(props) {
                         </div>
                     </div>
                     <div style={{textAlign: 'center'}}>
-                        {nomPatient ? (
+                        {patientChoisi.nom.length > 0 ? (
                             <div>
-                                Patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{nomPatient.toLocaleUpperCase()}</span>
+                                Patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
                             </div>
                         ) : null}
-                        {assurance !== assuranceDefaut ? (
+                        {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
                             <div style={{}}>
-                                Couvert par: <span style={{color: '#0e771a', fontWeight: '700'}}>{assurance.toLocaleUpperCase()}</span>
+                                Couvert par: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.assurance.toLocaleUpperCase()}</span>
                             </div>
                         ) : null}
                         <label htmlFor="">Montant versé : </label>

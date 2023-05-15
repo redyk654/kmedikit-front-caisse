@@ -14,3 +14,38 @@ export function extraireCode (designation) {
 
     return designation_extrait.toUpperCase();
 }
+
+export function afficherSexe (sexe) {
+    let val;
+    switch(sexe) {
+        case 'h':
+            val = 'homme';
+            break;
+        case 'f':
+            val = 'femme';
+            break;
+        default:
+            val = 'non renseigné'
+    }
+
+    return val.toUpperCase();
+}
+
+export function afficherAge (age) {
+    if (parseInt(age) > 1) 
+        return age + "ans"
+    else
+        return "non renseigné"
+}
+
+export const ROLES = {
+    caissier: "caissier",
+    admin: "admin",
+    regisseur: "regisseur",
+    secretaire: "secretaire",
+}
+
+export const SEXES = {
+    h: 'h',
+    f: 'f'
+}
