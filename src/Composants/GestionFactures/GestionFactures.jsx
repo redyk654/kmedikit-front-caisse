@@ -4,6 +4,7 @@ import './GestionFactures.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import { FaCheck, FaCross } from 'react-icons/fa';
+import FactureEnreg from '../Facture/FactureEnreg';
 
 const customStyles2 = {
     content: {
@@ -395,7 +396,7 @@ export default function GestionFactures(props) {
                     <div>
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
-                                <Facture 
+                                <FactureEnreg
                                 ref={componentRef}
                                 medocCommandes={detailsFacture}
                                 idFacture={factureSelectionne[0].id}
@@ -406,6 +407,7 @@ export default function GestionFactures(props) {
                                 montantVerse={factureSelectionne[0].montant_verse}
                                 relicat={factureSelectionne[0].relicat}
                                 assurance={factureSelectionne[0].assurance}
+                                type_assurance={factureSelectionne[0].type_assurance}
                                 resteaPayer={factureSelectionne[0].reste_a_payer}
                                 date={factureSelectionne[0].date_heure}
                                 nomConnecte={factureSelectionne[0].caissier}

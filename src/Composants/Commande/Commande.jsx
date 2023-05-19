@@ -8,7 +8,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, MONTANTMATERIEL } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -116,6 +116,7 @@ export default function Commande(props) {
     const componentRef = useRef();
     const annuler = useRef();
     const btnAjout = useRef();
+    const btnMateriel = useRef();
     const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
 
     const autre  = {designation: '', prix: ''};
@@ -129,37 +130,24 @@ export default function Commande(props) {
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [qteDesire, setQteDesire] = useState(1);
-    const [patient, setpatient] = useState('');
-    const [nomPatient, setNomPatient] = useState(false);
+    const [patient, setPatient] = useState('');
     const [autreState, setAutreState] = useState(autre);
     const [medocSelect, setMedoSelect] = useState(false);
     const [medocCommandes, setMedocCommandes] = useState([]);
-    const [frais, setFrais] = useState(false);
-    const [montantFrais, setMontantFrais] = useState(0);
-    const [qtePrixTotal, setQtePrixTotal] = useState({});
+    const [montantMateriel, setMontantMateriel] = useState(0);
     const [option, setoption] = useState('');
     const [reduction, setreduction] = useState(false);
-    const [remise, setremise] = useState(false);
-    const [valeurReduction, setvaleurReduction] = useState('');
-    const [verse, setverse] = useState('');
-    const [montantVerse, setmontantVerse] = useState(0);
-    const [relicat, setrelicat] = useState(0);
-    const [resteaPayer, setresteaPayer] = useState(0);
+    const [valeurReduction, setvaleurReduction] = useState(0);
+    const [montantVerse, setMontantVerse] = useState(0);
     const [idFacture, setidFacture] = useState('');
     // const [urgence, setUrgence] = useState(false);
-    const[actualiserQte, setActualiserQte] = useState(false);
     const [listePatient, setlistePatient] = useState([]);
-    const [listePatientSauvegarde, setlistePatientSauvegarde] = useState([]);
     const [modalEditerPatient, setModalEditerPatient] = useState(false);
-    // const [assurance, setAssurance] = useState(assuranceDefaut);
-    // const [type_assurance, setTypeAssurance] = useState(0);
     const [statu, setStatu] = useState('done');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [modalPatient, setModalPatient] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
-    const [statePourRerender, setStatePourRerender] = useState(true);
-    const [state, setState] = useState(0);
     const [rerender, setRerender] = useState(true);
 
     const {designation, prix} = autreState;
@@ -232,72 +220,41 @@ export default function Commande(props) {
         }
     }, [rerender]);
 
-    useEffect(() => {
-        /* Hook exécuter lors de la mise à jour de la liste de médicaments commandés,
-           L'exécution du hook va permettre d'actualier les prix et les quantités
-        */
-
-        /*
-         ***IMPORTANT*** : Il y a un bug non résolu qui fais que lors de la suppression d'un médicament de la liste des commandes,
-         les prix et quantités ne sont pas mis à jour correctement
-         */
+    const calculerPrixTotal = () => {
+        let prixTotalT = 0;
         if (medocSelect || designation.length > 0 && prix.length > 0) {
-            let prixTotal = 0;
-            medocCommandes.map(item => {
-                prixTotal += parseInt(item.prix);
-            });
-
-            if (frais) {
-                prixTotal += 500;
-                setMontantFrais(500);
-            }
             
-            // prixTotal += medocSelect[0].prix_total;
-            
-            Object.defineProperty(qtePrixTotal, 'prix_total', {
-                value: prixTotal,
-                configurable: true,
-                enumerable: true,
-            });
+            prixTotalT = medocCommandes.reduce((som, curr) => som + parseInt(curr.prix), 0)
+            prixTotalT += montantMateriel;
 
-            Object.defineProperty(qtePrixTotal, 'a_payer', {
-                value: prixTotal * ((100 - parseInt(type_assurance)) / 100),
-                configurable: true,
-                enumerable: true,
-            });
-
-            setStatePourRerender(!statePourRerender); // état modifié pour rerendre le composant
         }
+        return parseInt(prixTotalT);
+    }
 
-    }, [medocCommandes, frais]);
+    const calculerNetAPayer = () => {
+        let netAPayer = (calculerPrixTotal() * ((100 - parseInt(patientChoisi.type_assurance)) / 100));
 
-    useEffect(() => {
-        // Pour mettre à jour le relicat et le reste à payer
-        if (montantVerse >= parseInt(qtePrixTotal.a_payer)) {
-            setrelicat(montantVerse - parseInt(qtePrixTotal.a_payer));
-            setresteaPayer(0);
-        } else {
-            if (montantVerse < parseInt(qtePrixTotal.a_payer)) {
-                setresteaPayer(parseInt(qtePrixTotal.a_payer) - montantVerse);
-                setrelicat(0);
-            }
-        }
+        if (!isNaN(valeurReduction))
+            netAPayer = netAPayer - (netAPayer * (parseInt(valeurReduction) / 100))
+        
+        return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
+    }
 
-    }, [montantVerse, medocCommandes, frais, reduction, patientChoisi, nomPatient]);
+    const calculerResteAPayer = () => {
+        let resteAPayer = 0;
+        if (parseInt(montantVerse) < calculerNetAPayer())
+            resteAPayer = (calculerNetAPayer() - montantVerse)
 
-    useEffect(() => {
-        if(assurance.toLowerCase() !== assuranceDefaut) {
-            if(parseInt(qtePrixTotal.a_payer)) {
-                Object.defineProperty(qtePrixTotal, 'a_payer', {
-                    value: (parseInt(qtePrixTotal.prix_total) * (100 - parseInt(type_assurance))) / 100,
-                    configurable: true,
-                    enumerable: true,
-                });
+        return parseInt(resteAPayer);
+    }
     
-            }
-        }
-        setStatePourRerender(!statePourRerender);
-    }, [assurance]);
+    const calculerRelicat = () => {
+        let relicat = 0;
+        if (parseInt(montantVerse) > calculerNetAPayer())
+            relicat = (montantVerse - calculerNetAPayer())
+
+        return parseInt(relicat);
+    }
 
     // permet de récolter les informations sur le médicament sélectioné
     const afficherInfos = (e) => {
@@ -321,68 +278,50 @@ export default function Commande(props) {
 
     // Enregistrement d'un médicament dans la commande
     const ajouterMedoc = () => {
-        /* 
-            - Mise à jour de la quantité du médicament commandé dans la liste des commandes
-            - Mise à jour du prix total du médicament commandé
 
-            - Mise à jour du nombre total de médicaments commandés
-            - Mise à jour de la quantité total des médicaments commandés
-            - Mise à jour du prix total de la commande
-        */
-
+        // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
         setTimeout(() => {
             btnAjout.current.disabled = false;
         }, 1000);
-        // Desactive le bouton d'ajout quelques secondes
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
 
             setMessageErreur('');
             
             medocSelect[0].reduction = false;
-
-            // const existe = medocCommandes.filter(item => (medocSelect[0].id == item.id));
-
-            // if (existe.length > 0) {
-            //     setMessageErreur('Cet acte est déjà dans la facture');
-            // } else {
-                setMessageErreur('');
-                setMedocCommandes([...medocCommandes, medocSelect[0]]);
-                // setMedoSelect(false);
-            // }
+            setMessageErreur('');
+            setMedocCommandes([...medocCommandes, medocSelect[0]]);
 
             document.querySelector('.recherche').value = "";
             document.querySelector('.recherche').focus();
 
         }
         setQteDesire(1);
-        setvaleurReduction('');
-        setremise(false);
     }
 
-    const fraisMateriel = () => {
-        // +500 des frais de matériel
-        setFrais(true);
+    const desactiverBoutonMateriel = () => {
+        btnMateriel.current.disabled = true;
+        setMontantMateriel(MONTANTMATERIEL);
+    }
+
+    const activerBoutonMateriel = () => {
+        btnMateriel.current.disabled = false;
     }
 
     const annulerCommande = () => {
-        setState(0);
+        setMedoSelect(false);
         setMedocCommandes([]);
-        setQtePrixTotal({});
-        setpatient('');
-        setmontantVerse('')
-        setrelicat(0);
-        setremise(0);
+        setPatient('');
+        setvaleurReduction(0);
         setMessageErreur('');
-        setresteaPayer(0);
-        setverse('');
-        setFrais(false);
+        setMontantVerse(0);
         document.querySelector('.recherche').value = "";
         document.querySelector('.recherche').focus();
-        setMontantFrais(0);
+        setMontantMateriel(0);
         setreduction(false);
         setPatientChoisi(detailsDuPatient)
+        activerBoutonMateriel()
     }
 
     const sauvegarder = () => {
@@ -405,38 +344,37 @@ export default function Commande(props) {
 
     const idUnique = () => {
         // Création d'un identifiant unique pour la facture
-        return Math.floor((1 + Math.random()) * 0x1000000000)
+        return Math.floor((1 + Math.random()) * 0x100000000000)
                .toString(32)
-               .substring(1) + qtePrixTotal.prix_total;        
+               .substring(1).toUpperCase();
     }
 
     const enregisterFacture = (id) => {
 
         // Enregistrement de la facture
 
-
         const data = new FormData();
 
-        montantFrais === 500 ? data.append('frais', 500) : data.append('frais', 0);
+        montantMateriel === 500 ? data.append('frais_materiel', 500) : data.append('frais_materiel', 0);
 
         data.append('id', id);
         data.append('caissier', props.nomConnecte);
-        nomPatient && data.append('patient', nomPatient);
-        data.append('prix_total', qtePrixTotal.prix_total);
-        data.append('remise', remise);
-        data.append('a_payer', qtePrixTotal.a_payer);
+        data.append('nom_patient', patientChoisi.nom);
+        data.append('code_patient', patientChoisi.code);
+        data.append('prix_total', calculerPrixTotal());
+        data.append('reduction', valeurReduction);
+        data.append('net_a_payer', calculerNetAPayer());
         data.append('montant_verse', montantVerse);
-        data.append('relicat', relicat);
-        data.append('reste_a_payer', resteaPayer);
-        data.append('assurance', assurance);
-        data.append('type_assurance', type_assurance);
+        data.append('relicat', calculerRelicat());
+        data.append('reste_a_payer', calculerResteAPayer());
+        data.append('assurance', patientChoisi.assurance);
+        data.append('type_assurance', patientChoisi.type_assurance);
         data.append('statu', statu);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_factures.php');
+        req.open('POST', 'http://serveur/backend-cmab/index.php?enregistrer_facture');
 
         req.addEventListener('load', () => {
-            setMedoSelect(false);
             setMessageErreur('');
             // setActualiserQte(!actualiserQte);
             // Activation de la fenêtre modale qui indique la réussite de la commmande
@@ -455,46 +393,6 @@ export default function Commande(props) {
 
     }
 
-    const enregisterPatient = () => {
-        // On enregistre le patient dans la base de donnés s'il n'y est pas encore
-        if (nomPatient) {
-
-            // const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
-            // if(patient.length === 0) {
-            //     const data = new FormData();
-            //     data.append('nom_patient', nomPatient);
-            //     data.append('assurance', assuranceDefaut);
-            //     data.append('type_assurance', 0);        
-                
-            //     const req = new XMLHttpRequest();
-            //     req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
-    
-            //     req.send(data);
-            // }
-        }
-    }
-
-    const enregistrerAssurance = (data) => {
-        data.append('quantite', qteDesire);
-
-        const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/data_assurance.php');
-
-        req.addEventListener("load", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('');
-        });
-
-
-        req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('Erreur réseau');
-        });
-
-
-        req.send(data);
-    }
-
     const validerCommande = () => {
 
         /* 
@@ -504,7 +402,7 @@ export default function Commande(props) {
         */
        const id = idUnique();
        setidFacture(id);
-       if(medocCommandes.length > 0 && state === 0) {
+       if(medocCommandes.length > 0) {
 
             let i = 0;
             document.querySelector('.valide').disabled = true;
@@ -514,23 +412,22 @@ export default function Commande(props) {
 
                 const data2 = new FormData();
 
-                nomPatient && data2.append('patient', nomPatient);
-                data2.append('assurance', assurance);
+                data2.append('code_patient', patientChoisi.code);
                 data2.append('id_facture', id);
                 data2.append('designation', item.designation);
                 data2.append('prix_total', item.prix);
                 data2.append('categorie', item.categorie);
                 data2.append('caissier', props.nomConnecte);
-                data2.append('reduction', remise);
-                assurance !== assuranceDefaut && enregistrerAssurance(data2);
+                data2.append('reduction', valeurReduction);
 
                 // Envoi des données
                 const req2 = new XMLHttpRequest();
-                req2.open('POST', 'http://serveur/backend-cmab/maj_historique_service.php');
+                req2.open('POST', 'http://serveur/backend-cmab/index.php?enreg_historique_service');
                 
                 // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
                     if (req2.status >= 200 && req2.status < 400) {
+                        // console.log(req2.response);
                         setMessageErreur('');
                         i++;
                         if (medocCommandes.length === i) {
@@ -557,63 +454,13 @@ export default function Commande(props) {
     const appliquerReduction = (e) => {
         // Gestion des reduction sur un service
 
-        if (e.target.textContent === "reduction") {
-            setreduction(true);
-        } else if (e.target.textContent === "appliquer") {
-            
-            if (!isNaN(valeurReduction) && valeurReduction > 0) {
-                // On applique la reduction en mettant à jour le prix total
-
-                Object.defineProperty(qtePrixTotal, 'a_payer', {
-                    value: qtePrixTotal.prix_total - (qtePrixTotal.prix_total * (parseInt(valeurReduction) / 100)),
-                    configurable: true,
-                    enumerable: true,
-                });
-
-                setremise(valeurReduction);
-
-                setvaleurReduction('');
-                setreduction(false);
-            }
-        }
-    }
-
-    const handleClick = (e) => {
-        if (medocCommandes.length > 0 && verse !== "") {
-            setmontantVerse(verse);
-            setverse('');
-            setMessageErreur('');
-        }
-    }
-
-    const ajouterPatient = () => {
-        if(patient !== "") {
-            setNomPatient(patient.trim());
-            setpatient('');
-
-            if(assurance.toLowerCase() !== assuranceDefaut) {
-                if(parseInt(qtePrixTotal.a_payer)) {
-                    Object.defineProperty(qtePrixTotal, 'a_payer', {
-                        value: (parseInt(qtePrixTotal.prix_total) * (100 - parseInt(type_assurance))) / 100,
-                        configurable: true,
-                        enumerable: true,
-                    });
-                }
-                setStatu('pending');
-            } else {
-                setStatu('done');
-            }
-
-            setStatePourRerender(!statePourRerender);
-            fermerModalPatient();
-            setMessageErreur('');
-        }
+        setreduction(true);
     }
 
     const demanderConfirmation = () => {
         if (medocCommandes.length > 0) {
-            if (nomPatient) {
-                if (resteaPayer > 0) {
+            if (patientChoisi.nom.length > 0) {
+                if (calculerResteAPayer() > 0) {
                     setMessageErreur('Veuillez entrer le montant versé');
                 } else {
                     setMessageErreur('');
@@ -634,9 +481,9 @@ export default function Commande(props) {
         req.open('GET', 'http://serveur/backend-cmab/index.php?tous_les_patient');
 
         req.addEventListener('load', () => {
+            // console.log(req.response);
             const result = JSON.parse(req.responseText);
             setlistePatient(result);
-            setlistePatientSauvegarde(result);
         });
 
         req.addEventListener("error", function () {
@@ -713,15 +560,15 @@ export default function Commande(props) {
                     <div style={{color: '#fff'}}>
                         <p style={styleBox}>
                             <label htmlFor="">Désignation</label>
-                            <input type="text" style={{height: '4vh'}} value={designation} onChange={handleChange} name='designation' autoComplete='off' />
+                            <input type="text" style={{height: '4vh', width: '40%'}} value={designation.toUpperCase()} onChange={handleChange} name='designation' autoComplete='off' />
                         </p>
                         <p style={styleBox}>
                             <label htmlFor="">Prix</label>
-                            <input type="text" style={{height: '4vh'}} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
+                            <input type="text" style={{height: '4vh', width: '40%'}} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
                         </p>
                         <p style={styleBox}>
                             <label htmlFor="categorie">Catégorie</label>
-                            <select name="categorie" id="categorie">
+                            <select name="categorie" id="categorie" style={{height: '4vh', width: '40%'}}>
                                 <option value="maternité">Maternité</option>
                                 <option value="imagerie">Imagerie</option>
                                 <option value="laboratoire">Laboratoire</option>
@@ -756,7 +603,7 @@ export default function Commande(props) {
     }
 
     const filtrerPatient = (e) => {
-        setpatient(e.target.value);
+        setPatient(e.target.value);
 
         const req = new XMLHttpRequest();
 
@@ -767,7 +614,6 @@ export default function Commande(props) {
                 const result = JSON.parse(req.responseText);
 
                 setlistePatient(result);
-                setlistePatientSauvegarde(result);
             }
             
         });
@@ -780,14 +626,14 @@ export default function Commande(props) {
     }
 
     const ouvrirModalPatient = () => {
-        setpatient('');
+        setPatient('');
         setoption('patient');
         setModalPatient(true);
     }
     
     const fermerModalPatient = () => {
         setModalPatient(false);
-        setpatient('');
+        setPatient('');
         setAutreState(autre);
     }
 
@@ -798,7 +644,6 @@ export default function Commande(props) {
     const fermerModalReussi = () => {
         setModalReussi(false);
         sauvegarder();
-        setNomPatient('');
         setMedocCommandes([]);
         annulerCommande();
         setPatientChoisi(detailsDuPatient);
@@ -811,6 +656,20 @@ export default function Commande(props) {
     const ouvrirEditerPatient = () => {
         setModalEditerPatient(true);
         fermerModalPatient();
+    }
+
+    const handleChangeReduction = (e) => {
+        if(e.target.value.length === 0)
+            setvaleurReduction(0);
+        else
+            setvaleurReduction(parseInt(e.target.value))
+    }
+
+    const handleChangeMontantVerse = (e) => {
+        if(e.target.value.length === 0)
+            setMontantVerse(0);
+        else
+            setMontantVerse(parseInt(e.target.value))
     }
 
     const handleChangePatient = (e) => {
@@ -918,18 +777,6 @@ export default function Commande(props) {
             </div>
 
             <div className="right-side">
-                <button
-                    style={{position: 'absolute', 
-                    right: '0%', top: '0%', 
-                    backgroundColor: '#03ca7e',
-                    border: 'none',
-                    opacity: '.9',
-                    width: '50px',
-                    height: '20px',
-                    }}
-                    onClick={() => {setState(s => s+1);}}
-                >
-                </button>
                 <h1>{medocSelect ? "Détails du service" : "Selectionnez un service pour voir les détails"}</h1>
 
                 <div className="infos-medoc">
@@ -949,15 +796,15 @@ export default function Commande(props) {
                 <div className="box" style={{marginLeft: 5}}>
                     <div className="">
                         <button className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}} onClick={ajouterMedoc}>ajouter</button>
-                        <button className='bootstrap-btn' style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={fraisMateriel}>+500</button>
+                        <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button>
                     </div>
                     <div style={{textAlign: 'center'}}>
                         <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
                     </div>
                     <div>
                         <div>
-                            <input type="text" name="reduction" value={valeurReduction} onChange={(e) => {setvaleurReduction(e.target.value)}} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
-                            <button className='bootstrap-btn' onClick={appliquerReduction} style={{backgroundColor: '#6d6f94'}}>{reduction ? 'appliquer' : 'reduction'}</button>
+                            <input type="number" name="reduction" value={valeurReduction} onChange={handleChangeReduction} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
+                            <button className='bootstrap-btn' style={{display: reduction ? 'none' : 'inline-block', backgroundColor: '#6d6f94'}}  onClick={appliquerReduction}>reduction</button>
                         </div>
                     </div>
                     <div style={{textAlign: 'center'}}>
@@ -972,8 +819,7 @@ export default function Commande(props) {
                             </div>
                         ) : null}
                         <label htmlFor="">Montant versé : </label>
-                        <input type="text" name='verse' value={verse} onChange={(e) => !isNaN(e.target.value) && setverse(e.target.value)} autoComplete='off' />
-                        <button className='bootstrap-btn' onClick={handleClick} style={{width: '5%'}}>ok</button>
+                        <input type="number" name='verse' value={montantVerse} onChange={handleChangeMontantVerse} autoComplete='off' />
                     </div>
                 </div>
 
@@ -1002,22 +848,25 @@ export default function Commande(props) {
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
-                                Prix total : <span style={{color: "#0e771a", fontWeight: "600"}}>{medocCommandes.length > 0 ? qtePrixTotal.prix_total + ' Fcfa': 0 + ' Fcfa'}</span>
+                                Prix total : <span style={{color: "#012557", fontWeight: "600"}}>{calculerPrixTotal() + ' Fcfa'}</span>
                             </div>
                             <div>
-                                Réduction : <span style={{color: "#0e771a", fontWeight: "600"}}>{remise ? remise + '%' : 0 + '%'}</span>
+                                Réduction : <span style={{color: "#012557", fontWeight: "600"}}>{valeurReduction + '%'}</span>
+                            </div>
+                            <div style={{display: `${parseInt(patientChoisi.type_assurance) === 0 ? 'none' : 'block'}`}}>
+                                Assurance: <span style={{color: '#012557', fontWeight: '700'}}>{patientChoisi.type_assurance + '%'}</span>
                             </div>
                             <div>
-                                Net à payer : <span style={{color: "#0e771a", fontWeight: "600"}}>{qtePrixTotal.a_payer ? qtePrixTotal.a_payer + ' Fcfa': 0 + ' Fcfa'}</span>
+                                Net à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerNetAPayer() + ' Fcfa'}</span>
                             </div>
                             <div>
-                                Montant versé : <span style={{color: "#0e771a", fontWeight: "600"}}>{montantVerse > 0 ? montantVerse + ' Fcfa': 0 + ' Fcfa'}</span>
+                                Montant versé : <span style={{color: "#012557", fontWeight: "600"}}>{montantVerse > 0 ? montantVerse + ' Fcfa': 0 + ' Fcfa'}</span>
                             </div>
                             <div>
-                                Relicat : <span style={{color: "#0e771a", fontWeight: "600"}}>{relicat > 0 ? relicat + ' Fcfa': 0 + ' Fcfa'}</span>
+                                Relicat : <span style={{color: "#012557", fontWeight: "600"}}>{calculerRelicat() + ' Fcfa'}</span>
                             </div>
                             <div>
-                                Reste à payer : <span style={{color: "#0e771a", fontWeight: "600"}}>{resteaPayer > 0 ? resteaPayer + ' Fcfa': 0 + ' Fcfa'}</span>
+                                Reste à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerResteAPayer() + ' Fcfa'}</span>
                             </div>
                         </div>
                         <button className='bootstrap-btn annuler' onClick={annulerCommande}>Annnuler</button>
@@ -1029,18 +878,19 @@ export default function Commande(props) {
                         <div style={{display: 'none'}}>
                             <Facture
                                 ref={componentRef}
-                                assurance={assurance}
+                                assurance={patientChoisi.assurance}
+                                type_assurance={patientChoisi.type_assurance}
                                 medocCommandes={medocCommandes}
                                 idFacture={idFacture}
-                                patient={nomPatient}
-                                prixTotal={qtePrixTotal.prix_total}
-                                reduction={remise}
-                                aPayer={qtePrixTotal.a_payer}
+                                patient={patientChoisi.nom}
+                                prixTotal={calculerPrixTotal}
+                                reduction={valeurReduction}
+                                aPayer={calculerNetAPayer}
                                 montantVerse={montantVerse}
-                                relicat={relicat}
-                                resteaPayer={resteaPayer}
+                                relicat={calculerRelicat}
+                                resteaPayer={calculerResteAPayer}
                                 nomConnecte={props.nomConnecte}
-                                montantFrais={montantFrais}
+                                montantFrais={montantMateriel}
                             />
                         </div>
                     </div>
