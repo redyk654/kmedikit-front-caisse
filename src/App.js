@@ -93,7 +93,7 @@ function App() {
             <div className="onglets-blocs" style={{width: '95%'}}>
               <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>Historique</div>
               <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>Listing</div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div>
+              {/* <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div> */}
               <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>Modifier</div>
               <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>Comptes</div>
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>Factures-services</div>
@@ -137,7 +137,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role.toLowerCase() === ROLES.regisseur) {
+    } /*else if (role.toLowerCase() === ROLES.regisseur) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -156,7 +156,7 @@ function App() {
           </section>
         </main>
       );
-    } else if(role.toLowerCase() === ROLES.secretaire) {
+    }*/ else if(role.toLowerCase() === ROLES.secretaire) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />

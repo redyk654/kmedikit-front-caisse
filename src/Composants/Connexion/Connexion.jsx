@@ -25,8 +25,8 @@ export default function Connexion(props) {
         e.preventDefault();
 
         const data = new FormData();
-        data.append('nom', nom.trim().toLowerCase());
-        data.append('mdp', mdp.trim().toLowerCase());
+        data.append('nom', nom.trim().toUpperCase());
+        data.append('mdp', mdp.trim().toUpperCase());
 
         const req = new XMLHttpRequest();
         req.open('POST', 'http://serveur/backend-cmab/connexion_caisse.php');

@@ -2,7 +2,7 @@
   "main": "public/electron.js",
   "homepage": "./",
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
-  "name": "Caisse-Bepanda",
+  "name": "KMD-Caisse",
   "author": "Chrisppo Youmbissi Kamdem",
   "version": "2.1.7",
   "build": {

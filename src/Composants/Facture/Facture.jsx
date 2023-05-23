@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { extraireCode, mois } from '../../shared/Globals';
+import { extraireCode, mois, styleEntete } from '../../shared/Globals';
+import logo from '../../images/logo-minsante.png';
 
 const styles = {
     // display: 'flex',
@@ -33,17 +34,14 @@ const table_styles = {
     fontSize: 8,
 }
 
-const styleEntete = {
-    color: 'black',
-    borderBottom: '1px dotted #000',
-    letterSpacing: '1px'
-}
-
 export default class Facture extends Component {
 
     render() {
         return (
             <div style={{display: 'flex', flexDirection: 'column', width: '85%'}}>
+                <div className='logo-minsante-facture p1'>
+                    <img src={logo} alt="" width={70} height={70} />
+                </div>
                 <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                         <div style={{ lineHeight: '20px'}}>
@@ -115,6 +113,9 @@ export default class Facture extends Component {
                             <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                         </div>
                     </div>
+                </div>
+                <div className='logo-minsante-facture p2'>
+                    <img src={logo} alt="" width={70} height={70} />
                 </div>
                 <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>

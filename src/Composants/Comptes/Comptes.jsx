@@ -103,7 +103,6 @@ export default function Comptes(props) {
                         <select name="role">
                             <option value={ROLES.caissier}>caissier</option>
                             <option value={ROLES.admin}>admin</option>
-                            <option value={ROLES.regisseur}>regisseur</option>
                             <option value={ROLES.secretaire}>sécrétaire</option>
                         </select>
                     </p>
@@ -131,12 +130,12 @@ export default function Comptes(props) {
             setMsgErreur('Le mot de passe et le mot passe de confirmation doivent être identique');
         } else if (pseudo.includes(' ')) {
             setMsgErreur("l'identifiant ne doit pas contenir d'espace");
-        } else if (pseudo.length < 2 || pseudo.length > 4) {
-            setMsgErreur("l'identifiant doit être compris entre 2 et 4 caractères"); 
+        } else if (pseudo.length < 2 || pseudo.length > 6) {
+            setMsgErreur("l'identifiant doit être compris entre 2 et 6 caractères");
         } else if (nom.length === 0) {
             setMsgErreur('le champ nom ne doit pas être vide');
-        } else if (mdp.length < 3 || mdp.length > 6) {
-            setMsgErreur('le mot de passe doit être compris entre 3 et 6 caractères');
+        } else if (mdp.length < 3 || mdp.length > 8) {
+            setMsgErreur('le mot de passe doit être compris entre 3 et 8 caractères');
         } else {
             setMsgErreur('');
 

@@ -1,9 +1,10 @@
 import React, { useState, useRef, Fragment } from 'react';
 import './Entete.css';
-import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
+import { FaSignOutAlt } from 'react-icons/fa';
+
 
 const customStyles1 = {
     content: {
@@ -51,8 +52,6 @@ export default function Entete(props) {
         confirmation: ''
     }
 
-    const [services, setServices] = useState(servicesInit);
-    const [recettejour, setRecetteJour] = useState({recette: ''});
     const [slide, setSlide] = useState(false);
     const [nouveauMdp, setNouveauMdp] = useState(utilisateur);
     const [modalConfirmation, setModalConfirmation] = useState(false);
@@ -62,65 +61,6 @@ export default function Entete(props) {
     const [encours, setenCours] = useState(true);
 
     const { ancien, nouveau, confirmation } = nouveauMdp;
-
-
-    const calculRecetteJour = () => {
-        // Récupération de la recette en cours du vendeur
-        setModalReussi(true);
-        setMdpReussi(false);
-        const d = new Date();
-        let i = 0;
-
-        services.map(item => {
-            const data = new FormData();
-            data.append('code', item.code);
-            data.append('caissier', props.nomConnecte);
-
-            const req = new XMLHttpRequest();
-
-            if (d.getHours() >= 5 && d.getHours() <= 12) {
-                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=nuit`);
-                req.send(data);
-            } else if (d.getHours() <= 22 && d.getHours() >= 13) {
-                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=jour`);
-                req.send(data);
-            } else {
-                deconnection();
-            }
-
-            req.addEventListener('load', () => {
-                i++;
-                const result = JSON.parse(req.responseText).recette;
-                item.recette = JSON.parse(req.responseText).recette != null ? result : 0;
-                item.recetteRestante = JSON.parse(req.responseText).recette != null ? result : 0;
-                if (services.length === i) {
-                    let recetteT = 0;
-                    services.map(item => {recetteT += parseInt(item.recette)});
-                    setenCours(false);
-                }
-
-            });
-        });
-    }
-
-    const enregisterRecette = () => {
-        // Enreistrement de la recette dans la base de données
-        const data = new FormData();
-        data.append('nom', props.nomConnecte);
-        data.append('ancien', ancien);
-        data.append('montant', recettejour.recette);
-
-        const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_recette.php');
-
-        req.addEventListener('load', () => {
-            if (req.status >= 200 && req.status < 400) {
-                deconnection();
-            }
-        })
-
-        req.send(data);
-    }
 
     const handleChange = (e) => {
         setNouveauMdp({...nouveauMdp, [e.target.name]: e.target.value});
@@ -181,7 +121,7 @@ export default function Entete(props) {
     }
 
     return (
-        <header className="entete" style={{height: `${slide ? '20vh' : '10vh'}`}}>
+        <header className="entete" style={{height: `${slide ? '18vh' : '18vh'}`}}>
             <Modal
                 isOpen={modalReussi}
                 style={customStyles2}
@@ -241,24 +181,19 @@ export default function Entete(props) {
                 </form>
             </Modal>
             <div className="box-entete">
+                <h1 style={{textAlign: 'center', width: '98vw', fontSize: '29px'}}>
+                    Caisse
+                </h1>
                 <h3 onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
-                <div>
-                    <button onClick={() => {deconnection()}}>Déconnection</button>
-                </div>
-                <div>
-                    <button style={{display: `${slide ? 'inline' : 'none'}`}} onClick={() => {setModalConfirmation(true)}} >Modifier mot de passe</button>
+                <div className='deconnection' style={{display: `${slide ? 'flex' : 'flex'}`,}}>
+                    <div style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
+                        <FaSignOutAlt size={24} />
+                    </div>
+                    <div>
+                        <button style={{display: `${slide ? 'inline' : 'inline'}`}} onClick={() => {setModalConfirmation(true);}} >Modifier</button>
+                    </div>
                 </div>
             </div>
-            <h1 style={{backgroundColor: '',}}>
-                {/* © CMA de Bepanda */}
-            </h1>
-            {/* <div style={{display: 'none'}}>
-                <ImprimerRecette
-                    ref={componentRef}
-                    services={services}
-                    recetteTotal={recetteTotal}
-                />
-            </div> */}
         </header>
     )
 }
