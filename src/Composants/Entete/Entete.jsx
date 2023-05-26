@@ -250,7 +250,7 @@ export default function Entete(props) {
                 </div>
             </div>
             <h1 style={{backgroundColor: '',}}>
-                © CMA de Bepanda
+                Caisse
             </h1>
             {/* <div style={{display: 'none'}}>
                 <ImprimerRecette
