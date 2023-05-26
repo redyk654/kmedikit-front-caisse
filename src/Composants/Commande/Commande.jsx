@@ -344,7 +344,7 @@ export default function Commande(props) {
 
     const idUnique = () => {
         // Création d'un identifiant unique pour la facture
-        return Math.floor((1 + Math.random()) * 0x100000000000)
+        return Math.floor((1 + Math.random()) * 0x1000000000000)
                .toString(32)
                .substring(1).toUpperCase();
     }

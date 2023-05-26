@@ -193,7 +193,7 @@ export default function Apercu(props) {
 
     return (
         <section className="historique">
-            <h1>Historique des actes</h1>
+            <h1>Listing des caissiers</h1>
             <div className="container-historique">
                 <div className="table-commandes">
                     <div className="entete-historique">
