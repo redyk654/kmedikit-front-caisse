@@ -116,12 +116,12 @@ export default class ImprimerHistorique extends Component {
                 </div>
                 <div style={{fontSize: 9, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                     <div style={{textAlign: 'center', width: '410px'}}>
-                        <div style={{marginTop: 5, fontSize: 14}}>Fiche de recette des <strong>{this.props.listing === 'non' ? 'non assurés' : 'assurés'}</strong> </div>
+                        <div style={{marginTop: 5, fontSize: 14}}>Fiche de recette de la caisse pour les patients <strong>{this.props.listing === 'non' ? 'non assurés' : 'assurés'}</strong> </div>
                         <div style={{marginTop: 5}}>
                             tiré le &nbsp;
                             <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.infoRecette ? this.mois(this.props.infoRecette[0].date_heure.substring(0, 11)) : (this.mois(new Date().toLocaleDateString()) + ' ')} à {this.props.infoRecette ? this.props.infoRecette[0].date_heure.substring(11,) : (' ' + new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</span>
                         </div>
-                        <div style={{marginTop: 5}}>Service fait par <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.nomConnecte}</span></div>
+                        <div style={{marginTop: 5}}>Caissier <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
                         <div style={{marginTop: 5}}>Du <span style={{fontWeight: '600', marginTop: '15px'}}>{this.mois2(this.props.dateDepart)} à {this.props.dateDepart.substring(10, 13)}h{this.props.dateDepart.substring(14, 16)}min</span> Au <strong>{this.mois2(this.props.dateFin)} à {this.props.dateFin.substring(10, 13)}h{this.props.dateFin.substring(14, 16)}min</strong></div>
                         <div style={{textAlign: 'center', marginBottom: 15}}>
                             <table style={table_styles}>

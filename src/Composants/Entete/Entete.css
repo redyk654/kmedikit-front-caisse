@@ -10,13 +10,14 @@
 }
 
 .entete h3 {
-    width: 100%;
+    /* width: 100%;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     cursor: pointer;
-    padding-top: 2px;
+    padding-top: 2px; */
+    font-size: larger;
 }
 
 .entete h1 {
