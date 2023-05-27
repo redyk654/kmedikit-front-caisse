@@ -4,7 +4,7 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import { FaCheck, FaCross } from 'react-icons/fa';
 import FactureEnreg from '../Facture/FactureEnreg';
-import { mois, extraireCode } from "../../shared/Globals";
+import { mois, extraireCode, nomDns } from "../../shared/Globals";
 
 const customStyles2 = {
     content: {
@@ -80,9 +80,9 @@ export default function GestionFactures(props) {
         setfactureSauvegarde([]);
         const req = new XMLHttpRequest();
         if (filtrer) {
-            req.open('GET', 'http://serveur/backend-cmab/gestion_factures.php?filtrer=oui');
+            req.open('GET', `${nomDns}gestion_factures.php?filtrer=oui`);
             const req2 = new XMLHttpRequest();
-            req2.open('GET', 'http://serveur/backend-cmab/gestion_factures.php?filtrer=oui&manquant');
+            req2.open('GET', `${nomDns}gestion_factures.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
                 const result = JSON.parse(req2.responseText);
                 setManquantTotal(result[0].manquant);
@@ -90,7 +90,7 @@ export default function GestionFactures(props) {
             req2.send();
 
         } else {
-            req.open('GET', 'http://serveur/backend-cmab/gestion_factures.php');
+            req.open('GET', `${nomDns}gestion_factures.php`);
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -115,7 +115,7 @@ export default function GestionFactures(props) {
         if (factureSelectionne.length > 0) {
             const req = new XMLHttpRequest();
     
-            req.open('GET', `http://serveur/backend-cmab/gestion_factures.php?id=${factureSelectionne[0].id}`);
+            req.open('GET', `${nomDns}gestion_factures.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
@@ -165,7 +165,7 @@ export default function GestionFactures(props) {
                 data.append('relicat', relicat);
     
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/gestion_factures.php')
+                req.open('POST', `${nomDns}gestion_factures.php`)
     
                 req.addEventListener('load', () => {
                     setSupp(false);
@@ -186,7 +186,7 @@ export default function GestionFactures(props) {
     const filtrerListe = (e) => {
         const req = new XMLHttpRequest();
 
-        req.open('GET', `http://serveur/backend-cmab/rechercher_facture_caisse.php?str=${e.target.value}`);
+        req.open('GET', `${nomDns}rechercher_facture_caisse.php?str=${e.target.value}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -206,7 +206,7 @@ export default function GestionFactures(props) {
         data.append('id', factureSelectionne[0].id);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/supprimer_facture.php');
+        req.open('POST', `${nomDns}supprimer_facture.php`);
         
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {

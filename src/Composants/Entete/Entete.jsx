@@ -4,7 +4,7 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
 import { FaSignOutAlt } from 'react-icons/fa';
-
+import { nomDns } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -79,7 +79,7 @@ export default function Entete(props) {
             data.append('nouveau', nouveau);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/modif_pass_caisse.php');
+            req.open('POST', `${nomDns}modif_pass_caisse.php`);
 
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {

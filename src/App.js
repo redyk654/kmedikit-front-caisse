@@ -132,11 +132,16 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '83%', fontSize: '14px'}}>
+            <div className="onglets-blocs" style={{width: '95%', fontSize: '12px'}}>
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                 <FaStore size={22} />
                 &nbsp;
                 Services
+              </div>
+              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <FiSettings size={20} />
+                &nbsp;
+                Modifier
               </div>
               <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
                 <FaPlusSquare size={24} />

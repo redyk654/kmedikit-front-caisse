@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ContextChargement } from '../../Context/Chargement';
 import { afficherAge, afficherSexe } from '../../shared/Globals';
 import './EditerPatient.css'
-import { ROLES, SEXES } from "../../shared/Globals";
+import { ROLES, SEXES, nomDns } from "../../shared/Globals";
 import CustomLoader from '../../shared/CustomLoader';
 
 export default function EditerPatient({ ajouterNouveauPatient, resetInfosDuPatient, handleChange, fermerEditerPatient, ouvrirModalPatient, nom, age, sexe, quartier, assurance, type_assurance }) {
@@ -14,7 +14,7 @@ export default function EditerPatient({ ajouterNouveauPatient, resetInfosDuPatie
     const [messageErreur, setMessageErreur] = useState('');
 
     useEffect(() => {
-        fetch('http://serveur/backend-cmab/assurances.php?liste')
+        fetch(`${nomDns}assurances.php?liste`)
         .then(response => response.json())
         .then(data => setListeAssurances(data));
     }, [])

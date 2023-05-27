@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './VueRecettes.css';
 import ReactToPrint from 'react-to-print';
 import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
+import { extraireCode, nomDns } from '../../shared/Globals';
 
 export default function VueRecettes(props) {
 
@@ -14,7 +15,7 @@ export default function VueRecettes(props) {
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/gestion_pourcentage.php?recuperer');
+        req.open('GET', `${nomDns}gestion_pourcentage.php?recuperer`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -36,7 +37,7 @@ export default function VueRecettes(props) {
         setInfoRecette(listeRecettesSauvegarde.filter(item => (item.id_recette.indexOf(e.target.id) !== -1)));
         // console.log(listeRecettesSauvegarde.filter(item => (item.id_recette.indexOf(e.target.id) !== -1)));
         const req = new XMLHttpRequest();
-        req.open('GET', `http://serveur/backend-cmab/gestion_pourcentage.php?id_recette=${e.target.id}`);
+        req.open('GET', `${nomDns}gestion_pourcentage.php?id_recette=${e.target.id}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {

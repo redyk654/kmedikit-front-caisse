@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './Connexion.css';
+import { nomDns } from '../../shared/Globals';
 
 export default function Connexion(props) {
     let name_field = useRef()
@@ -29,7 +30,7 @@ export default function Connexion(props) {
         data.append('mdp', mdp.trim().toUpperCase());
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/connexion_caisse.php');
+        req.open('POST', `${nomDns}connexion_caisse.php`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
