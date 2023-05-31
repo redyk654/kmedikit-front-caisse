@@ -1,6 +1,5 @@
 import React, { useState, useRef, Fragment } from 'react';
 import './Entete.css';
-import { FaSignOutAlt } from 'react-icons/fa';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
@@ -185,7 +184,7 @@ export default function Entete(props) {
                 <h1 style={{textAlign: 'center', width: '98vw', fontSize: '29px'}}>
                     Caisse
                 </h1>
-                <h3 onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
+                <h3 className='ms-4' onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
                 <div className='deconnection' style={{display: `${slide ? 'flex' : 'flex'}`,}}>
                     <div style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
                         <FaSignOutAlt size={24} />

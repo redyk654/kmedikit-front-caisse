@@ -122,7 +122,7 @@ export default function Historique(props) {
                 </div>
                 <div style={{textAlign: 'center'}}>
                     <ReactToPrint
-                        trigger={() => <button style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                        trigger={() => <button className='bootstrap-btn' style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                         content={() => componentRef.current}
                     />
                 </div>
