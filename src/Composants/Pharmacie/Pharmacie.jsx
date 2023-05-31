@@ -206,7 +206,7 @@ export default function GestionFactures(props) {
     }
 
     const mettreAjourData = () => {
-        if (montantVerse.length > 0 && factureSelectionne[0].a_payer) {
+        if (montantVerse.length > 0 && factureSelectionne.length > 0) {
             setverse(montantVerse);
 
             if (parseInt(factureSelectionne[0].a_payer) < parseInt(montantVerse)) {

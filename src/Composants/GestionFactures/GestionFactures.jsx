@@ -4,6 +4,7 @@ import './GestionFactures.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import { FaCheck, FaCross } from 'react-icons/fa';
+import { extraireCode } from '../../shared/Globals';
 
 const customStyles2 = {
     content: {
@@ -228,23 +229,6 @@ export default function GestionFactures(props) {
 
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
-    }
-
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
     }
 
     const mois = (str) => {

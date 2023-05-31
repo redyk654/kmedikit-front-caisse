@@ -1,10 +1,10 @@
 export function extraireCode (designation) {
-    const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
+    const codes = ['RX ', 'LAB ', 'MA ', 'MED ', 'CHR ', 'CO ', 'UPEC ', 'SP ', 'CA '];
     let designation_extrait = '';
 
     codes.forEach(item => {
         if(designation.indexOf(item) === 0) {
-            designation_extrait =  designation.slice(item.length + 1);
+            designation_extrait =  designation.slice(item.length);
         } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
             designation_extrait = designation;
         }
