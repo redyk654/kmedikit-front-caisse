@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, mois, nomDns } from '../../shared/Globals';
 
 
 export default function Historique(props) {
@@ -49,7 +49,7 @@ export default function Historique(props) {
             let dateF = dateFin;
 
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}`);
+            req.open('GET', `${nomDns}recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}`);
 
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
@@ -57,7 +57,7 @@ export default function Historique(props) {
                 stopChargement();
 
                 const req2 = new XMLHttpRequest();
-                req2.open('GET', `http://serveur/backend-cmab/recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}&recette=oui`);
+                req2.open('GET', `${nomDns}recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}&recette=oui`);
                 req2.onload = () => {setRecetteTotal(JSON.parse(req2.responseText)[0].recette);}
                 req2.send();
 
@@ -72,36 +72,6 @@ export default function Historique(props) {
         setSearch(!search);
         setdateDepart(date_select1.current.value + ' ' + heure_select1.current.value + ':00');
         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
-    }
-
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
     }
 
     return (
