@@ -4,13 +4,15 @@
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
   "name": "KMD-Caisse",
   "author": "Chrisppo Youmbissi Kamdem",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "build": {
     "win": {
       "icon": "build/icon.ico"
     }
   },
   "dependencies": {
+    "@coreui/coreui": "^4.2.6",
+    "@coreui/react": "^4.8.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",

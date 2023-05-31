@@ -1,6 +1,6 @@
 import React, { useState, useRef, Fragment } from 'react';
 import './Entete.css';
-import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
+import { FaSignOutAlt } from 'react-icons/fa';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
@@ -181,7 +181,7 @@ export default function Entete(props) {
     }
 
     return (
-        <header className="entete" style={{height: `${slide ? '20vh' : '10vh'}`}}>
+        <header className="entete" style={{height: `${slide ? '18vh' : '18vh'}`}}>
             <Modal
                 isOpen={modalReussi}
                 style={customStyles2}
@@ -241,24 +241,19 @@ export default function Entete(props) {
                 </form>
             </Modal>
             <div className="box-entete">
-                <h3 onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
-                <div>
-                    <button onClick={() => {deconnection()}}>Déconnection</button>
-                </div>
-                <div>
-                    <button style={{display: `${slide ? 'inline' : 'none'}`}} onClick={() => {setModalConfirmation(true)}} >Modifier mot de passe</button>
+                <h1 className='text-center' style={{width: '98vw', fontSize: '29px'}}>
+                    Caisse
+                </h1>
+                <h3 className='ms-4' onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
+                <div className='ms-4' style={{display: `${slide ? 'flex' : 'flex'}`,}}>
+                    <div style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
+                        <FaSignOutAlt size={24} />
+                    </div>
+                    <div>
+                        <button style={{display: `${slide ? 'inline' : 'inline'}`}} onClick={() => {setModalConfirmation(true)}} >Modifier</button>
+                    </div>
                 </div>
             </div>
-            <h1 style={{backgroundColor: '',}}>
-                Caisse
-            </h1>
-            {/* <div style={{display: 'none'}}>
-                <ImprimerRecette
-                    ref={componentRef}
-                    services={services}
-                    recetteTotal={recetteTotal}
-                />
-            </div> */}
         </header>
     )
 }
