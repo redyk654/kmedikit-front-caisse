@@ -1,5 +1,6 @@
 import React, { useState, useRef, Fragment } from 'react';
 import './Entete.css';
+import { FaSignOutAlt } from 'react-icons/fa';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
