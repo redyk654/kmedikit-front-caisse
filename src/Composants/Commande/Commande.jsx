@@ -8,7 +8,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, ServiceExiste } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -645,9 +645,14 @@ export default function Commande(props) {
     
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
-                    setAutreState({designation: '', prix: ''});
-                    setRerender(true);
-                    fermerModalPatient();
+                    if (req.responseText.toUpperCase() === ServiceExiste.toUpperCase()) {
+                        setMessageErreur('Ce service existe déjà');
+                    } else {
+                        setMessageErreur('');
+                        setAutreState({designation: '', prix: ''});
+                        setRerender(true);
+                        fermerModalPatient();
+                    }
                 }
             });
     
@@ -713,8 +718,9 @@ export default function Commande(props) {
                                 <option value="consultation spécialiste">Consultation Spécialiste</option>
                             </select>
                         </p>
+                        <p className='text-light text-center'>{messageErreur}</p>
                         <p style={styleBox}>
-                            <button style={{width: '20%', cursor: 'pointer'}} onClick={nouveauService}>OK</button>
+                            <button className='bootstrap-btn valider' style={{width: '100%', cursor: 'pointer'}} onClick={nouveauService}>Ajouter</button>
                         </p>
                     </div>
                 </Fragment>
@@ -759,6 +765,7 @@ export default function Commande(props) {
     }
     
     const fermerModalPatient = () => {
+        setMessageErreur('');
         setModalPatient(false);
         setpatient('');
         setAutreState(autre);
