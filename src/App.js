@@ -1,5 +1,5 @@
 import './App.css';
-import { Fragment, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import '@coreui/coreui/dist/css/coreui.min.css'
 import Entete from './Composants/Entete/Entete';
 import Connexion from './Composants/Connexion/Connexion';
@@ -14,21 +14,22 @@ import Apercu from './Composants/Apercu/Apercu';
 import Assurance from './Composants/Assurance/Assurance';
 import FacturesAssurances from './Composants/FacturesAssurances/FacturesAssurances';
 import Modifier from './Composants/Modifier/Modifier';
-import { FaChartBar, FaClipboardList, FaLayerGroup, FaPlusSquare, FaReceipt, FaStore, FaTr, FaPlusSquareuck, FaUsers } from 'react-icons/fa';
+import { FaUsers, FaChartBar, FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
+import { RiSurveyFill } from "react-icons/ri";
+import { FiSettings } from "react-icons/fi";
+
+import { ContextChargement } from './Context/Chargement';
+import { ROLES } from "./shared/Globals";
 
 
 
 function App() {
 
-  const admin = "admin";
-  const caissier = "caissier";
-  const regisseur = "regisseur";
-  const secretaire = "secretaire";
+  const {role, setRole} = useContext(ContextChargement);
 
   const [onglet, setOnglet] = useState(1);
   const [connecter, setConnecter] = useState(false);
   const [nomConnecte, setNomConnecte] = useState('');
-  const [role, setRole] = useState('');
 
   const date_e = new Date('2022-08-26');
   const date_j = new Date();
@@ -39,11 +40,11 @@ function App() {
     //   setConnecter(false);
     // }
 
-    if(role === regisseur) {
+    if(role === ROLES.regisseur) {
       setOnglet(5);
-    } else if (role === admin) {
+    } else if (role === ROLES.admin) {
       setOnglet(3);
-    } else if (role === secretaire) {
+    } else if (role === ROLES.secretaire) {
       setOnglet(9);
     } else {
       setOnglet(1);
@@ -88,18 +89,38 @@ function App() {
   }
 
   if (connecter) {
-    if(role === admin) {
+    if(role.toLowerCase() === ROLES.admin) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95%'}}>
-              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>Historique</div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>Listing</div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>Modifier</div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>Comptes</div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>Factures-services</div>
+            <div className="onglets-blocs" style={{width: '98%', fontSize: '13px'}}>
+              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
+                <RiSurveyFill size={20} />
+                &nbsp;
+                Historique
+              </div>
+              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                <FaClipboardList size={19} />
+                &nbsp;
+                Listing
+              </div>
+              {/* <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div> */}
+              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <FiSettings size={20} />
+                &nbsp;
+                Modifier
+              </div>
+              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
+                <FaUsers size={20} />
+                &nbsp;
+                Comptes
+              </div>
+              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                <FaReceipt size={19} />
+                &nbsp;
+                Factures-services
+              </div>
             </div>
             <div className="onglets-contenu">
                 {contenu}
@@ -107,16 +128,21 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === caissier) {
+    } else if (role.toLowerCase() === ROLES.caissier) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '83%', fontSize: '14px'}}>
+            <div className="onglets-blocs" style={{width: '95%', fontSize: '12px'}}>
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                 <FaStore size={22} />
                 &nbsp;
                 Services
+              </div>
+              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <FiSettings size={20} />
+                &nbsp;
+                Modifier
               </div>
               <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
                 <FaPlusSquare size={24} />
@@ -140,7 +166,7 @@ function App() {
           </section>
         </main>
       );
-    } else if (role === regisseur) {
+    } /*else if (role.toLowerCase() === ROLES.regisseur) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
@@ -159,7 +185,7 @@ function App() {
           </section>
         </main>
       );
-    } else if(role === secretaire) {
+    }*/ else if(role.toLowerCase() === ROLES.secretaire) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
