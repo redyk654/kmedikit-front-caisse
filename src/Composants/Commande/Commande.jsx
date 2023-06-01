@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, MONTANTMATERIEL, nomDns } from '../../shared/Globals';
+import { extraireCode, MONTANTMATERIEL, nomDns, ServiceExiste } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -12,7 +12,6 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
-import { extraireCode, ServiceExiste } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -587,7 +586,7 @@ export default function Commande(props) {
                         </p>
                         <p className='text-light text-center'>{messageErreur}</p>
                         <p style={styleBox}>
-                            <button className='bootstrap-btn valider' style={{width: '100%', cursor: 'pointer'}} onClick={nouveauService}>Ajouter</button>
+                            <button className='bootstrap-btn valider' style={{width: '20%', cursor: 'pointer'}} onClick={nouveauService}>Ajouter</button>
                         </p>
                     </div>
                 </Fragment>
