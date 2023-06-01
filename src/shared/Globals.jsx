@@ -15,6 +15,8 @@ export function extraireCode (designation) {
     return designation_extrait.toUpperCase();
 }
 
+export const ServiceExiste = "Ce service existe déjà";	
+
 export function afficherSexe (sexe) {
     let val;
     switch(sexe) {
