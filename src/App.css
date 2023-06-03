@@ -6,6 +6,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
+  font-family: poppins, Arial, Helvetica, sans-serif;
   padding: 0;
   font-family: poppins, Impact;
 
@@ -94,4 +95,27 @@ body {
   position: relative;
   font-weight: 600;
   color: rgba(238, 42, 42, 0.952);
+}
+
+.logo-minsante {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 10%;
+  left: 45%;
+}
+
+.logo-minsante-facture {
+  z-index: 1111;
+  position: absolute;
+  transform: rotate(90deg);
+  left: 85%;
+}
+
+.logo-minsante-facture.p1 {
+  top: 22%;
+}
+
+.logo-minsante-facture.p2 {
+  bottom: 22%;
 }

@@ -4,7 +4,11 @@ import './Pharmacie.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
-import { FaCheck, FaCross, FaCrosshairs } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
+import { mois, nomDns } from "../../shared/Globals";
+import { io } from 'socket.io-client';
+
+const socket = io.connect('http://serveur:3010');
 
 const customStyles1 = {
     content: {
@@ -93,9 +97,9 @@ export default function GestionFactures(props) {
         
         const req = new XMLHttpRequest();
         if (filtrer) {
-            req.open('GET', `http://serveur/backend-cmab/factures_pharmacie.php?filtrer=oui&caissier=${props.nomConnecte}`);
+            req.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&caissier=${props.nomConnecte}`);
             const req2 = new XMLHttpRequest();
-            req2.open('GET', 'http://serveur/backend-cmab/factures_pharmacie.php?filtrer=oui&manquant');
+            req2.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
                 setMessageErreur('');
                 const result = JSON.parse(req2.responseText);
@@ -110,7 +114,7 @@ export default function GestionFactures(props) {
             req2.send();
 
         } else {
-            req.open('GET', 'http://serveur/backend-cmab/factures_pharmacie.php');
+            req.open('GET', `${nomDns}factures_pharmacie.php`);
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -149,9 +153,9 @@ export default function GestionFactures(props) {
     
             const req = new XMLHttpRequest();
             if (dateD === dateF) {
-                req.open('POST', `http://serveur/backend-cmab/recette_pharmacie.php?moment=jour`);
+                req.open('POST', `${nomDns}recette_pharmacie.php?moment=jour`);
             } else {
-                req.open('POST', `http://serveur/backend-cmab/recette_pharmacie.php?moment=nuit`);
+                req.open('POST', `${nomDns}recette_pharmacie.php?moment=nuit`);
             }
     
             req.addEventListener('load', () => {
@@ -179,7 +183,7 @@ export default function GestionFactures(props) {
         if (factureSelectionne.length > 0) {
             const req = new XMLHttpRequest();
     
-            req.open('GET', `http://serveur/backend-cmab/factures_pharmacie.php?id=${factureSelectionne[0].id}`);
+            req.open('GET', `${nomDns}factures_pharmacie.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
                 setMessageErreur('');
@@ -206,7 +210,7 @@ export default function GestionFactures(props) {
     }
 
     const mettreAjourData = () => {
-        if (montantVerse.length > 0 && factureSelectionne[0].a_payer) {
+        if (montantVerse.length > 0 && factureSelectionne.length > 0) {
             setverse(montantVerse);
 
             if (parseInt(factureSelectionne[0].a_payer) < parseInt(montantVerse)) {
@@ -216,7 +220,6 @@ export default function GestionFactures(props) {
                 setresteaPayer(parseInt(factureSelectionne[0].a_payer - parseInt(montantVerse)));
                 setrelicat(0)
             }
-
             setmontantVerse('')
         }
      }
@@ -238,7 +241,7 @@ export default function GestionFactures(props) {
             data.append('caissier', props.nomConnecte);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/factures_pharmacie.php')
+            req.open('POST', `${nomDns}factures_pharmacie.php`);
 
             req.addEventListener('load', () => {
                 // Mise à jour des stocks des médicaments vendus
@@ -250,7 +253,7 @@ export default function GestionFactures(props) {
                     data1.append('caissier', props.nomConnecte);
 
                     const req1 = new XMLHttpRequest();
-                    req1.open('POST', 'http://serveur/backend-cmab/maj_medocs.php');
+                    req1.open('POST', `${nomDns}maj_medocs.php`);
 
                     req1.addEventListener("load", function () {
                         if (req1.status >= 200 && req1.status < 400) {
@@ -285,7 +288,7 @@ export default function GestionFactures(props) {
     }
 
     const enregistrerAssurance = () => {
-        if(factureSelectionne.length > 0 && detailsFacture.length > 0 && factureSelectionne[0].assurance !== "aucune") {
+        if(factureSelectionne.length > 0 && detailsFacture.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase()) {
 
             detailsFacture.map(item => {
                 const data = new FormData();
@@ -299,7 +302,7 @@ export default function GestionFactures(props) {
 
                 
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/data_assurance.php');
+                req.open('POST', `${nomDns}data_assurance.php`);
                 
                 req.send(data);
                 
@@ -327,9 +330,9 @@ export default function GestionFactures(props) {
         const req = new XMLHttpRequest();
 
         if (filtrer) {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}&caissier=${props.nomConnecte}`);
+            req.open('GET', `${nomDns}rechercher_facture_phar.php?str=${e.target.value.trim()}&caissier=${props.nomConnecte}`);
         } else {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}`);
+            req.open('GET', `${nomDns}rechercher_facture_phar.php?str=${e.target.value.trim()}`);
         }
 
         req.addEventListener('load', () => {
@@ -344,11 +347,11 @@ export default function GestionFactures(props) {
 
     const supprimerFacture = () => {
         // Suppression d'une facture
-        document.querySelector('.valider').disabled = true;
+        document.querySelector('.valider-facture').disabled = true;
         document.querySelector('.supp').disabled = true;
 
         const req2 = new XMLHttpRequest();
-        req2.open('GET', `http://serveur/backend-cmab/supprimer_facture.php?id=${factureSelectionne[0].id}`);
+        req2.open('GET', `${nomDns}supprimer_facture.php?id=${factureSelectionne[0].id}`);
         req2.addEventListener('load', () => {
             fermerModalConfirmation();
             setSupp(true);
@@ -356,7 +359,6 @@ export default function GestionFactures(props) {
         });
 
         req2.send();
-
     }
 
     const rechercherHistorique = () => {
@@ -378,36 +380,6 @@ export default function GestionFactures(props) {
 
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
-    }
-
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
     }
 
     return (
@@ -441,7 +413,7 @@ export default function GestionFactures(props) {
                 <h2 style={{color: '#fff'}}>Annuler une facture entraine sa suppression. Voulez-vous continuer ?</h2>
                 <div style={{textAlign: 'center'}} className='modal-button'>
                     <button className='supp' style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px'}} onClick={fermerModalConfirmation}>NON</button>
-                    <button className="valider" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={supprimerFacture}>OUI</button>
+                    <button className="valider-facture" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={supprimerFacture}>OUI</button>
                 </div>
             </Modal>
             <div className="liste-medoc">
@@ -493,7 +465,7 @@ export default function GestionFactures(props) {
                         <div>Le <strong>{factureSelectionne.length > 0 && mois(factureSelectionne[0].date_heure.substring(0, 11))}</strong> à <strong>{factureSelectionne.length > 0 && factureSelectionne[0].date_heure.substring(11, )}</strong></div>
                     </div>
                     <div style={{marginTop: 5}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].patient}</span></div>
-                    {factureSelectionne.length > 0 && factureSelectionne[0].assurance !== "aucune" ? <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
+                    {factureSelectionne.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase() ? <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
                         <table style={table_styles}>
                             <thead>
@@ -569,6 +541,7 @@ export default function GestionFactures(props) {
                                     date={factureSelectionne[0].date_heure}
                                     caissier={props.nomConnecte}
                                     assurance={factureSelectionne[0].assurance}
+                                    type_assurance={factureSelectionne[0].type_assurance}
                                 />
                             </div>
                         )}

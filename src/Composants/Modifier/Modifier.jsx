@@ -5,9 +5,9 @@ import { CFormSwitch, CFormCheck } from '@coreui/react';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
-import { extraireCode } from '../../shared/Globals';
 import ModifService from './ModifService';
 import { toast, Toaster } from "react-hot-toast";
+import { extraireCode, nomDns } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -21,6 +21,20 @@ const customStyles1 = {
     }, 
 };
 
+const customStyles3 = {
+    content: {
+      top: '48%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#038654',
+      width: '80%',
+      height: '85vh'
+    }, 
+};
+
 const styleBtnAutre = {
     height: '4vh',
     width: '38%',
@@ -29,6 +43,7 @@ const styleBtnAutre = {
     cursor: 'pointer'
 }
 
+
 const service = {
     id: '',
     designation: '',
@@ -36,6 +51,15 @@ const service = {
     categorie: '',
     generalite: '',
 }
+
+const styleBox = {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '10px',
+    padding: '5px',
+}
+
+const autre  = {designation: '', prix: ''};
 
 export default function Modifier(props) {
 
@@ -49,9 +73,12 @@ export default function Modifier(props) {
     const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
+    const [modalPatient, setModalPatient] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
+    const [autreState, setAutreState] = useState(autre);
 
+    const {designation, prix} = autreState;
 
     useEffect(() => {
         const d = new Date();
@@ -162,9 +189,82 @@ export default function Modifier(props) {
         }
     }
 
+    const contenuModal = () => {
+        return (
+            <Fragment>
+                <h2 style={{color: '#fff', textAlign: 'center'}}>Nouveau Service</h2>
+                <div style={{color: '#fff'}}>
+                    <p style={styleBox}>
+                        <label htmlFor="">Désignation</label>
+                        <input type="text" style={{height: '4vh', width: '40%'}} value={designation.toUpperCase()} onChange={handleChange} name='designation' autoComplete='off' />
+                    </p>
+                    <p style={styleBox}>
+                        <label htmlFor="">Prix</label>
+                        <input type="text" style={{height: '4vh', width: '40%'}} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
+                    </p>
+                    <p style={styleBox}>
+                        <label htmlFor="categorie">Catégorie</label>
+                        <select name="categorie" id="categorie-add" style={{height: '4vh', width: '40%'}}>
+                            <option value="maternité">Maternité</option>
+                            <option value="imagerie">Imagerie</option>
+                            <option value="laboratoire">Laboratoire</option>
+                            <option value="carnet">Carnet</option>
+                            <option value="medecine">Medecine</option>
+                            <option value="chirurgie">Chirurgie</option>
+                            <option value="upec">Upec</option>
+                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                        </select>
+                    </p>
+                    <p style={styleBox}>
+                        <button style={{width: '20%', cursor: 'pointer'}} onClick={nouveauService}>OK</button>
+                    </p>
+                </div>
+            </Fragment>
+        )
+    }
+
+    const nouveauService = () => {
+        
+        if (autreState.designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
+            
+            const data = new FormData();
+            data.append('designation', autreState.designation.toUpperCase().trim());
+            data.append('prix', prix);
+            data.append('categorie', document.getElementById('categorie-add').value);
+    
+            const req = new XMLHttpRequest();
+            req.open('POST', 'http://serveur/backend-cmab/nouveau_service.php');
+    
+            req.addEventListener('load', () => {
+                if (req.status >= 200 && req.status < 400) {
+                    setAutreState({designation: '', prix: ''});
+                    setRerender(true);
+                    fermerModalPatient();
+                }
+            });
+    
+            req.send(data);
+        }
+    }
+
+    const handleChange = (e) => {
+        setAutreState({...autreState, [e.target.name]: e.target.value});
+    }
+    
+    const autreService = () => {
+        setModalPatient(true);
+    }
+
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
     }
+
+    const fermerModalPatient = () => {
+        setAutreState(autre);
+        setModalPatient(false);
+
+    }
+
 
     return (
         <Fragment>
@@ -181,6 +281,15 @@ export default function Modifier(props) {
                         <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
                     </div>
                     <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
+                </Modal>
+                <Modal
+                    isOpen={modalPatient}
+                    style={customStyles3}
+                    contentLabel=""
+                    ariaHideApp={false}
+                    onRequestClose={fermerModalPatient}
+                >
+                    {contenuModal()}
                 </Modal>
                 <div className="left-side">
 
@@ -200,6 +309,9 @@ export default function Modifier(props) {
                             <option value="upec">Upec</option>
                             <option value="consultation spécialiste">Consultation Spécialiste</option>
                         </select>
+                    </div>
+                    <div>
+                        <button className='' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
                     </div>
                     <div className="liste-medoc">
                         <h1>Services</h1>

@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, nomDns } from '../../shared/Globals';
 
 
 export default function Apercu(props) {
@@ -21,7 +21,7 @@ export default function Apercu(props) {
 
     const [historique, sethistorique] = useState([]);
     const [listeComptes, setListeComptes] = useState([]);
-    const [dateJour, setdateJour] = useState('');
+    // const [dateJour, setdateJour] = useState('');
     const [total, setTotal] = useState('');
     const [reccetteTotal, setRecetteTotal] = useState(false);
     const [montantFrais, setMontantFrais] = useState(0);
@@ -29,14 +29,14 @@ export default function Apercu(props) {
     const [dateFin, setdateFin] = useState('');
     const [caissier, setCaissier] = useState('');
     const [assurance, setAssurance] = useState('non');
-    const [labo, setLabo] = useState(0);
-    const [radio, setRadio] = useState(0);
-    const [consul, setConsul] = useState(0);
-    const [echo, setEcho] = useState(0);
-    const [mater, setMater] = useState(0);
-    const [chr, setChr] = useState(0);
-    const [med, setMed] = useState(0);
-    const [upec, setUpec] = useState(0);
+    // const [labo, setLabo] = useState(0);
+    // const [radio, setRadio] = useState(0);
+    // const [consul, setConsul] = useState(0);
+    // const [echo, setEcho] = useState(0);
+    // const [mater, setMater] = useState(0);
+    // const [chr, setChr] = useState(0);
+    // const [med, setMed] = useState(0);
+    // const [upec, setUpec] = useState(0);
     const [messageErreur, setMessageErreur] = useState('');
 
 
@@ -57,10 +57,11 @@ export default function Apercu(props) {
     
             const req = new XMLHttpRequest();
     
-            req.open('POST', `http://serveur/backend-cmab/apercu.php`);
+            req.open('POST', `${nomDns}apercu.php`);
     
             req.addEventListener('load', () => {
                 setMessageErreur('');
+                // console.log(JSON.parse(req.responseText));
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
@@ -89,7 +90,7 @@ export default function Apercu(props) {
         // Récupération des comptes
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/recuperer_caissier.php');
+        req.open('GET', `${nomDns}recuperer_caissier.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -110,7 +111,7 @@ export default function Apercu(props) {
 
     const recupererRecetteTotal = (data) => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/recuperer_recette.php');
+        req.open('POST', `${nomDns}recuperer_recette.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -126,14 +127,14 @@ export default function Apercu(props) {
                 let recette = 0, frais = 0;
                 if (assurance === "non") {
                     result.forEach(item => {
-                        if (item.assurance.toLowerCase() === "aucune") {
+                        if (item.assurance.toUpperCase() === "aucune".toUpperCase()) {
                             recette += parseInt(item.a_payer);
                             frais += parseInt(item.frais);
                         }
                     });
                 } else {
                     result.forEach(item => {
-                        if (item.assurance !== "aucune") {
+                        if (item.assurance.toUpperCase() !== "aucune".toUpperCase()) {
                             recette += parseInt(item.a_payer);
                             frais += parseInt(item.frais);
                         }
@@ -152,11 +153,6 @@ export default function Apercu(props) {
         req.send(data);
     }
 
-    const idUnique = () => {
-        // Création d'un identifiant unique pour la facture
-        return Math.floor((1 + Math.random()) * 0x100000000);        
-    }
-
     const recuperationFrais = () => {
 
         let dateD = dateDepart;
@@ -170,7 +166,7 @@ export default function Apercu(props) {
 
         const req = new XMLHttpRequest();
         // Récupération des frais matériel
-        req.open('POST', `http://serveur/backend-cmab/frais.php`);
+        req.open('POST', `${nomDns}frais.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -195,39 +191,9 @@ export default function Apercu(props) {
         setCaissier(document.getElementById('caissier').value.toLowerCase());
     }
 
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
-    }
-
     return (
         <section className="historique">
-            <h1>Historique des actes</h1>
+            <h1>Listing des caissiers</h1>
             <div className="container-historique">
                 <div className="table-commandes">
                     <div className="entete-historique">
@@ -300,7 +266,7 @@ export default function Apercu(props) {
                     listing={assurance}
                     total={total}
                     montantFrais={montantFrais}
-                    nomConnecte={props.nomConnecte}
+                    nomConnecte={caissier}
                     dateDepart={dateDepart}
                     dateFin={dateFin}
                 />

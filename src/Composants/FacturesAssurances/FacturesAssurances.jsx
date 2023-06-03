@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import '../Commande/Commande.css';
+import { extraireCode, mois, nomDns } from '../../shared/Globals';
 
 const btn_styles = {
     backgroundColor: '#6d6f94', 
@@ -25,7 +26,7 @@ export default function FacturesAssurances() {
     useEffect(() => {
         if(clientSelect.length === 1) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://localhost/backend-cmab/gestion_assurance.php?id_general=${clientSelect[0].id_facture}`);
+            req.open('GET', `${nomDns}gestion_assurance.php?id_general=${clientSelect[0].id_facture}`);
             req.addEventListener('load', () => {
 
                 const result = JSON.parse(req.responseText);
@@ -34,7 +35,7 @@ export default function FacturesAssurances() {
                 let i = 0;
                 result.forEach(item => {
                     const req2 = new XMLHttpRequest();
-                    req2.open('GET', `http://localhost/backend-cmab/gestion_assurance.php?facture=${item.id_facture}`);
+                    req2.open('GET', `${nomDns}gestion_assurance.php?facture=${item.id_facture}`);
             
                     req2.addEventListener('load', () => {
                         i++;
@@ -68,7 +69,7 @@ export default function FacturesAssurances() {
     useEffect(() => {
         // Récupération des clients
         const req = new XMLHttpRequest();
-        req.open('GET', `http://localhost/backend-cmab/gestion_assurance.php?facture_fait=oui`);
+        req.open('GET', `${nomDns}gestion_assurance.php?facture_fait=oui`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -150,13 +151,13 @@ export default function FacturesAssurances() {
         data.append('statu', 'done');
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://localhost/backend-cmab/gestion_assurance.php?categorie=service');
+        req.open('POST', `${nomDns}gestion_assurance.php?categorie=service`);
 
         req.addEventListener('load', () => {
             let result = [...JSON.parse(req.responseText)];
 
             const req2 = new XMLHttpRequest();
-            req2.open('POST', 'http://localhost/backend-cmab/gestion_assurance.php?categorie=pharmacie');
+            req2.open('POST', `${nomDns}gestion_assurance.php?categorie=pharmacie`);
             req2.addEventListener('load', () => {
                 result = [...result, ...JSON.parse(req2.responseText)];
                 traiterData(result);
@@ -197,57 +198,10 @@ export default function FacturesAssurances() {
         setClientSelect([{nom: nom, id_facture: id_facture, total: total, type_assurance: type_assurance, periode: periode,}]);
     }
 
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
     const formaterDate = (d) => {
         const dat = new Date(d);
         d = d.split('-').reverse().join(('/'));
         return mois(d);
-    }
-
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
     }
 
     return (
