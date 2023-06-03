@@ -246,8 +246,8 @@ export default function Modifier(props) {
                     
                     <div className="details-commande">
                         <div className={`valider-annuler ${isModifier ? 'd-none' : 'd-block'}`}>
-                            <button className='bootstrap-btn annuler w-25' onClick={supprimer}>Supprimer</button>
                             <button className='bootstrap-btn valider w-25' onClick={() => setIsModifier(true)}>Modifier</button>
+                            <button className='bootstrap-btn annuler w-25' onClick={supprimer}>Supprimer</button>
                         </div>
                     </div>
                 </div>
