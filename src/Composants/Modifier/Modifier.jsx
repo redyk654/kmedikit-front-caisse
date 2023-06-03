@@ -157,13 +157,14 @@ export default function Modifier(props) {
             req.addEventListener('load', () => {
                 setRerender(!renrender);
                 setMedoSelect(service);
+                toast.success('Suppression effectuée avec succès');
             });
     
             req.send();
         }
     }
 
-    const handleChange = (e) => {
+    const handleChange2 = (e) => {
         console.log(medocSelect);
         setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
     }
@@ -204,7 +205,7 @@ export default function Modifier(props) {
                     </p>
                     <p style={styleBox}>
                         <label htmlFor="categorie">Catégorie</label>
-                        <select name="categorie" id="categorie-add" style={{height: '4vh', width: '40%'}}>
+                        <select name="categorie-add" id="categorie-add" style={{height: '4vh', width: '40%'}}>
                             <option value="maternité">Maternité</option>
                             <option value="imagerie">Imagerie</option>
                             <option value="laboratoire">Laboratoire</option>
@@ -240,6 +241,7 @@ export default function Modifier(props) {
                     setAutreState({designation: '', prix: ''});
                     setRerender(true);
                     fermerModalPatient();
+                    toast.success('Service enregistré avec succès');
                 }
             });
     
@@ -330,7 +332,7 @@ export default function Modifier(props) {
                         {isModifier ? (
                             <ModifService
                                 {...medocSelect}
-                                handleChange={handleChange}
+                                handleChange={handleChange2}
                                 enregistrerModif={enregistrerModif}
                             />
                         ) : (
