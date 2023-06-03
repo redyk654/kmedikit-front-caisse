@@ -1,6 +1,6 @@
 export function extraireCode (designation) {
-    const codes = ['RX ', 'LAB ', 'MA ', 'MED ', 'CHR ', 'CO ', 'UPEC ', 'SP ', 'CA '];
     let designation_extrait = '';
+    const codes = ['RX ', 'LAB ', 'MA ', 'MED ', 'CHR ', 'CO ', 'UPEC ', 'SP ', 'CA '];
 
     codes.forEach(item => {
         if(designation.indexOf(item) === 0) {
