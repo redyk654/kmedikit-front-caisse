@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import '../Commande/Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
+import { CFormSwitch, CFormCheck } from '@coreui/react';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
 import { extraireCode } from '../../shared/Globals';
+import ModifService from './ModifService';
+import { toast, Toaster } from "react-hot-toast";
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -26,6 +29,14 @@ const styleBtnAutre = {
     cursor: 'pointer'
 }
 
+const service = {
+    id: '',
+    designation: '',
+    prix: '',
+    categorie: '',
+    generalite: '',
+}
+
 export default function Modifier(props) {
 
     const componentRef = useRef();
@@ -34,11 +45,12 @@ export default function Modifier(props) {
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
-    const [medocSelect, setMedoSelect] = useState(false);
+    const [medocSelect, setMedoSelect] = useState(service);
     const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [renrender, setRerender] = useState(true);
+    const [isModifier, setIsModifier] = useState(false);
 
 
     useEffect(() => {
@@ -68,6 +80,7 @@ export default function Modifier(props) {
     
                     // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
                     setListeMedoc(result);
+                    console.log(result);
                     setListeMedocSauvegarde(result);
                     setListeMedocSauvegarde2(result);
     
@@ -87,7 +100,8 @@ export default function Modifier(props) {
 
     // permet de récolter les informations sur le médicament sélectioné
     const afficherInfos = (e) => {
-        const medocSelectionne = listeMedoc.filter(item => (item.id == e.target.value));
+        setIsModifier(false);
+        const medocSelectionne = listeMedoc.filter(item => (item.id == e.target.value))[0];
         setMedoSelect(medocSelectionne);
     }
 
@@ -115,29 +129,35 @@ export default function Modifier(props) {
 
             req.addEventListener('load', () => {
                 setRerender(!renrender);
-                setMedoSelect(false);
+                setMedoSelect(service);
             });
     
             req.send();
         }
     }
 
-    const modifierService = () => {
-        if (medocSelect) {
-            document.querySelector('#enregistrer').disabled = true
+    const handleChange = (e) => {
+        console.log(medocSelect);
+        setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
+    }
+
+    const enregistrerModif = () => {
+        if (medocSelect.designation.length > 0) {
             const data = new FormData();
-            data.append('prix', nouveauPrix);
-            data.append('id', medocSelect[0].id);
+            data.append('designation', medocSelect.designation);
+            data.append('prix', medocSelect.prix);
+            data.append('categorie', medocSelect.categorie);
+            data.append('id', medocSelect.id);
             
             const req = new XMLHttpRequest();
             req.open('POST', 'http://serveur/backend-cmab/gestion_services.php');
 
             req.addEventListener('load', () => {
-                fermerModalConfirmation();
+                setMedoSelect(service);
+                setIsModifier(false);
                 setRerender(!renrender);
-                setMedoSelect(false);
+                toast.success('Modification enregistrée avec succès');
             });
-    
             req.send(data);
         }
     }
@@ -147,78 +167,91 @@ export default function Modifier(props) {
     }
 
     return (
-        <section className="commande">
-            <Modal
-                isOpen={modalConfirmation}
-                style={customStyles1}
-                onRequestClose={fermerModalConfirmation}
-                contentLabel="validation commande"
-            >
-                <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2>
-                <div style={{margin: 10}}>
-                    <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
-                </div>
-                <button id='enregistrer' style={styleBtnAutre} onClick={modifierService}>Enregistrer</button>
-            </Modal>
-            <div className="left-side">
+        <Fragment>
+            <div><Toaster/></div>
+            <section className="commande">
+                <Modal
+                    isOpen={modalConfirmation}
+                    style={customStyles1}
+                    onRequestClose={fermerModalConfirmation}
+                    contentLabel="validation commande"
+                >
+                    {/* <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2> */}
+                    <div style={{margin: 10}}>
+                        <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
+                    </div>
+                    <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
+                </Modal>
+                <div className="left-side">
 
-                <p className="search-zone">
-                    <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
-                </p>
-                <div>
-                    <label htmlFor="categorie">Catégorie : </label>
-                    <select name="categorie" id="categorie" onChange={changerCategorie}>
-                        <option value="tout">Tout les services</option>
-                        <option value="maternité">Maternité</option>
-                        <option value="imagerie">Imagerie</option>
-                        <option value="laboratoire">Laboratoire</option>
-                        <option value="carnet">Carnet</option>
-                        <option value="medecine">Medecine</option>
-                        <option value="chirurgie">Chirurgie</option>
-                        <option value="upec">Upec</option>
-                        <option value="consultation spécialiste">Consultation Spécialiste</option>
-                    </select>
+                    <p className="search-zone">
+                        <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
+                    </p>
+                    <div>
+                        <label htmlFor="categorie1">Catégorie : </label>
+                        <select name="categorie1" id="categorie1" onChange={changerCategorie}>
+                            <option value="tout">Tout les services</option>
+                            <option value="maternité">Maternité</option>
+                            <option value="imagerie">Imagerie</option>
+                            <option value="laboratoire">Laboratoire</option>
+                            <option value="carnet">Carnet</option>
+                            <option value="medecine">Medecine</option>
+                            <option value="chirurgie">Chirurgie</option>
+                            <option value="upec">Upec</option>
+                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                        </select>
+                    </div>
+                    <div className="liste-medoc">
+                        <h1>Services</h1>
+                        <ul>
+                            {listeMedoc.map(item => (
+                                <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation)}</li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
-                <div className="liste-medoc">
-                    <h1>Services</h1>
-                    <ul>
-                        {listeMedoc.map(item => (
-                            <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation)}</li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
 
-            <div className="right-side">
-                <h1>{medocSelect ? "Détails du service" : "Selectionnez un service pour voir les détails"}</h1>
+                <div className="right-side">
+                    <h1>{isModifier ? "Modifier les infos du service" : "Détails du service"}</h1>
 
-                <div className="infos-medoc">
-                    {medocSelect && medocSelect.map(item => (
-                        <div className="service">
-                            <div>
-                                <p>Designation</p>
-                                <p  style={{fontWeight: '700', color: '#000'}}>{extraireCode(item.designation)}</p>
+                    <div className="infos-medoc">
+                        {isModifier ? (
+                            <ModifService
+                                {...medocSelect}
+                                handleChange={handleChange}
+                                enregistrerModif={enregistrerModif}
+                            />
+                        ) : (
+                            <div className={`ps-3 ${medocSelect.designation.length === 0 && 'd-none'}`}>
+                                <div>
+                                    <p>Designation</p>
+                                    <p  style={{fontWeight: '700', color: '#000'}}>{extraireCode(medocSelect.designation)}</p>
+                                </div>
+                                <div style={{paddingTop: 10}}>
+                                    <p>Prix</p>
+                                    <p  style={{fontWeight: '700', color: '#000'}}>{medocSelect.prix + ' Fcfa'}</p>
+                                </div>
+                                <div style={{paddingTop: 10}}>
+                                    <p>Catégorie</p>
+                                    <p  style={{fontWeight: '700', color: '#000'}}>{medocSelect.categorie}</p>
+                                </div>
+                                <div className='border-black'>
+                                    <p>
+                                        <CFormSwitch size='xl' id="flexCheckDefault" label="Généralité"/>
+                                    </p>
+                                </div>
                             </div>
-                            <div style={{paddingTop: 10}}>
-                                <p>Prix</p>
-                                <p  style={{fontWeight: '700', color: '#000'}}>{item.prix + ' Fcfa'}</p>
-                            </div>
-                            <div style={{paddingTop: 10}}>
-                                <p>Catégorie</p>
-                                <p  style={{fontWeight: '700', color: '#000'}}>{item.categorie}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                
-                <div className="details-commande">
-                        <div className="valider-annuler">
-                            <button className='bootstrap-btn annuler' onClick={supprimer}>Supprimer</button>
-                            <button className='bootstrap-btn valider' onClick={() => setModalConfirmation(true)}>Modifier</button>
-
+                        )}
+                    </div>
+                    
+                    <div className="details-commande">
+                        <div className={`valider-annuler ${isModifier ? 'd-none' : 'd-block'}`}>
+                            <button className='bootstrap-btn annuler w-25' onClick={supprimer}>Supprimer</button>
+                            <button className='bootstrap-btn valider w-25' onClick={() => setIsModifier(true)}>Modifier</button>
                         </div>
                     </div>
-            </div>
-        </section>
+                </div>
+            </section>
+        </Fragment>
     )
 }
