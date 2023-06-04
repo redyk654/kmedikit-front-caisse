@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, Fragment } from 'react';
 import '../Commande/Commande.css';
 import Modal from 'react-modal';
 import ReactExport from "react-data-export";
+import { extraireCode, mois, mois2, nomDns } from '../../shared/Globals';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -89,7 +90,7 @@ export default function Assurance() {
 
             clientSelect[0].factures.map(item => {
                 const req = new XMLHttpRequest();
-                req.open('GET', `http://serveur/backend-cmab/gestion_assurance.php?facture=${item}`);
+                req.open('GET', `${nomDns}gestion_assurance.php?facture=${item}`);
                 req.addEventListener('load', () => {
                     i++;
                     result = [...result, ...JSON.parse(req.responseText)];
@@ -125,7 +126,7 @@ export default function Assurance() {
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/gestion_patients.php');
+        req.open('GET', `${nomDns}gestion_patients.php`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -138,7 +139,7 @@ export default function Assurance() {
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/assurances.php?liste');
+        req.open('GET', `${nomDns}assurances.php?liste`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -237,14 +238,14 @@ export default function Assurance() {
         data.append('assurance', assurance);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php?categorie=service');
+        req.open('POST', `${nomDns}gestion_assurance.php?categorie=service`);
 
         req.addEventListener('load', () => {
             let result = [...JSON.parse(req.responseText)];
 
 
             const req2 = new XMLHttpRequest();
-            req2.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php?categorie=pharmacie');
+            req2.open('POST', `${nomDns}gestion_assurance.php?categorie=pharmacie`);
             req2.addEventListener('load', () => {
                 result = [...result, ...JSON.parse(req2.responseText)];
 
@@ -350,7 +351,7 @@ export default function Assurance() {
             data.append('categorie', 'service');
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php');
+            req.open('POST', `${nomDns}gestion_assurance.php`);
 
             req.addEventListener('load', () => {
                 i++;
@@ -362,7 +363,7 @@ export default function Assurance() {
                         data.append('categorie', 'pharmacie');
 
                         const req2 = new XMLHttpRequest();
-                        req2.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php');
+                        req2.open('POST', `${nomDns}gestion_assurance.php`);
 
                         req2.addEventListener('load', () => {
                             i++;
@@ -399,7 +400,7 @@ export default function Assurance() {
             data.append('reste', reste);
     
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php');
+            req.open('POST', `${nomDns}gestion_assurance.php`);
     
             req.addEventListener('load', () => {
                 enregistrerIdFactures(id);
@@ -418,7 +419,7 @@ export default function Assurance() {
             data.append('id_general', id);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_assurance.php');
+            req.open('POST', `${nomDns}gestion_assurance.php`);
 
             req.addEventListener('load', () => {
                 i++;
@@ -439,7 +440,7 @@ export default function Assurance() {
         data.append('type_assurance', typeAssurance);
         
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
+        req.open('POST', `${nomDns}gestion_patients.php`);
 
         req.addEventListener('load', () => {
             setModalPatient(false);
@@ -454,7 +455,7 @@ export default function Assurance() {
         data.append('designation', nvAssurance);
         
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/assurances.php');
+        req.open('POST', `${nomDns}assurances.php`);
 
         req.addEventListener('load', () => {
             setFetch(!fecth);
@@ -521,7 +522,7 @@ export default function Assurance() {
         data.append('supprime', assuranceSelect);
         
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/assurances.php');
+        req.open('POST', `${nomDns}assurances.php`);
 
         req.addEventListener('load', () => {
             setFetch(!fecth);
@@ -531,87 +532,10 @@ export default function Assurance() {
         req.send(data);
     }
 
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
     const formaterDate = (d) => {
         const dat = new Date(d);
         d = d.split('-').reverse().join(('/'));
         return mois(d);
-    }
-
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
-    }
-
-    const mois2 = (str) => {
-
-        switch(parseInt(str.substring(5, 7))) {
-            case 1:
-                return str.substring(8, 10) + " janvier " + str.substring(0, 4);
-            case 2:
-                return str.substring(8, 10) + " fevrier " + str.substring(0, 4);
-            case 3:
-                return str.substring(8, 10) + " mars " + str.substring(0, 4);
-            case 4:
-                return str.substring(8, 10) + " avril " +  str.substring(0, 4);
-            case 5:
-                return str.substring(8, 10) + " mai " + str.substring(0, 4);
-            case 6:
-                return str.substring(8, 10) + " juin " + str.substring(0, 4);
-            case 7:
-                return str.substring(8, 10) + " juillet " + str.substring(0, 4);
-            case 8:
-                return str.substring(8, 10) + " août " + str.substring(0, 4);
-            case 9:
-                return str.substring(8, 10) + " septembre " + str.substring(0, 4);
-            case 10:
-                return str.substring(8, 10) + " octobre " + str.substring(0, 4);
-            case 11:
-                return str.substring(8, 10) + " novembre " + str.substring(0, 4);
-            case 12:
-                return str.substring(8, 10) + " décembre " + str.substring(0, 4);
-        }
     }
 
     const fermerModalPatient = () => {

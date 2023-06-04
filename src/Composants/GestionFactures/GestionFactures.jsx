@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Facture from '../Facture/Facture';
 import './GestionFactures.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import { FaCheck, FaCross } from 'react-icons/fa';
+import FactureEnreg from '../Facture/FactureEnreg';
+import { mois, extraireCode, nomDns } from "../../shared/Globals";
 
 const customStyles2 = {
     content: {
@@ -79,9 +80,9 @@ export default function GestionFactures(props) {
         setfactureSauvegarde([]);
         const req = new XMLHttpRequest();
         if (filtrer) {
-            req.open('GET', 'http://serveur/backend-cmab/gestion_factures.php?filtrer=oui');
+            req.open('GET', `${nomDns}gestion_factures.php?filtrer=oui`);
             const req2 = new XMLHttpRequest();
-            req2.open('GET', 'http://serveur/backend-cmab/gestion_factures.php?filtrer=oui&manquant');
+            req2.open('GET', `${nomDns}gestion_factures.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
                 const result = JSON.parse(req2.responseText);
                 setManquantTotal(result[0].manquant);
@@ -89,7 +90,7 @@ export default function GestionFactures(props) {
             req2.send();
 
         } else {
-            req.open('GET', 'http://serveur/backend-cmab/gestion_factures.php');
+            req.open('GET', `${nomDns}gestion_factures.php`);
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -114,7 +115,7 @@ export default function GestionFactures(props) {
         if (factureSelectionne.length > 0) {
             const req = new XMLHttpRequest();
     
-            req.open('GET', `http://serveur/backend-cmab/gestion_factures.php?id=${factureSelectionne[0].id}`);
+            req.open('GET', `${nomDns}gestion_factures.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
@@ -122,7 +123,7 @@ export default function GestionFactures(props) {
                 fermerModalConfirmation();
             });
 
-            req.send()
+            req.send();
         }
 
     }, [effet2])
@@ -164,7 +165,7 @@ export default function GestionFactures(props) {
                 data.append('relicat', relicat);
     
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/gestion_factures.php')
+                req.open('POST', `${nomDns}gestion_factures.php`)
     
                 req.addEventListener('load', () => {
                     setSupp(false);
@@ -185,7 +186,7 @@ export default function GestionFactures(props) {
     const filtrerListe = (e) => {
         const req = new XMLHttpRequest();
 
-        req.open('GET', `http://serveur/backend-cmab/rechercher_facture_caisse.php?str=${e.target.value}`);
+        req.open('GET', `${nomDns}rechercher_facture_caisse.php?str=${e.target.value}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -205,7 +206,7 @@ export default function GestionFactures(props) {
         data.append('id', factureSelectionne[0].id);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/supprimer_facture.php');
+        req.open('POST', `${nomDns}supprimer_facture.php`);
         
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -228,53 +229,6 @@ export default function GestionFactures(props) {
 
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
-    }
-
-    const extraireCode = (designation) => {
-        const codes = ['RX', 'LAB', 'MA', 'MED', 'CHR', 'CO', 'UPEC', 'SP', 'CA'];
-        let designation_extrait = '';
-        
-        codes.forEach(item => {
-            if(designation.toUpperCase().indexOf(item) === 0) {
-                designation_extrait =  designation.slice(item.length + 1);
-            } else if (designation.toUpperCase().indexOf('ECHO') === 0)  {
-                designation_extrait = designation;
-            }
-        });
-
-        if (designation_extrait === '') designation_extrait = designation;
-
-        return designation_extrait;
-    }
-
-    const mois = (str) => {
-
-        switch(parseInt(str.substring(3, 5))) {
-            case 1:
-                return str.substring(0, 2) + " janvier " + str.substring(6, 10);
-            case 2:
-                return str.substring(0, 2) + " fevrier " + str.substring(6, 10);
-            case 3:
-                return str.substring(0, 2) + " mars " + str.substring(6, 10);
-            case 4:
-                return str.substring(0, 2) + " avril " +  str.substring(6, 10);
-            case 5:
-                return str.substring(0, 2) + " mai " + str.substring(6, 10);
-            case 6:
-                return str.substring(0, 2) + " juin " + str.substring(6, 10);
-            case 7:
-                return str.substring(0, 2) + " juillet " + str.substring(6, 10);
-            case 8:
-                return str.substring(0, 2) + " août " + str.substring(6, 10);
-            case 9:
-                return str.substring(0, 2) + " septembre " + str.substring(6, 10);
-            case 10:
-                return str.substring(0, 2) + " octobre " + str.substring(6, 10);
-            case 11:
-                return str.substring(0, 2) + " novembre " + str.substring(6, 10);
-            case 12:
-                return str.substring(0, 2) + " décembre " + str.substring(6, 10);
-        }
     }
 
     return (
@@ -335,7 +289,7 @@ export default function GestionFactures(props) {
                         <div>Le <strong>{factureSelectionne.length > 0 && mois(factureSelectionne[0].date_heure.substring(0, 10))}</strong> à <strong>{factureSelectionne.length > 0 && factureSelectionne[0].date_heure.substring(11, )}</strong></div>
                     </div>
                     <div style={{marginTop: 5}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].patient}</span></div>
-                    {factureSelectionne.length > 0 && factureSelectionne[0].assurance !== "aucune" ? <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
+                    {factureSelectionne.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase() ? <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
                         <table style={table_styles}>
                             <thead>
@@ -361,7 +315,7 @@ export default function GestionFactures(props) {
                     <div>
                         <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
                     </div>
-                    <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'flex'}`, justifyContent: 'center'}}>                        
+                    <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'flex'}`, justifyContent: 'center'}}>
                         <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'block'}`}}>
                             <ReactToPrint
                                 trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
@@ -395,7 +349,7 @@ export default function GestionFactures(props) {
                     <div>
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
-                                <Facture 
+                                <FactureEnreg
                                 ref={componentRef}
                                 medocCommandes={detailsFacture}
                                 idFacture={factureSelectionne[0].id}
@@ -406,6 +360,7 @@ export default function GestionFactures(props) {
                                 montantVerse={factureSelectionne[0].montant_verse}
                                 relicat={factureSelectionne[0].relicat}
                                 assurance={factureSelectionne[0].assurance}
+                                type_assurance={factureSelectionne[0].type_assurance}
                                 resteaPayer={factureSelectionne[0].reste_a_payer}
                                 date={factureSelectionne[0].date_heure}
                                 nomConnecte={factureSelectionne[0].caissier}
