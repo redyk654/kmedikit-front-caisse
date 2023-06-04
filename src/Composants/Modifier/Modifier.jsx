@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import '../Commande/Commande.css';
-import { ContextChargement } from '../../Context/Chargement';
-import { CFormSwitch, CFormCheck } from '@coreui/react';
+import './Modifier.css'
+import { CFormSwitch, CBadge } from '@coreui/react';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
 import { extraireCode } from '../../shared/Globals';
 import ModifService from './ModifService';
 import { toast, Toaster } from "react-hot-toast";
+import AfficherGeneralites from './AfficherGeneralites';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -20,6 +21,20 @@ const customStyles1 = {
       background: '#0e771a',
     }, 
 };
+
+const customStylesGeneralites = {
+    content: {
+        top: '45%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#fff',
+        width: '40vw',
+        height: '80vh',
+    }
+}
 
 const styleBtnAutre = {
     height: '4vh',
@@ -39,9 +54,10 @@ const service = {
 
 export default function Modifier(props) {
 
-    const componentRef = useRef();
-    const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
+    Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';
 
+    
+    const [listeDesGeneralites, setListeDesGeneralites] = useState([]);
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
@@ -51,7 +67,7 @@ export default function Modifier(props) {
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
-
+    const [modalGeneralites, setModalGeneralites] = useState(false);
 
     useEffect(() => {
         const d = new Date();
@@ -80,10 +96,9 @@ export default function Modifier(props) {
     
                     // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
                     setListeMedoc(result);
-                    console.log(result);
                     setListeMedocSauvegarde(result);
                     setListeMedocSauvegarde2(result);
-    
+                    setListeDesGeneralites(result.filter(item => parseInt(item.generalite) === 1));
                 } else {
                     // Affichage des informations sur l'échec du traitement de la requête
                     console.error(req.status + " " + req.statusText);
@@ -137,8 +152,16 @@ export default function Modifier(props) {
     }
 
     const handleChange = (e) => {
-        console.log(medocSelect);
-        setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
+        if (e.target.name === "generalite") {
+            if (parseInt(medocSelect.generalite)) {
+                setMedoSelect({...medocSelect, [e.target.name]: 0});
+            } else {
+                setMedoSelect({...medocSelect, [e.target.name]: 1});
+            }
+        } else {
+            console.log(medocSelect);
+            setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
+        }
     }
 
     const enregistrerModif = () => {
@@ -147,6 +170,7 @@ export default function Modifier(props) {
             data.append('designation', medocSelect.designation);
             data.append('prix', medocSelect.prix);
             data.append('categorie', medocSelect.categorie);
+            data.append('generalite', medocSelect.generalite);
             data.append('id', medocSelect.id);
             
             const req = new XMLHttpRequest();
@@ -162,8 +186,33 @@ export default function Modifier(props) {
         }
     }
 
+    const retirerActeDesGeneralites = (e) => {
+        if (e.target.id !== "") {
+            const data = new FormData();
+            data.append('generalite', 0);
+            data.append('id', e.target.id);
+            
+            const req = new XMLHttpRequest();
+            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php?retirer_generalite');
+    
+            req.addEventListener('load', () => {
+                setListeDesGeneralites(listeDesGeneralites.filter(item => item.id !== e.target.id));
+                setRerender(!renrender);
+            });
+            req.send(data);
+        }
+    }
+
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
+    }
+
+    const fermerModalGeneralites = () => {
+        setModalGeneralites(false);
+    }
+
+    const ouvrirModalGeneralites = () => {
+        setModalGeneralites(true);
     }
 
     return (
@@ -182,8 +231,18 @@ export default function Modifier(props) {
                     </div>
                     <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
                 </Modal>
+                <Modal
+                    isOpen={modalGeneralites}
+                    style={customStylesGeneralites}
+                    onRequestClose={fermerModalGeneralites}
+                    contentLabel="modal generalites"
+                >
+                    <AfficherGeneralites
+                        listeDesGeneralites={listeDesGeneralites}
+                        retirerActeDesGeneralites={retirerActeDesGeneralites}
+                    />
+                </Modal>
                 <div className="left-side">
-
                     <p className="search-zone">
                         <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
                     </p>
@@ -201,11 +260,21 @@ export default function Modifier(props) {
                             <option value="consultation spécialiste">Consultation Spécialiste</option>
                         </select>
                     </div>
+                    <div>
+                        <a role="button" onClick={ouvrirModalGeneralites} className='link-primary'>Liste des généralités</a>
+                    </div>
                     <div className="liste-medoc">
                         <h1>Services</h1>
                         <ul>
                             {listeMedoc.map(item => (
-                                <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation)}</li>
+                                <li value={item.id} key={item.id} onClick={afficherInfos}>
+                                    {extraireCode(item.designation)}
+                                    &nbsp;
+                                    {parseInt(item.generalite) === 1 
+                                        &&
+                                        <CBadge color='dark'>g</CBadge>
+                                    }
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -235,9 +304,9 @@ export default function Modifier(props) {
                                     <p>Catégorie</p>
                                     <p  style={{fontWeight: '700', color: '#000'}}>{medocSelect.categorie}</p>
                                 </div>
-                                <div className='border-black'>
-                                    <p>
-                                        <CFormSwitch size='xl' id="flexCheckDefault" label="Généralité"/>
+                                <div>
+                                    <p style={{width: '15vw'}}>
+                                        <CFormSwitch checked={parseInt(medocSelect.generalite) ? true : false} size='xl' label="Généralité"/>
                                     </p>
                                 </div>
                             </div>
