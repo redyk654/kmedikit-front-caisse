@@ -55,16 +55,13 @@ const service = {
 export default function Modifier(props) {
 
     Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';
-
     
     const [listeDesGeneralites, setListeDesGeneralites] = useState([]);
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
     const [medocSelect, setMedoSelect] = useState(service);
-    const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
-    const [modalConfirmation, setModalConfirmation] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
     const [modalGeneralites, setModalGeneralites] = useState(false);
@@ -90,6 +87,7 @@ export default function Modifier(props) {
             } else {
                 req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
             }
+
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                     const result = JSON.parse(req.responseText);
@@ -104,6 +102,7 @@ export default function Modifier(props) {
                     console.error(req.status + " " + req.statusText);
                 }
             });
+
             req.addEventListener("error", function () {
                 // La requête n'a pas réussi à atteindre le serveur
                 console.error("Erreur réseau");
@@ -159,7 +158,6 @@ export default function Modifier(props) {
                 setMedoSelect({...medocSelect, [e.target.name]: 1});
             }
         } else {
-            console.log(medocSelect);
             setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
         }
     }
@@ -203,10 +201,6 @@ export default function Modifier(props) {
         }
     }
 
-    const fermerModalConfirmation = () => {
-        setModalConfirmation(false);
-    }
-
     const fermerModalGeneralites = () => {
         setModalGeneralites(false);
     }
@@ -219,18 +213,6 @@ export default function Modifier(props) {
         <Fragment>
             <div><Toaster/></div>
             <section className="commande">
-                <Modal
-                    isOpen={modalConfirmation}
-                    style={customStyles1}
-                    onRequestClose={fermerModalConfirmation}
-                    contentLabel="validation commande"
-                >
-                    {/* <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2> */}
-                    <div style={{margin: 10}}>
-                        <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
-                    </div>
-                    <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
-                </Modal>
                 <Modal
                     isOpen={modalGeneralites}
                     style={customStylesGeneralites}
