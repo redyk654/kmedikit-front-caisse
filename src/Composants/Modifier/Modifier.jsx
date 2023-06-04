@@ -62,9 +62,7 @@ export default function Modifier(props) {
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
     const [medocSelect, setMedoSelect] = useState(service);
-    const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
-    const [modalConfirmation, setModalConfirmation] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
     const [modalGeneralites, setModalGeneralites] = useState(false);
@@ -159,7 +157,6 @@ export default function Modifier(props) {
                 setMedoSelect({...medocSelect, [e.target.name]: 1});
             }
         } else {
-            console.log(medocSelect);
             setMedoSelect({...medocSelect, [e.target.name]: e.target.value.toUpperCase()});
         }
     }
@@ -203,10 +200,6 @@ export default function Modifier(props) {
         }
     }
 
-    const fermerModalConfirmation = () => {
-        setModalConfirmation(false);
-    }
-
     const fermerModalGeneralites = () => {
         setModalGeneralites(false);
     }
@@ -219,18 +212,6 @@ export default function Modifier(props) {
         <Fragment>
             <div><Toaster/></div>
             <section className="commande">
-                <Modal
-                    isOpen={modalConfirmation}
-                    style={customStyles1}
-                    onRequestClose={fermerModalConfirmation}
-                    contentLabel="validation commande"
-                >
-                    {/* <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2> */}
-                    <div style={{margin: 10}}>
-                        <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
-                    </div>
-                    <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
-                </Modal>
                 <Modal
                     isOpen={modalGeneralites}
                     style={customStylesGeneralites}
