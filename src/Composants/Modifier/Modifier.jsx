@@ -79,7 +79,6 @@ const autre  = {designation: '', prix: ''};
 export default function Modifier(props) {
 
     Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';
-
     
     const [listeDesGeneralites, setListeDesGeneralites] = useState([]);
     const [listeMedoc, setListeMedoc] = useState([]);
@@ -116,6 +115,7 @@ export default function Modifier(props) {
             } else {
                 req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
             }
+
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                     const result = JSON.parse(req.responseText);
@@ -130,6 +130,7 @@ export default function Modifier(props) {
                     console.error(req.status + " " + req.statusText);
                 }
             });
+
             req.addEventListener("error", function () {
                 // La requête n'a pas réussi à atteindre le serveur
                 console.error("Erreur réseau");

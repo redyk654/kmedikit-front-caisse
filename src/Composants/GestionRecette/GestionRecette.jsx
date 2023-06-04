@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
+import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
 import ReactToPrint from 'react-to-print';
 import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
 import { extraireCode, nomDns } from '../../shared/Globals';
@@ -18,6 +19,20 @@ const customStyles1 = {
     },
 };
 
+const customStylesGeneralites = {
+    content: {
+        top: '45%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#fff',
+        width: '40vw',
+        height: '80vh',
+    }
+}
+
 const ulBox = {
     border: '1px solid gray',
     overflowY: 'auto',
@@ -29,8 +44,8 @@ const ulBox = {
 const styleBtnAutre = {
     backgroundColor: '#6d6f94',
     color: '#fff',
-    height: '4vh',
-    width: '35%',
+    height: '4.5vh',
+    width: '10vw',
     marginTop: '5px',
     fontSize: '16px',
     cursor: 'pointer'
@@ -55,10 +70,10 @@ export default function GestionRecette(props) {
     let heure_select1 = useRef();
     let heure_select2 = useRef();
 
-    const date_e = new Date('2023-12-19');
+    const date_e = new Date('2024-03-19');
     const date_j = new Date();
 
-    const componentRef = useRef();
+    Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';
 
     const [historique, sethistorique] = useState([]);
     const [listeComptes, setListeComptes] = useState([]);
@@ -81,6 +96,7 @@ export default function GestionRecette(props) {
     const [modalReussi, setModalReussi] = useState(false);
     const [valeur, setValeur] = useState('');
     const [generalites, setGeneralites] = useState([]);
+    const [recetteGeneralites, setRecetteGeneralites] = useState(0);
     const [totalGeneralites, setTotalGeneralites] = useState(0);
     const [itemPourcentage, setitemPourcentage] = useState('');
     const [detailsState, setDetailsState] = useState([detail]);
@@ -127,17 +143,17 @@ export default function GestionRecette(props) {
             data.append('caissier', caissier);
     
             const req = new XMLHttpRequest();
-            req.open('POST', `${nomDns}gestion_pourcentage.php`);
+
+            req.open('POST', `${nomDns}gestion_pourcentage.php?par_categories`);
     
             req.addEventListener('load', () => {
                 fetchDetails();
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
-                sethistorique(result);
+                recupererRecetteGeneralites(data, result);
+
                 let t = 0;
-                result.forEach(item => {
-                    t += parseInt(item.recette);
-                })
+                t = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
 
                 setTotal(t);
             });
@@ -146,6 +162,27 @@ export default function GestionRecette(props) {
         }
 
     }, [dateDepart, dateFin, caissier]);
+
+    const recupererRecetteGeneralites = (data, categories) => {
+        const req = new XMLHttpRequest();
+        req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php?recette_generalite');
+
+        req.addEventListener('load', () => {
+            if(req.status >= 200 && req.status < 400) {
+                let result = JSON.parse(req.responseText);
+                setRecetteGeneralites(result);
+
+                let recetteGen = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
+                sethistorique([...categories, {categorie: 'GÉNÉRALITÉS', recette: recetteGen}]);
+            }
+        });
+
+        req.send(data);
+    }
+
+    const afficherGeneralites = () => {
+
+    }
 
     useEffect(() => {
         setrecetteRestante(recetteTotal - montantRetire);
@@ -195,7 +232,7 @@ export default function GestionRecette(props) {
     }
 
     const changerCategorie = (e) => {
-        setServices(servicesSauvegarde.filter(item => item.categorie.toLowerCase() === e.target.value));
+        setServices(servicesSauvegarde.filter(item => item.categorie.toLowerCase().includes(e.target.value.toLowerCase())));
     }
 
     const rechercherHistorique = () => {
@@ -246,6 +283,7 @@ export default function GestionRecette(props) {
                 <h2 style={{color: '#fff', textAlign: 'center'}}></h2>
                 <div style={{margin: 10}}>
                     <select name="categorie" id="categorie" onChange={changerCategorie}>
+                        <option value="">Selectionnez une catégorie</option>
                         <option value="maternité">Maternité</option>
                         <option value="imagerie">Imagerie</option>
                         <option value="laboratoire">Laboratoire</option>
@@ -378,22 +416,23 @@ export default function GestionRecette(props) {
 
     const fermerModalReussi = () => {
         setModalReussi(false);
-        annuler();
+    }
+
+    const ouvrirModalReussi = () => {
+        setModalReussi(true)
     }
 
     return (
         <div className="gestion-recette">
             <Modal
                 isOpen={modalReussi}
-                style={customStyles1}
+                style={customStylesGeneralites}
+                onRequestClose={fermerModalReussi}
                 contentLabel=""
             >
-                <div style={{color: '#fff'}}>
-                    <h3>Recette enregistré !</h3>
-                    <button style={{padding: '5px', cursor: 'pointer'}} onClick={fermerModalReussi}>Fermer</button>
-                    <ReactToPrint
-                        trigger={() => <button style={{padding: '5px', cursor: 'pointer', marginLeft: '10px'}}>Imprimer</button>}
-                        content={() => componentRef.current}
+                <div>
+                    <AfficherRecetteGeneralites
+                        recetteGeneralites={recetteGeneralites}
                     />
                 </div>
             </Modal>
@@ -448,12 +487,15 @@ export default function GestionRecette(props) {
                         </p>
                     </div>
                     <div style={{paddingLeft: '20px'}}>
-                        <button style={styleBtnAutre} onClick={rechercherHistorique}>rechercher</button>
+                        <button style={styleBtnAutre} className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
                     </div>
                 </div>
                 <div className="box-2">
                     <div className="btn-container" style={{textAlign: 'center'}}>
-                        <button onClick={() => {setModalContenu(false); setModalConfirmation(true);}}>Généralités</button>
+                        <button className='bootstrap-btn h-25' onClick={() => {setModalContenu(false); setModalConfirmation(true);}}>Catégories</button>
+                    </div>
+                    <div className='text-center'>
+                        <button className='bootstrap-btn' onClick={ouvrirModalReussi}>Généralités</button>
                     </div>
                     <table>
                         <thead>
@@ -472,8 +514,9 @@ export default function GestionRecette(props) {
                     <div style={{marginTop: '50px', textAlign: 'center'}}>
                         <div>
                             <input style={{width: '100px', height: '3vh'}} type="text" id="retire" />
-                            <button 
-                                style={{margin: 5, color: '#fff', backgroundColor: '#012557', width: '40px', height: '3vh', cursor: 'pointer'}}
+                            <button
+                                className='bootstrap-btn'
+                                style={{margin: 5, color: '#fff', backgroundColor: '#012557', width: '50px', height: '4vh', cursor: 'pointer'}}
                                 onClick={() => setmontantRetire(parseInt(document.getElementById('retire').value))}
                             >
                                 OK
@@ -490,16 +533,9 @@ export default function GestionRecette(props) {
                         </div>
                     </div>
                     <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
-                        <button onClick={terminer}>Terminer</button>
+                        <button className='bootstrap-btn h-25' onClick={terminer}>Terminer</button>
                     </div>
                 </div>
-            </div>
-            <div style={{display: 'none'}}>
-                <ImprimerRecette
-                    ref={componentRef}
-                    services={services}
-                    recetteTotal={recetteRestante}
-                />
             </div>
         </div>
     )
