@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { extraireCode, mois, styleEntete } from '../../shared/Globals';
+import { extraireCode, mois } from '../../shared/Globals';
 import logo from '../../images/logo-minsante.png';
 
 const styles = {
@@ -34,7 +34,13 @@ const table_styles = {
     fontSize: 8,
 }
 
-export default class Facture extends Component {
+const styleEntete = {
+    color: 'black',
+    borderBottom: '1px dotted #000',
+    letterSpacing: '1px'
+}
+
+export default class FactureEnreg extends Component {
 
     render() {
         return (
@@ -99,14 +105,14 @@ export default class Facture extends Component {
                                     <div>Reste à payer</div>
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
-                                    <div><strong>{this.props.prixTotal() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.prixTotal + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
                                     <div><strong>{this.props.type_assurance + ' %'}</strong></div>
-                                    <div><strong>{this.props.aPayer() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.aPayer + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.relicat() + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.resteaPayer() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.relicat + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                                 </div>
                             </div>
                             <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
@@ -174,14 +180,14 @@ export default class Facture extends Component {
                                     <div>Reste à payer</div>
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
-                                    <div><strong>{this.props.prixTotal() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.prixTotal + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
                                     <div><strong>{this.props.type_assurance + ' %'}</strong></div>
-                                    <div><strong>{this.props.aPayer() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.aPayer + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.relicat() + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.resteaPayer() + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.relicat + ' Fcfa'}</strong></div>
+                                    <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                                 </div>
                             </div>
                             <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>

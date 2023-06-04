@@ -5,10 +5,10 @@ import { CFormSwitch, CBadge } from '@coreui/react';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
-import { extraireCode } from '../../shared/Globals';
 import ModifService from './ModifService';
 import { toast, Toaster } from "react-hot-toast";
 import AfficherGeneralites from './AfficherGeneralites';
+import { extraireCode, nomDns } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -36,6 +36,20 @@ const customStylesGeneralites = {
     }
 }
 
+const customStyles3 = {
+    content: {
+      top: '48%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      background: '#038654',
+      width: '80%',
+      height: '85vh'
+    }, 
+};
+
 const styleBtnAutre = {
     height: '4vh',
     width: '38%',
@@ -44,6 +58,7 @@ const styleBtnAutre = {
     cursor: 'pointer'
 }
 
+
 const service = {
     id: '',
     designation: '',
@@ -51,6 +66,15 @@ const service = {
     categorie: '',
     generalite: '',
 }
+
+const styleBox = {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: '10px',
+    padding: '5px',
+}
+
+const autre  = {designation: '', prix: ''};
 
 export default function Modifier(props) {
 
@@ -62,9 +86,13 @@ export default function Modifier(props) {
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
     const [medocSelect, setMedoSelect] = useState(service);
     const [messageErreur, setMessageErreur] = useState('');
+    const [modalPatient, setModalPatient] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
     const [modalGeneralites, setModalGeneralites] = useState(false);
+    const [autreState, setAutreState] = useState(autre);
+
+    const {designation, prix} = autreState;
 
     useEffect(() => {
         const d = new Date();
@@ -144,13 +172,14 @@ export default function Modifier(props) {
             req.addEventListener('load', () => {
                 setRerender(!renrender);
                 setMedoSelect(service);
+                toast.success('Suppression effectuée avec succès');
             });
     
             req.send();
         }
     }
-
-    const handleChange = (e) => {
+    
+    const handleChange2 = (e) => {
         if (e.target.name === "generalite") {
             if (parseInt(medocSelect.generalite)) {
                 setMedoSelect({...medocSelect, [e.target.name]: 0});
@@ -197,8 +226,75 @@ export default function Modifier(props) {
                 setListeDesGeneralites(listeDesGeneralites.filter(item => item.id !== e.target.id));
                 setRerender(!renrender);
             });
+          
             req.send(data);
         }
+    }
+    
+    const contenuModal = () => {
+        return (
+            <Fragment>
+                <h2 style={{color: '#fff', textAlign: 'center'}}>Nouveau Service</h2>
+                <div style={{color: '#fff'}}>
+                    <p style={styleBox}>
+                        <label htmlFor="">Désignation</label>
+                        <input type="text" style={{height: '4vh', width: '40%'}} value={designation.toUpperCase()} onChange={handleChange} name='designation' autoComplete='off' />
+                    </p>
+                    <p style={styleBox}>
+                        <label htmlFor="">Prix</label>
+                        <input type="text" style={{height: '4vh', width: '40%'}} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
+                    </p>
+                    <p style={styleBox}>
+                        <label htmlFor="categorie">Catégorie</label>
+                        <select name="categorie-add" id="categorie-add" style={{height: '4vh', width: '40%'}}>
+                            <option value="maternité">Maternité</option>
+                            <option value="imagerie">Imagerie</option>
+                            <option value="laboratoire">Laboratoire</option>
+                            <option value="carnet">Carnet</option>
+                            <option value="medecine">Medecine</option>
+                            <option value="chirurgie">Chirurgie</option>
+                            <option value="upec">Upec</option>
+                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                        </select>
+                    </p>
+                    <p style={styleBox}>
+                        <button style={{width: '20%', cursor: 'pointer'}} onClick={nouveauService}>OK</button>
+                    </p>
+                </div>
+            </Fragment>
+        )
+    }
+
+    const nouveauService = () => {
+        
+        if (autreState.designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
+            
+            const data = new FormData();
+            data.append('designation', autreState.designation.toUpperCase().trim());
+            data.append('prix', prix);
+            data.append('categorie', document.getElementById('categorie-add').value);
+    
+            const req = new XMLHttpRequest();
+            req.open('POST', 'http://serveur/backend-cmab/nouveau_service.php');
+    
+            req.addEventListener('load', () => {
+                if (req.status >= 200 && req.status < 400) {
+                    setAutreState({designation: '', prix: ''});
+                    setRerender(true);
+                    fermerModalPatient();
+                    toast.success('Service enregistré avec succès');
+                }
+            });
+            req.send(data);
+        }
+    }
+
+    const handleChange = (e) => {
+        setAutreState({...autreState, [e.target.name]: e.target.value});
+    }
+    
+    const autreService = () => {
+        setModalPatient(true);
     }
 
     const fermerModalGeneralites = () => {
@@ -207,6 +303,11 @@ export default function Modifier(props) {
 
     const ouvrirModalGeneralites = () => {
         setModalGeneralites(true);
+    }
+
+    const fermerModalPatient = () => {
+        setAutreState(autre);
+        setModalPatient(false);
     }
 
     return (
@@ -223,6 +324,15 @@ export default function Modifier(props) {
                         listeDesGeneralites={listeDesGeneralites}
                         retirerActeDesGeneralites={retirerActeDesGeneralites}
                     />
+                 </Modal>
+                 <Modal
+                    isOpen={modalPatient}
+                    style={customStyles3}
+                    contentLabel=""
+                    ariaHideApp={false}
+                    onRequestClose={fermerModalPatient}
+                  >
+                    {contenuModal()}
                 </Modal>
                 <div className="left-side">
                     <p className="search-zone">
@@ -244,6 +354,9 @@ export default function Modifier(props) {
                     </div>
                     <div>
                         <a role="button" onClick={ouvrirModalGeneralites} className='link-primary'>Liste des généralités</a>
+                        <div>
+                            <button className='' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                        </div>
                     </div>
                     <div className="liste-medoc">
                         <h1>Services</h1>
@@ -269,7 +382,7 @@ export default function Modifier(props) {
                         {isModifier ? (
                             <ModifService
                                 {...medocSelect}
-                                handleChange={handleChange}
+                                handleChange={handleChange2}
                                 enregistrerModif={enregistrerModif}
                             />
                         ) : (

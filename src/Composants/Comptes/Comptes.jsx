@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import './Comptes.css';
 import Modal from 'react-modal';
+import { ROLES, nomDns } from "../../shared/Globals";
 
 const customStyles1 = {
     content: {
@@ -53,7 +54,7 @@ export default function Comptes(props) {
         // Récupération des comptes
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/recuperer_caissier.php');
+        req.open('GET', `${nomDns}recuperer_caissier.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -100,10 +101,9 @@ export default function Comptes(props) {
                     <p className="input-zone">
                         <label htmlFor="">Rôle : </label>
                         <select name="role">
-                            <option value="admin">admin</option>
-                            <option value="caissier">caissier</option>
-                            <option value="regisseur">regisseur</option>
-                            <option value="secretaire">sécrétaire</option>
+                            <option value={ROLES.caissier}>caissier</option>
+                            <option value={ROLES.admin}>admin</option>
+                            <option value={ROLES.secretaire}>sécrétaire</option>
                         </select>
                     </p>
                 </div>
@@ -130,23 +130,23 @@ export default function Comptes(props) {
             setMsgErreur('Le mot de passe et le mot passe de confirmation doivent être identique');
         } else if (pseudo.includes(' ')) {
             setMsgErreur("l'identifiant ne doit pas contenir d'espace");
-        } else if (pseudo.length < 2 || pseudo.length > 4) {
-            setMsgErreur("l'identifiant doit être compris entre 2 et 4 caractères"); 
+        } else if (pseudo.length < 2 || pseudo.length > 6) {
+            setMsgErreur("l'identifiant doit être compris entre 2 et 6 caractères");
         } else if (nom.length === 0) {
             setMsgErreur('le champ nom ne doit pas être vide');
-        } else if (mdp.length < 3 || mdp.length > 6) {
-            setMsgErreur('le mot de passe doit être compris entre 3 et 6 caractères');
+        } else if (mdp.length < 3 || mdp.length > 8) {
+            setMsgErreur('le mot de passe doit être compris entre 3 et 8 caractères');
         } else {
             setMsgErreur('');
 
             const data = new FormData();
-            data.append('nom', nom.trim().toLowerCase());
-            data.append('pseudo', pseudo.trim().toLowerCase());
-            data.append('mdp', mdp.trim().toLowerCase());
+            data.append('nom', nom.trim().toUpperCase());
+            data.append('pseudo', pseudo.trim().toUpperCase());
+            data.append('mdp', mdp.trim().toUpperCase());
             data.append('role', document.querySelector('form').role.value);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/enregistrer_caissier.php');
+            req.open('POST', `${nomDns}enregistrer_caissier.php`);
 
             req.addEventListener('load', () => {
                 if (req.response.toLowerCase() == "Cet identifiant est déjà utilisé. choisissez en un autre".toLowerCase()) {
@@ -187,7 +187,7 @@ export default function Comptes(props) {
         data.append('montant', recettejour.recette);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_caisse.php');
+        req.open('POST', `${nomDns}gestion_caisse.php`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
@@ -202,7 +202,7 @@ export default function Comptes(props) {
         // Suppression d'un compte
         if (compteSelectionne.length > 0) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/supprimer_compte.php?compte=${compteSelectionne[0].pseudo}`);
+            req.open('GET', `${nomDns}supprimer_compte.php?compte=${compteSelectionne[0].pseudo}`);
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {

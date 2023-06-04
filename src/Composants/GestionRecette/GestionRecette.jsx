@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
-import { extraireCode } from '../../shared/Globals';
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
+import ReactToPrint from 'react-to-print';
+import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
+import { extraireCode, nomDns } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -115,7 +117,7 @@ export default function GestionRecette(props) {
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/recuperer_caissier.php');
+        req.open('GET', `${nomDns}recuperer_caissier.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -141,7 +143,8 @@ export default function GestionRecette(props) {
             data.append('caissier', caissier);
     
             const req = new XMLHttpRequest();
-            req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?par_categories`);
+
+            req.open('POST', `${nomDns}gestion_pourcentage.php?par_categories`);
     
             req.addEventListener('load', () => {
                 fetchDetails();
@@ -187,7 +190,7 @@ export default function GestionRecette(props) {
 
     const recupererRecetteTotal = (data) => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/recuperer_recette.php');
+        req.open('POST', `${nomDns}recuperer_recette.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -217,7 +220,7 @@ export default function GestionRecette(props) {
         data.append('caissier', caissier);
 
         const req = new XMLHttpRequest();
-        req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?details=oui`);
+        req.open('POST', `${nomDns}gestion_pourcentage.php?details=oui`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -354,7 +357,7 @@ export default function GestionRecette(props) {
     //         data.append('recette_restante', item.recetteRestante);
 
     //         const req = new XMLHttpRequest();
-    //         req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
+    //         req.open('POST', `${nomDns}gestion_pourcentage.php`);
 
     //         req.addEventListener('load', () => {
     //             i++
@@ -380,7 +383,7 @@ export default function GestionRecette(props) {
         data.append('regisseur', props.nomConnecte);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
+        req.open('POST', `${nomDns}gestion_pourcentage.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {

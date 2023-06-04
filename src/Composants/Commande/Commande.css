@@ -241,3 +241,20 @@
 .bootstrap-btn.annuler {
     background-color: #ec4641;
 }
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid #fff; */
+    padding-top: 15px;
+}
+
+.a-link {
+    display: block;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.a-link:hover {
+    font-weight: bold;
+}

@@ -1,0 +1,47 @@
+.form-patient h3 {
+    color: #f1f1f1;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.form-patient {
+    /* border: 1px solid #f1f1f1; */
+    width: 100%;
+}
+
+.form-patient input[type=text] {
+    margin: 0;
+    margin-bottom: -10px;
+}
+
+.form-patient input {
+    outline: none;
+    border: none;
+    background: none;
+    /* border-bottom: 1px solid #f1f1f1; */
+    width: 65%;
+    color: #f1f1f1;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .8px;
+}
+
+.form-patient .box-input p{
+    margin-top: 30px;
+    color: #f1f1f1;
+    margin-left: 25%;
+
+}
+
+.form-patient .box-input {
+    width: 100%;
+    margin: auto;
+    /* border: 1px solid #f1f1f1; */
+
+}
+
+.form-patient .btn-control {
+    margin-top: 45px;
+    width: 100%;
+    text-align: center;
+}
