@@ -4,7 +4,7 @@
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
   "name": "KMD-Caisse",
   "author": "Chrisppo Youmbissi Kamdem",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "build": {
     "win": {
       "icon": "build/icon.ico"
@@ -20,7 +20,6 @@
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^4.6.0",
     "cross-env": "^7.0.3",
-    "electron": "^25.0.1",
     "electron-is-dev": "^2.0.0",
     "react": "^17.0.2",
     "react-data-export": "^0.6.0",
@@ -68,6 +67,7 @@
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
+    "electron": "^25.0.1",
     "electron-builder": "^22.11.7",
     "wait-on": "^6.0.0"
   }
