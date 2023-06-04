@@ -86,9 +86,7 @@ export default function Modifier(props) {
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [listeMedocSauvegarde2, setListeMedocSauvegarde2] = useState([]);
     const [medocSelect, setMedoSelect] = useState(service);
-    const [nouveauPrix, setNouveauPrix]= useState('');
     const [messageErreur, setMessageErreur] = useState('');
-    const [modalConfirmation, setModalConfirmation] = useState(false);
     const [modalPatient, setModalPatient] = useState(false);
     const [renrender, setRerender] = useState(true);
     const [isModifier, setIsModifier] = useState(false);
@@ -298,10 +296,6 @@ export default function Modifier(props) {
         setModalPatient(true);
     }
 
-    const fermerModalConfirmation = () => {
-        setModalConfirmation(false);
-    }
-
     const fermerModalGeneralites = () => {
         setModalGeneralites(false);
     }
@@ -319,18 +313,6 @@ export default function Modifier(props) {
         <Fragment>
             <div><Toaster/></div>
             <section className="commande">
-                <Modal
-                    isOpen={modalConfirmation}
-                    style={customStyles1}
-                    onRequestClose={fermerModalConfirmation}
-                    contentLabel="validation commande"
-                >
-                    {/* <h2 style={{color: '#fff'}}>Modifier le prix de {medocSelect && extraireCode(medocSelect[0]?.designation)}</h2> */}
-                    <div style={{margin: 10}}>
-                        <input type="number" onChange={(e) => setNouveauPrix(e.target.value)} />
-                    </div>
-                    <button id='enregistrer' style={styleBtnAutre}>Enregistrer</button>
-                </Modal>
                 <Modal
                     isOpen={modalGeneralites}
                     style={customStylesGeneralites}
@@ -371,7 +353,9 @@ export default function Modifier(props) {
                     </div>
                     <div>
                         <a role="button" onClick={ouvrirModalGeneralites} className='link-primary'>Liste des généralités</a>
-                        <button className='' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                        <div>
+                            <button className='' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                        </div>
                     </div>
                     <div className="liste-medoc">
                         <h1>Services</h1>
