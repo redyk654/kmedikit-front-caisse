@@ -525,9 +525,9 @@ export default function GestionRecette(props) {
                         <div>
                             Total : <span style={{fontWeight: '600'}}>{total ? (total + frais) + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
-                        <div>
+                        {/* <div>
                             Matériel : <span style={{fontWeight: '600'}}>{frais ? frais + ' Fcfa' : '0 Fcfa'}</span>
-                        </div>
+                        </div> */}
                         <div>
                             Recette : <span style={{fontWeight: '600'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span>
                         </div>

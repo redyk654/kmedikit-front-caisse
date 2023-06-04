@@ -803,7 +803,7 @@ export default function Commande(props) {
                 <div className="box" style={{marginLeft: 5}}>
                     <div className="">
                         <button className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}} onClick={ajouterMedoc}>ajouter</button>
-                        <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button>
+                        {/* <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button> */}
                     </div>
                     <div style={{textAlign: 'center'}}>
                         <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
