@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "@coreui/coreui": "^4.2.6",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-react": "^2.1.0",
     "@coreui/react": "^4.8.0",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "bootstrap": "^4.6.0",
     "cross-env": "^7.0.3",
+    "electron": "^25.0.1",
     "electron-is-dev": "^2.0.0",
     "react": "^17.0.2",
     "react-data-export": "^0.6.0",
@@ -65,7 +68,6 @@
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
-    "electron": "^14.0.0",
     "electron-builder": "^22.11.7",
     "wait-on": "^6.0.0"
   }

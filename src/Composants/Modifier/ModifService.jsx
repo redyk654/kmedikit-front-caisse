@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
-export default function ModifService({ designation, prix, categorie, handleChange, enregistrerModif }) {
+import { CFormInput, CFormSwitch } from '@coreui/react';
+
+export default function ModifService({ designation, prix, categorie, generalite, handleChange, enregistrerModif }) {
     const refBtn = useRef();
 
     // console.log(designation, prix, categorie);
@@ -35,6 +37,9 @@ export default function ModifService({ designation, prix, categorie, handleChang
                 <option value="UPEC">Upec</option>
                 <option value="CONSULTATION SPÉCIALISTE">Consultation Spécialiste</option>
             </select>
+        </p>
+        <p className='ps-3'>
+            <CFormSwitch onChange={handleChange} checked={parseInt(generalite) ? true : false} size='xl' name="generalite" id="generalite" label="Généralité"/>
         </p>
         <p className='ps-3'>
             <button ref={refBtn} className='bootstrap-btn valider w-75' role='button' onClick={excuterEnregistrerModif}>Enregistrer</button>
