@@ -139,7 +139,7 @@ export default function Modifier(props) {
     const supprimer = () => {
         if (medocSelect) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/gestion_services.php?id=${medocSelect[0].id}`);
+            req.open('GET', `http://serveur/backend-cmab/gestion_services.php?id=${medocSelect.id}`);
 
             req.addEventListener('load', () => {
                 setRerender(!renrender);
