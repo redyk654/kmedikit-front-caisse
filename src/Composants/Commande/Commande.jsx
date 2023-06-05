@@ -758,7 +758,6 @@ export default function Commande(props) {
                 contentLabel="Commande réussie"
             >
                 <h2 style={{color: '#fff'}}>Service effectué !</h2>
-                <button style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '15px', fontSize: 'large'}} onClick={fermerModalReussi}>ok</button>
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
