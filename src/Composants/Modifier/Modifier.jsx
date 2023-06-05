@@ -111,9 +111,9 @@ export default function Modifier(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php?urgence=oui');
+                req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
             } else {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
+                req.open('GET', `${nomDns}recuperer_services.php`);
             }
 
             req.addEventListener("load", () => {
@@ -167,7 +167,7 @@ export default function Modifier(props) {
     const supprimer = () => {
         if (medocSelect) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/gestion_services.php?id=${medocSelect[0].id}`);
+            req.open('GET', `${nomDns}gestion_services.php?id=${medocSelect.id}`);
 
             req.addEventListener('load', () => {
                 setRerender(!renrender);
@@ -201,7 +201,7 @@ export default function Modifier(props) {
             data.append('id', medocSelect.id);
             
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php');
+            req.open('POST', `${nomDns}gestion_services.php`);
 
             req.addEventListener('load', () => {
                 setMedoSelect(service);
@@ -220,7 +220,7 @@ export default function Modifier(props) {
             data.append('id', e.target.id);
             
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php?retirer_generalite');
+            req.open('POST', `${nomDns}gestion_services.php?retirer_generalite`);
     
             req.addEventListener('load', () => {
                 setListeDesGeneralites(listeDesGeneralites.filter(item => item.id !== e.target.id));
@@ -275,7 +275,7 @@ export default function Modifier(props) {
             data.append('categorie', document.getElementById('categorie-add').value);
     
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/nouveau_service.php');
+            req.open('POST', `${nomDns}nouveau_service.php`);
     
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
