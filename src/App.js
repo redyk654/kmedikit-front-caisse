@@ -63,7 +63,7 @@ function App() {
       contenu = <Historique nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />
       break;
     case 4:
-      contenu = <Comptes nomConnecte={nomConnecte} />
+      contenu = <Comptes nomConnecte={nomConnecte} role={role} />
       break;
     case 5:
       contenu = <GestionRecette nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />

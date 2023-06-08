@@ -2,12 +2,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import './GestionFactures.css';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
-import { FaCheck, FaCross } from 'react-icons/fa';
 import FactureEnreg from '../Facture/FactureEnreg';
-import { mois, extraireCode, nomDns } from "../../shared/Globals";
+import { mois, extraireCode, nomDns, ROLES } from "../../shared/Globals";
 import { CBadge } from '@coreui/react';
 import CIcon from '@coreui/icons-react'
 import { cilReload, cilXCircle } from '@coreui/icons';
+import { io } from 'socket.io-client';
+
+const socket = io.connect('http://serveur:3010');
 
 const customStyles2 = {
     content: {
@@ -130,6 +132,13 @@ export default function GestionFactures(props) {
         }
 
     }, [effet2])
+
+    useEffect(() => {
+        socket.on('acte_supprime', () => {
+            seteffet(!effet);
+            setdetailsFacture([]);
+        })
+    }, [socket])
 
     const afficherInfos = (e) => {
         // Affichage des informations de la facture selectionnée
@@ -272,6 +281,7 @@ export default function GestionFactures(props) {
             if (req.status >= 200 && req.status < 400) {
                 setfactureSelectionne([{...factureSelectionne[0], a_payer: nouveauNetAPayer}]);
                 seteffet(!effet);
+                socket.emit('suppression_acte');
             }
         });
 
@@ -313,7 +323,7 @@ export default function GestionFactures(props) {
                 contentLabel="validation commande"
                 onRequestClose={fermerModalConfirmation}
             >
-                <h2 style={{color: '#fff'}}>Annuler une facture entraine sa suppression de la base de données. Voulez-vous continuer ?</h2>
+                <h5 style={{color: '#fff'}}>Annuler une facture entraine sa suppression de la base de données. Voulez-vous continuer ?</h5>
                 <div style={{textAlign: 'center'}} className='modal-button'>
                     <button className="supp" style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px'}} onClick={fermerModalConfirmation}>NON</button>
                     <button className="valider" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={supprimerFacture}>OUI</button>
@@ -378,25 +388,27 @@ export default function GestionFactures(props) {
                                             {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
                                         </td>
                                         <td style={table_styles2}>{item.prix}</td>
-                                        <td>
-                                            {parseInt(item.statu_acte) ? 
-                                            (<CIcon
-                                                onClick={() => restaurerActe(item.id_facture, item.designation)}
-                                                icon={cilReload}
-                                                className="text-success"
-                                                role="button"
-                                                size='lg'
-                                            />) : 
-                                            (
-                                                <CIcon
-                                                    onClick={() => annulerActe(item.id_facture, item.designation)}
-                                                    icon={cilXCircle}
-                                                    className="text-danger"
+                                        {(props.role.toUpperCase() === ROLES.regisseur.toUpperCase() || props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (                                            
+                                            <td>
+                                                {parseInt(item.statu_acte) ? 
+                                                (<CIcon
+                                                    onClick={() => restaurerActe(item.id_facture, item.designation)}
+                                                    icon={cilReload}
+                                                    className="text-success"
                                                     role="button"
                                                     size='lg'
-                                                />
-                                            )}
-                                        </td>
+                                                />) : 
+                                                (
+                                                    <CIcon
+                                                        onClick={() => annulerActe(item.id_facture, item.designation)}
+                                                        icon={cilXCircle}
+                                                        className="text-danger"
+                                                        role="button"
+                                                        size='lg'
+                                                    />
+                                                )}
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>
@@ -408,14 +420,14 @@ export default function GestionFactures(props) {
                     <div>
                         <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
                     </div>
-                    <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'flex'}`, justifyContent: 'center'}}>
-                        <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'block'}`}}>
+                    <div style={{display: `${'flex'}`, justifyContent: 'center'}}>
+                        <div style={{display: `${'block'}`}}>
                             <ReactToPrint
                                 trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                                 content={() => componentRef.current}
                             />
                         </div>
-                        <div>
+                        <div style={{display: `${props.role.toUpperCase() !== ROLES.admin.toUpperCase() && 'none' }`}}>
                             <button className='bootstrap-btn annuler' style={{width: '15vw', height: '5vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
                         </div>
                     </div>

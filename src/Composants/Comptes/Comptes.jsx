@@ -103,7 +103,7 @@ export default function Comptes(props) {
                         <select name="role">
                             <option value={ROLES.caissier}>caissier</option>
                             <option value={ROLES.regisseur}>regisseur</option>
-                            <option value={ROLES.admin}>admin</option>
+                            {props.role === ROLES.admin ? <option value={ROLES.admin}>admin</option> : null}
                             <option value={ROLES.secretaire}>sécrétaire</option>
                         </select>
                     </p>
