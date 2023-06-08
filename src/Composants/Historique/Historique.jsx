@@ -5,7 +5,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
 import { extraireCode, mois, nomDns } from '../../shared/Globals';
-
+import { CBadge } from '@coreui/react';
 
 export default function Historique(props) {
 
@@ -98,22 +98,25 @@ export default function Historique(props) {
                             <tr>
                                 <td>Désignation</td>
                                 <td>Prix</td>
-                                <td>Par</td>
+                                <td>Caissier</td>
                                 <td>Le</td>
                                 <td>À</td>
-                                <td>Patient</td>
+                                {/* <td>Patient</td> */}
                                 <td>Reduction</td>
                             </tr>
                         </thead>
                         <tbody>
                             {historique.length > 0 && historique.map(item => (
                                 <tr key={item.id}>
-                                    <td>{extraireCode(item.designation)}</td>
+                                    <td>
+                                        {extraireCode(item.designation)}
+                                        {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
+                                    </td>
                                     <td>{item.prix}</td>
                                     <td>{item.caissier}</td>
                                     <td>{mois(item.date_fait)}</td>
                                     <td>{item.heure_fait}</td>
-                                    <td>{item.patient}</td>
+                                    {/* <td>{item.patient}</td> */}
                                     <td style={{fontWeight: '700'}}>{parseInt(item.reduction) > 0 ? '-' + item.reduction + ' %': 0}</td>
                                 </tr>
                             ))}

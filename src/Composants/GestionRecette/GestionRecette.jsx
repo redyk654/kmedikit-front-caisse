@@ -402,7 +402,6 @@ export default function GestionRecette(props) {
         setRecetteTotal(0);
         sethistorique([]);
         setServices([]);
-        document.getElementById('retire').value = "";
     }
 
     const fermerModalConfirmation = () => {
@@ -512,7 +511,7 @@ export default function GestionRecette(props) {
                         </tbody>
                     </table>
                     <div style={{marginTop: '50px', textAlign: 'center'}}>
-                        <div>
+                        {/* <div>
                             <input style={{width: '100px', height: '3vh'}} type="text" id="retire" />
                             <button
                                 className='bootstrap-btn'
@@ -521,7 +520,7 @@ export default function GestionRecette(props) {
                             >
                                 OK
                             </button>
-                        </div>
+                        </div> */}
                         <div>
                             Total : <span style={{fontWeight: '600'}}>{total ? (total + frais) + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
@@ -532,9 +531,9 @@ export default function GestionRecette(props) {
                             Recette : <span style={{fontWeight: '600'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
                     </div>
-                    <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
+                    {/* <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
                         <button className='bootstrap-btn h-25' onClick={terminer}>Terminer</button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
