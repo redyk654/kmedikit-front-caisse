@@ -42,8 +42,9 @@ export function afficherAge (age) {
 
 export const ROLES = {
     caissier: "caissier",
-    admin: "admin",
     secretaire: "secretaire",
+    regisseur: "regisseur",
+    admin: "admin",
 }
 
 export const SEXES = {

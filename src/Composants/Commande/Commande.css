@@ -66,7 +66,7 @@
 }
 
 .commande .left-side .liste-medoc ul li {
-    color: #038654;
+    color: rgb(107, 102, 102);
     font-weight: 600;
     width: 100%;
     line-height: 30px;

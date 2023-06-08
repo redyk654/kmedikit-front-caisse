@@ -29,14 +29,6 @@ export default function Apercu(props) {
     const [dateFin, setdateFin] = useState('');
     const [caissier, setCaissier] = useState('');
     const [assurance, setAssurance] = useState('non');
-    // const [labo, setLabo] = useState(0);
-    // const [radio, setRadio] = useState(0);
-    // const [consul, setConsul] = useState(0);
-    // const [echo, setEcho] = useState(0);
-    // const [mater, setMater] = useState(0);
-    // const [chr, setChr] = useState(0);
-    // const [med, setMed] = useState(0);
-    // const [upec, setUpec] = useState(0);
     const [messageErreur, setMessageErreur] = useState('');
 
 
@@ -228,7 +220,7 @@ export default function Apercu(props) {
                             </p>
                         </div>
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
-                        <div>Total : <span style={{fontWeight: '700'}}>{total ? (total + montantFrais) + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
                         {/* <div>Matériel : <span style={{fontWeight: '700'}}>{montantFrais ? montantFrais + ' Fcfa' : '0 Fcfa'}</span></div> */}
                         <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
                     </div>
@@ -265,7 +257,6 @@ export default function Apercu(props) {
                     recetteTotal={reccetteTotal}
                     listing={assurance}
                     total={total}
-                    montantFrais={montantFrais}
                     nomConnecte={caissier}
                     dateDepart={dateDepart}
                     dateFin={dateFin}

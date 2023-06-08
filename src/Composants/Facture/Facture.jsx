@@ -90,9 +90,9 @@ export default class Facture extends Component {
                             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div>Total</div>
-                                    <div>Matériel</div>
+                                    {/* <div>Matériel</div> */}
                                     <div>Reduction</div>
-                                    <div>Assurance</div>
+                                    {/* <div>Assurance</div> */}
                                     <div>Net à payer</div>
                                     <div>Montant versé</div>
                                     <div>Relicat</div>
@@ -100,9 +100,9 @@ export default class Facture extends Component {
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div><strong>{this.props.prixTotal() + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
+                                    {/* <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div> */}
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
-                                    <div><strong>{this.props.type_assurance + ' %'}</strong></div>
+                                    {/* <div><strong>{this.props.type_assurance + ' %'}</strong></div> */}
                                     <div><strong>{this.props.aPayer() + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.relicat() + ' Fcfa'}</strong></div>
@@ -165,9 +165,9 @@ export default class Facture extends Component {
                             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div>Total</div>
-                                    <div>Matériel</div>
+                                    {/* <div>Matériel</div> */}
                                     <div>Reduction</div>
-                                    <div>Assurance</div>
+                                    {/* <div>Assurance</div> */}
                                     <div>Net à payer</div>
                                     <div>Montant versé</div>
                                     <div>Relicat</div>
@@ -175,9 +175,9 @@ export default class Facture extends Component {
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div><strong>{this.props.prixTotal() + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
+                                    {/* <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div> */}
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
-                                    <div><strong>{this.props.type_assurance + ' %'}</strong></div>
+                                    {/* <div><strong>{this.props.type_assurance + ' %'}</strong></div> */}
                                     <div><strong>{this.props.aPayer() + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.relicat() + ' Fcfa'}</strong></div>

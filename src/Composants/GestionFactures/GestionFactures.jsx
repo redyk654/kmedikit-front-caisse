@@ -5,6 +5,9 @@ import Modal from 'react-modal';
 import { FaCheck, FaCross } from 'react-icons/fa';
 import FactureEnreg from '../Facture/FactureEnreg';
 import { mois, extraireCode, nomDns } from "../../shared/Globals";
+import { CBadge } from '@coreui/react';
+import CIcon from '@coreui/icons-react'
+import { cilReload, cilXCircle } from '@coreui/icons';
 
 const customStyles2 = {
     content: {
@@ -73,7 +76,7 @@ export default function GestionFactures(props) {
     const [supp, setSupp] =  useState(true);
     const [modalReussi, setModalReussi] = useState(false);
     const [modalConfirmation, setModalConfirmation] = useState(false);
-
+    const [visible, setVisible] = useState(false)
 
     useEffect(() => {
         setFactures([])
@@ -231,6 +234,77 @@ export default function GestionFactures(props) {
         setModalConfirmation(false);
     }
 
+    const annulerActe = (idFacture, designation) => {
+        // mettre à jour le statut de l'acte dans la vue
+        let acte = detailsFacture.filter(item => (item.designation === designation));
+        acte = {...acte[0], statu_acte: 1};
+        let filterDetailsFacture = detailsFacture.filter(item => (item.designation !== designation));
+        filterDetailsFacture.push(acte);
+        
+        // mettre à jour le statut de l'acte dans la base de données
+        const data = new FormData();
+        data.append('id_facture', idFacture);
+        data.append('designation', designation);
+
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}annuler_acte.php?statu_acte=1`);
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                setdetailsFacture(filterDetailsFacture);
+                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) - (parseInt(acte.prix) - (parseInt(acte.prix) * (parseInt(acte.reduction) / 100)));
+                majNetAPayer(idFacture, nouveauNetAPayer);
+            }
+        });
+
+        req.send(data);
+    }
+
+    const majNetAPayer = (idFacture, nouveauNetAPayer) => {
+        const data = new FormData();
+        data.append('id_facture', idFacture);
+        data.append('nouveau_net_a_payer', nouveauNetAPayer);
+
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}annuler_acte.php?maj_net_a_payer`);
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                setfactureSelectionne([{...factureSelectionne[0], a_payer: nouveauNetAPayer}]);
+                seteffet(!effet);
+            }
+        });
+
+        req.send(data);
+    }
+
+    const restaurerActe = (idFacture, designation) => {
+
+        // mettre à jour le statut de l'acte dans la vue
+        let acte = detailsFacture.filter(item => (item.designation === designation));
+        acte = {...acte[0], statu_acte: 0};
+        let filterDetailsFacture = detailsFacture.filter(item => (item.designation !== designation));
+        filterDetailsFacture.push(acte);
+        
+        // mettre à jour le statut de l'acte dans la base de données
+        const data = new FormData();
+        data.append('id_facture', idFacture);
+        data.append('designation', designation);
+
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}annuler_acte.php?statu_acte=0`);
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                setdetailsFacture(filterDetailsFacture);
+                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) + (parseInt(acte.prix) - (parseInt(acte.prix) * (parseInt(acte.reduction) / 100)));
+                majNetAPayer(idFacture, nouveauNetAPayer);
+            }
+        });
+
+        req.send(data);
+    }
+
     return (
         <div className="container-facture">
             <Modal
@@ -293,23 +367,42 @@ export default function GestionFactures(props) {
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
                         <table style={table_styles}>
                             <thead>
-                                <th style={table_styles1}>Désignation</th>
+                                <th style={table_styles1}>Désignation </th>
                                 <th style={table_styles2}>Prix</th>
                             </thead>
                             <tbody>
                                 {detailsFacture.map(item => (
                                     <tr>
-                                        <td style={table_styles1}>{extraireCode(item.designation)}</td>
+                                        <td style={table_styles1} role="button" onClick={() => setVisible(true)}>
+                                            {extraireCode(item.designation)}
+                                            {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
+                                        </td>
                                         <td style={table_styles2}>{item.prix}</td>
+                                        <td>
+                                            {parseInt(item.statu_acte) ? 
+                                            (<CIcon
+                                                onClick={() => restaurerActe(item.id_facture, item.designation)}
+                                                icon={cilReload}
+                                                className="text-success"
+                                                role="button"
+                                                size='lg'
+                                            />) : 
+                                            (
+                                                <CIcon
+                                                    onClick={() => annulerActe(item.id_facture, item.designation)}
+                                                    icon={cilXCircle}
+                                                    className="text-danger"
+                                                    role="button"
+                                                    size='lg'
+                                                />
+                                            )}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                    <div style={{marginTop: 15}}>
-                        <div style={{fontWeight: 700}}>Status: {factureSelectionne.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0 ? <FaCross /> : <FaCheck color='#038654' size={18} />}</div>
-                    </div>
-                    <div>
+                    <div className='mt-4'>
                         <div>Net à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].a_payer + ' Fcfa'}</span></div>
                     </div>
                     <div>
@@ -351,13 +444,13 @@ export default function GestionFactures(props) {
                             <div style={{display: 'none'}}>
                                 <FactureEnreg
                                 ref={componentRef}
-                                medocCommandes={detailsFacture}
+                                detailsFacture={detailsFacture}
                                 idFacture={factureSelectionne[0].id}
                                 patient={factureSelectionne[0].patient}
                                 prixTotal={factureSelectionne[0].prix_total}
                                 reduction={factureSelectionne[0].reduction}
                                 aPayer={factureSelectionne[0].a_payer}
-                                montantVerse={factureSelectionne[0].montant_verse}
+                                montantVerse={0}
                                 relicat={factureSelectionne[0].relicat}
                                 assurance={factureSelectionne[0].assurance}
                                 type_assurance={factureSelectionne[0].type_assurance}

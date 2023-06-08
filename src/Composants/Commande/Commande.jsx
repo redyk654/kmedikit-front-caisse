@@ -300,14 +300,10 @@ export default function Commande(props) {
         setQteDesire(1);
     }
 
-    const desactiverBoutonMateriel = () => {
-        btnMateriel.current.disabled = true;
-        setMontantMateriel(MONTANTMATERIEL);
-    }
-
-    const activerBoutonMateriel = () => {
-        btnMateriel.current.disabled = false;
-    }
+    // const desactiverBoutonMateriel = () => {
+    //     btnMateriel.current.disabled = true;
+    //     setMontantMateriel(MONTANTMATERIEL);
+    // }
 
     const annulerCommande = () => {
         setMedoSelect(false);
@@ -321,7 +317,6 @@ export default function Commande(props) {
         setMontantMateriel(0);
         setreduction(false);
         setPatientChoisi(detailsDuPatient)
-        activerBoutonMateriel()
     }
 
     const sauvegarder = () => {

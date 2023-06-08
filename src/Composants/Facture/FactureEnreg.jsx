@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { extraireCode, mois } from '../../shared/Globals';
 import logo from '../../images/logo-minsante.png';
+import { CBadge } from '@coreui/react';
 
 const styles = {
     // display: 'flex',
@@ -66,6 +67,7 @@ export default class FactureEnreg extends Component {
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                         <div style={{textAlign: 'center', width: '320px'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
+                            <div style={{marginTop: 5}}><span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px'}}>Réedition</span></div>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? mois(this.props.date.substring(0, 10)) : 
@@ -84,9 +86,12 @@ export default class FactureEnreg extends Component {
                                         <th style={table_styles2}>Prix</th>
                                     </thead>
                                     <tbody>
-                                        {this.props.medocCommandes.map(item => (
+                                        {this.props.detailsFacture.map(item => (
                                             <tr>
-                                                <td style={table_styles1}>{extraireCode(item.designation)}</td>
+                                                <td style={table_styles1}>
+                                                    {extraireCode(item.designation)} &nbsp;
+                                                    {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
+                                                </td>
                                                 <td style={table_styles2}>{item.prix}</td>
                                             </tr>
                                         ))}
@@ -96,9 +101,9 @@ export default class FactureEnreg extends Component {
                             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div>Total</div>
-                                    <div>Matériel</div>
+                                    {/* <div>Matériel</div> */}
                                     <div>Reduction</div>
-                                    <div>Assurance</div>
+                                    {/* <div>Assurance</div> */}
                                     <div>Net à payer</div>
                                     <div>Montant versé</div>
                                     <div>Relicat</div>
@@ -106,9 +111,9 @@ export default class FactureEnreg extends Component {
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div><strong>{this.props.prixTotal + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
+                                    {/* <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div> */}
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
-                                    <div><strong>{this.props.type_assurance + ' %'}</strong></div>
+                                    {/* <div><strong>{this.props.type_assurance + ' %'}</strong></div> */}
                                     <div><strong>{this.props.aPayer + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.relicat + ' Fcfa'}</strong></div>
@@ -141,6 +146,7 @@ export default class FactureEnreg extends Component {
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                         <div style={{textAlign: 'center', width: '320px'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
+                            <div style={{marginTop: 5}}><span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px'}}>Réedition</span></div>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? mois(this.props.date.substring(0, 10)) : 
@@ -159,9 +165,12 @@ export default class FactureEnreg extends Component {
                                         <th style={table_styles2}>Prix</th>
                                     </thead>
                                     <tbody>
-                                        {this.props.medocCommandes.map(item => (
+                                        {this.props.detailsFacture.map(item => (
                                             <tr>
-                                                <td style={table_styles1}>{extraireCode(item.designation)}</td>
+                                                <td style={table_styles1}>
+                                                    {extraireCode(item.designation)} &nbsp;
+                                                    {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null} 
+                                                </td>
                                                 <td style={table_styles2}>{item.prix}</td>
                                             </tr>
                                         ))}
@@ -171,9 +180,9 @@ export default class FactureEnreg extends Component {
                             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div>Total</div>
-                                    <div>Matériel</div>
+                                    {/* <div>Matériel</div> */}
                                     <div>Reduction</div>
-                                    <div>Assurance</div>
+                                    {/* <div>Assurance</div> */}
                                     <div>Net à payer</div>
                                     <div>Montant versé</div>
                                     <div>Relicat</div>
@@ -181,9 +190,9 @@ export default class FactureEnreg extends Component {
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div><strong>{this.props.prixTotal + ' Fcfa'}</strong></div>
-                                    <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
+                                    {/* <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div> */}
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
-                                    <div><strong>{this.props.type_assurance + ' %'}</strong></div>
+                                    {/* <div><strong>{this.props.type_assurance + ' %'}</strong></div> */}
                                     <div><strong>{this.props.aPayer + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.relicat + ' Fcfa'}</strong></div>
