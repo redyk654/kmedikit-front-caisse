@@ -109,13 +109,13 @@ body {
   z-index: 1111;
   position: absolute;
   transform: rotate(90deg);
-  left: 85%;
+  left: 69%;
 }
 
 .logo-minsante-facture.p1 {
-  top: 22%;
+  top: 21%;
 }
 
 .logo-minsante-facture.p2 {
-  bottom: 22%;
+  bottom: 23%;
 }

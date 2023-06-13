@@ -117,7 +117,8 @@ export function mois2 (str) {
 export const styleEntete = {
     color: 'black',
     borderBottom: '1px dotted #000',
-    letterSpacing: '1px'
+    letterSpacing: '1px',
+    fontSize: 8
 }
 
 export const nomDns = 'http://serveur/backend-cmab/';

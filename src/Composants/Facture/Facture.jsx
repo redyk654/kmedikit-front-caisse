@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { extraireCode, mois, styleEntete } from '../../shared/Globals';
 import logo from '../../images/logo-minsante.png';
+import EnteteHopital from '../../shared/EnteteHopital';
 
 const styles = {
     // display: 'flex',
@@ -31,32 +32,19 @@ const table_styles = {
     padding: 6,
     width: '100%',
     marginTop: '15px',
-    fontSize: 8,
+    fontSize: 14,
 }
 
 export default class Facture extends Component {
 
     render() {
         return (
-            <div style={{display: 'flex', flexDirection: 'column', width: '85%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', width: '85%', marginTop: '-60px', marginLeft: '-70px'}}>
                 <div className='logo-minsante-facture p1'>
                     <img src={logo} alt="" width={70} height={70} />
                 </div>
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
-                    <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                        <div style={{ lineHeight: '20px'}}>
-                            <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
-                            <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
-                            <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
-                            <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-                        </div>
-                        <div style={{ lineHeight: '20px'}}>
-                            <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
-                            <div style={styleEntete}><strong>Minister of Public Health</strong></div>
-                            <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
-                            <div style={styleEntete}><strong>Mbanga Health District</strong></div>
-                        </div>
-                    </div>
+                <div style={{fontSize: 14, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)', color: 'black'}}>
+                    <EnteteHopital />
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                         <div style={{textAlign: 'center', width: '320px'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
@@ -68,6 +56,7 @@ export default class Facture extends Component {
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
                             <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>Code patient : <span style={{fontWeight: '600', marginTop: '10px'}}>{this.props.codePatient.toUpperCase()}</span></div>
                             {this.props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
                             ) : null}
@@ -117,21 +106,8 @@ export default class Facture extends Component {
                 <div className='logo-minsante-facture p2'>
                     <img src={logo} alt="" width={70} height={70} />
                 </div>
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
-                    <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                        <div style={{ lineHeight: '20px'}}>
-                            <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
-                            <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
-                            <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
-                            <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-                        </div>
-                        <div style={{ lineHeight: '20px'}}>
-                            <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
-                            <div style={styleEntete}><strong>Minister of Public Health</strong></div>
-                            <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
-                            <div style={styleEntete}><strong>Mbanga Health District</strong></div>
-                        </div>
-                    </div>
+                <div style={{fontSize: 14, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)', color: 'black'}}>
+                    <EnteteHopital />
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                         <div style={{textAlign: 'center', width: '320px'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
@@ -143,6 +119,7 @@ export default class Facture extends Component {
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
                             <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>Code patient : <span style={{fontWeight: '600', marginTop: '10px'}}>{this.props.codePatient.toUpperCase()}</span></div>
                             {this.props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
                             ) : null}
@@ -185,7 +162,7 @@ export default class Facture extends Component {
                                 </div>
                             </div>
                             <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
-                            <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
+                            {/* <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div> */}
                         </div>
                     </div>
                 </div>

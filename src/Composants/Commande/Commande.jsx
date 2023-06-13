@@ -12,6 +12,8 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
+import CIcon from '@coreui/icons-react'
+import { cilX } from '@coreui/icons';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -747,11 +749,12 @@ export default function Commande(props) {
                 style={customStyles2}
                 contentLabel="Commande réussie"
             >
+                <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' />
                 <h2 style={{color: '#fff'}}>Service effectué !</h2>
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
-                    onAfterPrint={fermerModalReussi}
+                    // onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">
@@ -879,6 +882,7 @@ export default function Commande(props) {
                                 medocCommandes={medocCommandes}
                                 idFacture={idFacture}
                                 patient={patientChoisi.nom}
+                                codePatient={patientChoisi.code}
                                 prixTotal={calculerPrixTotal}
                                 reduction={valeurReduction}
                                 aPayer={calculerNetAPayer}
