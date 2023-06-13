@@ -687,14 +687,16 @@ export default function Commande(props) {
         const req = new XMLHttpRequest();
         const data = new FormData();
 
-        data.append('code', creerCodePatient());
+        const nouveauCodePatient = creerCodePatient()
+
+        data.append('code', nouveauCodePatient);
         data.append('nouveau_patient', JSON.stringify(nouveauPatient))
 
         req.open('POST', `${nomDns}index.php`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
-                setPatientChoisi(nouveauPatient);
+                setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
                 fermerEditerPatient();
                 resetInfosDuPatient();
             }

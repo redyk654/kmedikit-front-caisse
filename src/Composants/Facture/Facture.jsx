@@ -56,7 +56,7 @@ export default class Facture extends Component {
                                 </strong> à <strong>{this.props.date ? this.props.date.substring(11, 19) : 
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
-                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient.toUpperCase()}</span></div>
                             <div style={{marginTop: 5, textTransform: 'capitalize'}}>Code patient : <span style={{fontWeight: '600', marginTop: '10px'}}>{this.props.codePatient.toUpperCase()}</span></div>
                             {this.props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
@@ -119,7 +119,7 @@ export default class Facture extends Component {
                                 </strong> à <strong>{this.props.date ? this.props.date.substring(11, 19) : 
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
-                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient.toUpperCase()}</span></div>
                             <div style={{marginTop: 5, textTransform: 'capitalize'}}>Code patient : <span style={{fontWeight: '600', marginTop: '10px'}}>{this.props.codePatient.toUpperCase()}</span></div>
                             {this.props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>

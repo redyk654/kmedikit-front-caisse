@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
 import ReactToPrint from 'react-to-print';
 import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
-import { extraireCode, nomDns } from '../../shared/Globals';
+import { extraireCode, nomDns, CATEGORIES } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -283,15 +283,9 @@ export default function GestionRecette(props) {
                 <h2 style={{color: '#fff', textAlign: 'center'}}></h2>
                 <div style={{margin: 10}}>
                     <select name="categorie" id="categorie" onChange={changerCategorie}>
-                        <option value="">Selectionnez une catégorie</option>
-                        <option value="maternité">Maternité</option>
-                        <option value="imagerie">Imagerie</option>
-                        <option value="laboratoire">Laboratoire</option>
-                        <option value="carnet">Carnet</option>
-                        <option value="medecine">Medecine</option>
-                        <option value="chirurgie">Chirurgie</option>
-                        <option value="upec">Upec</option>
-                        <option value="consultation spécialiste">Consultation Spécialiste</option>
+                        {CATEGORIES.map(item => (
+                            <option value={item}>{item}</option>
+                        ))}
                     </select>
                 </div>
                 <div>
