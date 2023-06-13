@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, MONTANTMATERIEL, nomDns, ServiceExiste } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -569,14 +569,9 @@ export default function Commande(props) {
                         <p style={styleBox}>
                             <label htmlFor="categorie">Catégorie</label>
                             <select name="categorie" id="categorie" style={{height: '4vh', width: '40%'}}>
-                                <option value="maternité">Maternité</option>
-                                <option value="imagerie">Imagerie</option>
-                                <option value="laboratoire">Laboratoire</option>
-                                <option value="carnet">Carnet</option>
-                                <option value="medecine">Medecine</option>
-                                <option value="chirurgie">Chirurgie</option>
-                                <option value="upec">Upec</option>
-                                <option value="consultation spécialiste">Consultation Spécialiste</option>
+                                {CATEGORIES.map(item => (
+                                    <option value={item}>{item}</option>
+                                ))}
                             </select>
                         </p>
                         <p className='text-light text-center'>{messageErreur}</p>

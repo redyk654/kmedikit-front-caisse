@@ -8,7 +8,7 @@ import Modal from 'react-modal';
 import ModifService from './ModifService';
 import { toast, Toaster } from "react-hot-toast";
 import AfficherGeneralites from './AfficherGeneralites';
-import { extraireCode, nomDns } from '../../shared/Globals';
+import { extraireCode, nomDns, CATEGORIES } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -247,14 +247,9 @@ export default function Modifier(props) {
                     <p style={styleBox}>
                         <label htmlFor="categorie">Catégorie</label>
                         <select name="categorie-add" id="categorie-add" style={{height: '4vh', width: '40%'}}>
-                            <option value="maternité">Maternité</option>
-                            <option value="imagerie">Imagerie</option>
-                            <option value="laboratoire">Laboratoire</option>
-                            <option value="carnet">Carnet</option>
-                            <option value="medecine">Medecine</option>
-                            <option value="chirurgie">Chirurgie</option>
-                            <option value="upec">Upec</option>
-                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                            {CATEGORIES.map(item => (
+                                <option value={item}>{item}</option>
+                            ))}
                         </select>
                     </p>
                     <p style={styleBox}>
@@ -341,15 +336,9 @@ export default function Modifier(props) {
                     <div>
                         <label htmlFor="categorie1">Catégorie : </label>
                         <select name="categorie1" id="categorie1" onChange={changerCategorie}>
-                            <option value="tout">Tout les services</option>
-                            <option value="maternité">Maternité</option>
-                            <option value="imagerie">Imagerie</option>
-                            <option value="laboratoire">Laboratoire</option>
-                            <option value="carnet">Carnet</option>
-                            <option value="medecine">Medecine</option>
-                            <option value="chirurgie">Chirurgie</option>
-                            <option value="upec">Upec</option>
-                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                            {CATEGORIES.map(item => (
+                                <option value={item}>{item}</option>
+                            ))}
                         </select>
                     </div>
                     <div>
