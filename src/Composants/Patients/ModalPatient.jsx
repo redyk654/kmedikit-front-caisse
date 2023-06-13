@@ -3,9 +3,9 @@ import React from 'react'
 export default function ModalPatient({ patient, filtrerPatient, stylePatient, listePatient, selectionnePatient, ouvrirEditerPatient }) {
   return (
     <div style={{display: 'flex', flexDirection: 'column' , width: '45%', marginTop: 10, color: '#f1f1f1'}}>
-        <label htmlFor="" style={{display: 'block',}}>Nom et prénom</label>
         <div>
-            <input type="text" name="qteDesire" style={{width: '250px', height: '4vh'}} value={patient} onChange={filtrerPatient} autoComplete='off' />
+        <label htmlFor="recherche-patient" style={{display: 'block',}}>Nom et prénom</label>
+            <input id='recherche-patient' type="text" name="qteDesire" style={{width: '250px', height: '4vh'}} value={patient} onChange={filtrerPatient} autoComplete='off' />
         </div>
         <div style={{marginTop: '10px'}}>
             <h2>Liste des patients</h2>

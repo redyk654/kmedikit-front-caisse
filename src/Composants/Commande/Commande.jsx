@@ -79,7 +79,7 @@ const customStyles3 = {
       transform: 'translate(-50%, -50%)',
       background: '#038654',
       width: '80%',
-      height: '85vh'
+      height: '90vh'
     }, 
 };
 
@@ -534,9 +534,11 @@ export default function Commande(props) {
         if (option === 'patient') {
             return (
                 <Fragment>
+                    <CIcon onClick={fermerModalPatient} icon={cilX} size='lg' className=' text-bg-light' role='button' />
                     <h2 style={{color: '#fff', textAlign: 'center'}}>informations du patient</h2>
                     <div className="detail-item">
                         <>
+
                             <ModalPatient
                                 patient={patient}
                                 filtrerPatient={filtrerPatient}
