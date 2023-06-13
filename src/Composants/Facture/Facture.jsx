@@ -32,14 +32,15 @@ const table_styles = {
     padding: 6,
     width: '100%',
     marginTop: '15px',
-    fontSize: 14,
+    fontSize: 11,
+    color: 'black'
 }
 
 export default class Facture extends Component {
 
     render() {
         return (
-            <div style={{display: 'flex', flexDirection: 'column', width: '85%', marginTop: '-60px', marginLeft: '-70px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', width: '85%', marginTop: '-60px', marginLeft: '-35px'}}>
                 <div className='logo-minsante-facture p1'>
                     <img src={logo} alt="" width={70} height={70} />
                 </div>
