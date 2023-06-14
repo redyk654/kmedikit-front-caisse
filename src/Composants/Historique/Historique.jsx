@@ -24,7 +24,7 @@ export default function Historique(props) {
     const [historique, sethistorique] = useState([])
     const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(false);
-    const [dateRecherche, setdateRecherche] = useState('');
+    const [dette, setDette] = useState(false);
     const [dateDepart, setdateDepart] = useState('');
     const [dateFin, setdateFin] = useState('');
     const [search, setSearch] = useState(false);
@@ -58,7 +58,13 @@ export default function Historique(props) {
 
                 const req2 = new XMLHttpRequest();
                 req2.open('GET', `${nomDns}recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}&recette=oui`);
-                req2.onload = () => {setRecetteTotal(JSON.parse(req2.responseText)[0].recette);}
+                req2.onload = () => {
+                    const result = JSON.parse(req2.responseText)[0];
+                    let recette = 0;
+                    recette = parseInt(result.recette) - parseInt(result.dette);
+                    setRecetteTotal(recette);
+                    setDette(parseInt(result.dette));
+                }
                 req2.send();
 
             });
@@ -92,6 +98,7 @@ export default function Historique(props) {
                             </p>
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Recette total : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div>
                     </div>
                     <table>
                         <thead>

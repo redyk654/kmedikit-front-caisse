@@ -33,7 +33,8 @@ const table_styles = {
     padding: 6,
     width: '100%',
     marginTop: '15px',
-    fontSize: 11,
+    fontWeight: 'bold',
+    fontSize: 8,
     color: 'black'
 }
 
@@ -51,9 +52,9 @@ export default class FactureEnreg extends Component {
                 <div className='logo-minsante-facture p1'>
                     <img src={logo} alt="" width={70} height={70} />
                 </div>
-                <div style={{fontSize: 14, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
+                <div style={{fontSize: 10, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)', color: 'black'}}>
                     <EnteteHopital />
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px', marginLeft: '80px'}}>
                         <div style={{textAlign: 'center', width: '320px'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
                             <div style={{marginTop: 5}}><span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px'}}>Réedition</span></div>
@@ -65,6 +66,7 @@ export default class FactureEnreg extends Component {
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
                             <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>Code patient : <span style={{fontWeight: '600', marginTop: '10px', letterSpacing: '2px'}}>{this.props.codePatient.toUpperCase()}</span></div>
                             {this.props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
                             ) : null}
@@ -114,7 +116,7 @@ export default class FactureEnreg extends Component {
                         </div>
                     </div>
                 </div>
-                <div className='logo-minsante-facture p2'>
+                {/* <div className='logo-minsante-facture p2'>
                     <img src={logo} alt="" width={70} height={70} />
                 </div>
                 <div style={{fontSize: 14, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
@@ -156,9 +158,9 @@ export default class FactureEnreg extends Component {
                             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div>Total</div>
-                                    {/* <div>Matériel</div> */}
+                                    <div>Matériel</div>
                                     <div>Reduction</div>
-                                    {/* <div>Assurance</div> */}
+                                    <div>Assurance</div>
                                     <div>Net à payer</div>
                                     <div>Montant versé</div>
                                     <div>Relicat</div>
@@ -166,9 +168,9 @@ export default class FactureEnreg extends Component {
                                 </div>
                                 <div style={{ lineHeight: '18px'}}>
                                     <div><strong>{this.props.prixTotal + ' Fcfa'}</strong></div>
-                                    {/* <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div> */}
+                                    <div><strong>{this.props.montantFrais + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.reduction + ' %'}</strong></div>
-                                    {/* <div><strong>{this.props.type_assurance + ' %'}</strong></div> */}
+                                    <div><strong>{this.props.type_assurance + ' %'}</strong></div>
                                     <div><strong>{this.props.aPayer + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.montantVerse + ' Fcfa'}</strong></div>
                                     <div><strong>{this.props.relicat + ' Fcfa'}</strong></div>
@@ -176,10 +178,10 @@ export default class FactureEnreg extends Component {
                                 </div>
                             </div>
                             <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
-                            {/* <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div> */}
+                            <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         )
     }

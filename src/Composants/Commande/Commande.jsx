@@ -140,7 +140,7 @@ export default function Commande(props) {
     const [option, setoption] = useState('');
     const [reduction, setreduction] = useState(false);
     const [valeurReduction, setvaleurReduction] = useState(0);
-    const [montantVerse, setMontantVerse] = useState(0);
+    const [montantVerse, setMontantVerse] = useState('');
     const [idFacture, setidFacture] = useState('');
     // const [urgence, setUrgence] = useState(false);
     const [listePatient, setlistePatient] = useState([]);
@@ -244,10 +244,13 @@ export default function Commande(props) {
 
     const calculerResteAPayer = () => {
         let resteAPayer = 0;
-        if (parseInt(montantVerse) < calculerNetAPayer())
-            resteAPayer = (calculerNetAPayer() - montantVerse)
-
-        return parseInt(resteAPayer);
+        if (isNaN(parseInt(montantVerse))) {
+            resteAPayer = (calculerNetAPayer() - resteAPayer);
+            return parseInt(resteAPayer);
+        } else {
+            resteAPayer = (calculerNetAPayer() - montantVerse);
+            return parseInt(resteAPayer);
+        }
     }
     
     const calculerRelicat = () => {
@@ -313,12 +316,14 @@ export default function Commande(props) {
         setPatient('');
         setvaleurReduction(0);
         setMessageErreur('');
-        setMontantVerse(0);
+        setMontantVerse('');
         document.querySelector('.recherche').value = "";
         document.querySelector('.recherche').focus();
         setMontantMateriel(0);
         setreduction(false);
         setPatientChoisi(detailsDuPatient)
+        document.querySelector('#valider-facture').disabled = false;
+        document.querySelector('#annuler-facture').disabled = false;
     }
 
     const sauvegarder = () => {
@@ -402,8 +407,9 @@ export default function Commande(props) {
        if(medocCommandes.length > 0) {
 
             let i = 0;
-            document.querySelector('.valide').disabled = true;
-            annuler.current.disabled = true;
+            document.querySelector('#valider-facture').disabled = true;
+            document.querySelector('#annuler-facture').disabled = true;
+            // annuler.current.disabled = true;
 
             medocCommandes.map(item => {
 
@@ -460,8 +466,7 @@ export default function Commande(props) {
                 if (calculerResteAPayer() > 0) {
                     setMessageErreur('Veuillez entrer le montant versé');
                 } else {
-                    setMessageErreur('');
-                    setModalConfirmation(true);
+                    validerCommande();
                 }
             } else {
                 setMessageErreur('Entrez le nom et le prénom du patient');
@@ -668,7 +673,7 @@ export default function Commande(props) {
 
     const handleChangeMontantVerse = (e) => {
         if(e.target.value.length === 0)
-            setMontantVerse(0);
+            setMontantVerse('');
         else
             setMontantVerse(parseInt(e.target.value))
     }
@@ -753,12 +758,12 @@ export default function Commande(props) {
                 style={customStyles2}
                 contentLabel="Commande réussie"
             >
-                <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' />
+                {/* <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' /> */}
                 <h2 style={{color: '#fff'}}>Service effectué !</h2>
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
-                    // onAfterPrint={fermerModalReussi}
+                    onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">
@@ -814,6 +819,11 @@ export default function Commande(props) {
                         {patientChoisi.nom.length > 0 ? (
                             <div>
                                 Patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
+                            </div>
+                        ) : null}
+                        {patientChoisi.nom.length > 0 ? (
+                            <div>
+                                Code patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.code.toUpperCase()}</span>
                             </div>
                         ) : null}
                         {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
@@ -872,8 +882,8 @@ export default function Commande(props) {
                                 Reste à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerResteAPayer() + ' Fcfa'}</span>
                             </div>
                         </div>
-                        <button className='bootstrap-btn annuler' onClick={annulerCommande}>Annnuler</button>
-                        <button className='bootstrap-btn valider' onClick={demanderConfirmation}>Valider</button>
+                        <button className='bootstrap-btn annuler' id='annuler-facture' onClick={annulerCommande}>Annnuler</button>
+                        <button className='bootstrap-btn valider' id='valider-facture' onClick={demanderConfirmation}>Valider</button>
 
                     </div>
 

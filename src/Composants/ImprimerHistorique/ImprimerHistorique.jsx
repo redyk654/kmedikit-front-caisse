@@ -42,21 +42,23 @@ export default class ImprimerHistorique extends Component {
                 <div className='logo-minsante'>
                     <img src={logo} alt="" width={80} height={80} />
                 </div>
-                <div style={{textTransform: 'uppercase', padding: '15px 135px', fontSize: 7, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+                <div style={{textTransform: 'uppercase', color: 'black', padding: '15px 135px', fontSize: 7, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
                         <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
                         <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
                         <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
+                        <div style={styleEntete}><strong>Hôpital de district de Mbanga</strong></div>
                     </div>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
-                        <div style={styleEntete}><strong>Minister of Public Health</strong></div>
+                        <div style={styleEntete}><strong>Ministry of Public Health</strong></div>
                         <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
                         <div style={styleEntete}><strong>Mbanga Health District</strong></div>
+                        <div style={styleEntete}><strong>District Hospital of Mbanga</strong></div>
                     </div>
                 </div>
-                <div style={{fontSize: 9, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
+                <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                     <div style={{textAlign: 'center', width: '410px'}}>
                         <div style={{marginTop: 5, fontSize: 14}}>Fiche de recette de la caisse pour les patients <strong>{this.props.listing === 'non' ? 'non assurés' : 'assurés'}</strong> </div>
                         <div style={{marginTop: 5}}>
@@ -82,7 +84,7 @@ export default class ImprimerHistorique extends Component {
                                 </tbody>
                             </table>
                         </div>
-                        <div style={{marginTop: 5}}>Total : <strong>{this.props.recetteTotal ? (this.props.total + this.props.montantFrais) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
+                        <div style={{marginTop: 5}}>Total : <strong>{this.props.recetteTotal ? (this.props.total) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
                         {/* <div style={{marginTop: 5}}>Matériel : <strong>{this.props.montantFrais ? this.props.montantFrais + ' Fcfa' : 0 + ' Fcfa'}</strong></div> */}
                         <div style={{marginTop: 5}}>Recette : <strong>{this.props.recetteTotal ? this.props.recetteTotal + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
                     </div>

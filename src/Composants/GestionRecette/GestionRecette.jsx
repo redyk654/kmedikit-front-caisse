@@ -180,10 +180,6 @@ export default function GestionRecette(props) {
         req.send(data);
     }
 
-    const afficherGeneralites = () => {
-
-    }
-
     useEffect(() => {
         setrecetteRestante(recetteTotal - montantRetire);
     }, [montantRetire]);
@@ -516,7 +512,7 @@ export default function GestionRecette(props) {
                             </button>
                         </div> */}
                         <div>
-                            Total : <span style={{fontWeight: '600'}}>{total ? (total + frais) + ' Fcfa' : '0 Fcfa'}</span>
+                            Total : <span style={{fontWeight: '600'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
                         {/* <div>
                             Matériel : <span style={{fontWeight: '600'}}>{frais ? frais + ' Fcfa' : '0 Fcfa'}</span>
