@@ -100,8 +100,8 @@ export default function Comptes(props) {
                     <p className="input-zone">
                         <label htmlFor="">Rôle : </label>
                         <select name="role">
-                            <option value="admin">admin</option>
                             <option value="caissier">caissier</option>
+                            <option style={{display: `${props.role.toUpperCase() != "admin".toUpperCase() && 'none'}`}} value="admin">admin</option>
                             <option value="regisseur">regisseur</option>
                             <option value="secretaire">sécrétaire</option>
                         </select>
