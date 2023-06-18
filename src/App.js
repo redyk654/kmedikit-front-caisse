@@ -65,7 +65,7 @@ function App() {
       contenu = <Comptes nomConnecte={nomConnecte} />
       break;
     case 5:
-      contenu = <GestionRecette nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />
+      contenu = <GestionRecette nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} setOnglet={setOnglet} />
       break;
     case 6:
       contenu = <VueRecettes nomConnecte={nomConnecte} role={role} />

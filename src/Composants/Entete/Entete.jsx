@@ -246,7 +246,7 @@ export default function Entete(props) {
                 </h1>
                 <h3 className='ms-4' onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
                 <div className='ms-4' style={{display: `${slide ? 'flex' : 'flex'}`,}}>
-                    <div style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
+                    <div className='deconnexion ps-2' style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
                         <FaSignOutAlt size={24} />
                     </div>
                     <div>

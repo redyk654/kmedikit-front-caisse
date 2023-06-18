@@ -1,8 +1,10 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi } from '../../shared/Globals';
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
+import { CFormCheck, CContainer, CRow, CCol } from '@coreui/react';
+import { CChart } from '@coreui/react-chartjs';
 
 const customStyles1 = {
     content: {
@@ -75,31 +77,28 @@ export default function GestionRecette(props) {
 
     const [historique, sethistorique] = useState([]);
     const [listeComptes, setListeComptes] = useState([]);
-    const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(0);
     const [total, setTotal] = useState('');
     const [dateDepart, setdateDepart] = useState('');
     const [dateFin, setdateFin] = useState('');
     const [services, setServices] = useState([]);
     const [servicesSauvegarde, setServicesSauvegarde] = useState([]);
-    const [categorie, setCategorie]= useState('');
     const [recetteRestante, setrecetteRestante] = useState(0);
     const [frais, setFrais] = useState(0);
     const [montantRetire, setmontantRetire] = useState(0);
     const [caissier, setCaissier] = useState('');
-    const [rerender, setRerender] = useState(false);
     const [modalContenu, setModalContenu] = useState(true);
     const [modalConfirmation, setModalConfirmation] = useState(false);
-    const [modalValidation, setmodalValidation] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
     const [valeur, setValeur] = useState('');
-    const [generalites, setGeneralites] = useState([]);
     const [recetteGeneralites, setRecetteGeneralites] = useState(0);
     const [totalGeneralites, setTotalGeneralites] = useState(0);
     const [itemPourcentage, setitemPourcentage] = useState('');
-    const [detailsState, setDetailsState] = useState([detail]);
-    const [detailsSauvegarde, setDetailsSauvegarde] = useState([]);
-    const [state, setState] = useState(false);
+    const [plusOptions, setPlusOptions] = useState(true);
+    const [idRadio, setIdRadio] = useState('7');
+    const [labelsChart, setLabelsChart] = useState([]);
+    const [data1ChartTotal, setData1ChartTotal] = useState([]);
+    const [data2ChartRecette, setData2ChartRecette] = useState([]);
 
     useEffect(() => {
         // Récupération des médicaments dans la base via une requête Ajax
@@ -170,20 +169,13 @@ export default function GestionRecette(props) {
                 setRecetteGeneralites(result);
 
                 let recetteGen = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
-                sethistorique([...categories, {categorie: 'GÉNÉRALITÉS', recette: recetteGen}]);
+                setTotalGeneralites(recetteGen);
+                sethistorique([...categories]);
             }
         });
 
         req.send(data);
     }
-
-    const afficherGeneralites = () => {
-
-    }
-
-    useEffect(() => {
-        setrecetteRestante(recetteTotal - montantRetire);
-    }, [montantRetire]);
 
     const recupererRecetteTotal = (data) => {
         const req = new XMLHttpRequest();
@@ -199,7 +191,7 @@ export default function GestionRecette(props) {
                     recette += parseInt(item.a_payer);
                     f += parseInt(item.frais);
                 });
-                setRecetteTotal(recette);
+                setRecetteTotal(recette + f);
                 setFrais(f);
             }
         });
@@ -302,21 +294,6 @@ export default function GestionRecette(props) {
         )
     }
 
-    const appliquerGeneralite = (e) => {
-        // On retire les généralités de la liste des détails et on fait la soustraction sur le montant de la recette
-        services.map(item => {
-            if(item.code === detailsState[0].code) {
-                item.detailsServices = item.detailsServices.filter(item2 => (item2.designation !== e.target.id));
-                setDetailsSauvegarde(detailsSauvegarde.filter(item2 => (item2.designation !== e.target.id)));
-                setGeneralites([...generalites, {designation: e.target.id, prix: e.target.value}]);
-                item.recetteRestante = (parseInt(item.recetteRestante) - parseInt(e.target.value));
-                setrecetteRestante(parseInt(recetteRestante) - parseInt(e.target.value));
-                setState(!state);
-            }
-        });
-
-    }
-
     const appliquerPourcentage = () => {
         // Application du pourcentage sur un service
         if (valeur.length > 0 && !isNaN(valeur)) {
@@ -335,80 +312,114 @@ export default function GestionRecette(props) {
         
     }
 
-    const genererId = () => {
-        // Fonction pour générer un identifiant unique pour une commande
-        return Math.floor((1 + Math.random()) * 0x10000)
-               .toString(16)
-               .substring(1) + recetteTotal;
-    }
-
-    // const enregitrerDetails = (id_recette) => {
-    //     // On enregistre les détails de la recette
-    //     let i = 0
-    //     services.map(item => {
-    //         const data = new FormData();
-    //         data.append('id_recette', id_recette);
-    //         data.append('categorie', item.service);
-    //         data.append('recette', item.recette);
-    //         data.append('pourcentage', item.pourcentage);
-    //         data.append('recette_restante', item.recetteRestante);
-
-    //         const req = new XMLHttpRequest();
-    //         req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
-
-    //         req.addEventListener('load', () => {
-    //             i++
-    //             if (services.length === i) {
-    //                 fermerModaValidation();
-    //             }
-    //         });
-
-    //         req.send(data);
-    //     })
+    // const genererId = () => {
+    //     // Fonction pour générer un identifiant unique pour une commande
+    //     return Math.floor((1 + Math.random()) * 0x10000)
+    //            .toString(16)
+    //            .substring(1) + recetteTotal;
     // }
 
-    const terminer = () => {
-        // Enregistrement de la recette et de tous les détails
-        const id_recette = genererId();
+    // const terminer = () => {
+    //     // Enregistrement de la recette et de tous les détails
+    //     const id_recette = genererId();
 
-        const data = new FormData();
-        data.append('id_recette', id_recette);
-        data.append('recette_total', recetteTotal);
-        data.append('montant_retire', montantRetire);
-        data.append('recette_restante', recetteRestante);
-        data.append('caissier', caissier);
-        data.append('regisseur', props.nomConnecte);
+    //     const data = new FormData();
+    //     data.append('id_recette', id_recette);
+    //     data.append('recette_total', recetteTotal);
+    //     data.append('montant_retire', montantRetire);
+    //     data.append('recette_restante', recetteRestante);
+    //     data.append('caissier', caissier);
+    //     data.append('regisseur', props.nomConnecte);
 
-        const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
+    //     const req = new XMLHttpRequest();
+    //     req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
 
-        req.addEventListener('load', () => {
-            if(req.status >= 200 && req.status < 400) {
-                fermerModaValidation();
-                annuler()
-            }
-        })
+    //     req.addEventListener('load', () => {
+    //         if(req.status >= 200 && req.status < 400) {
+    //             fermerModaValidation();
+    //             annuler()
+    //         }
+    //     })
 
-        req.send(data);
+    //     req.send(data);
 
+    // }
+
+    const rechercheParPeriode = (date1, date2) => {
+        // Recherche des recettes par période
+        if (date1 !== '' && date2 !== '') {
+            const data = new FormData();
+            data.append('date1', date1);
+            data.append('date2', date2);
+
+            const req = new XMLHttpRequest();
+            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?recette`);
+
+            req.addEventListener('load', () => {
+                if(req.status >= 200 && req.status < 400) {
+                    const res = JSON.parse(req.responseText);
+                    majDonneesFinales(res);
+                    recupGeneralitesParPeriode(date1, date2);
+                    recupDetailsParPeriode(date1, date2);
+                }
+            });
+
+            req.send(data);
+        }
     }
 
-    const annuler = () => {
-        setmontantRetire(0);
-        setrecetteRestante(0);
-        setRecetteTotal(0);
-        sethistorique([]);
+    const recupGeneralitesParPeriode = (date1, date2) => {
+        setRecetteGeneralites([]);
+        setTotalGeneralites(0);
+        // Récupération des généralités par période
+        if (date1 !== '' && date2 !== '') {
+            const data = new FormData();
+            data.append('date1', date1);
+            data.append('date2', date2);
+
+            const req = new XMLHttpRequest();
+            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?generalites`);
+
+            req.addEventListener('load', () => {
+                if(req.status >= 200 && req.status < 400) {
+                    const result = JSON.parse(req.responseText);
+                    setRecetteGeneralites(result);
+                    let recetteGen = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
+                    setTotalGeneralites(recetteGen);
+                }
+            });
+
+            req.send(data);
+        }
+    }
+
+    const recupDetailsParPeriode = (date1, date2) => {
         setServices([]);
-        document.getElementById('retire').value = "";
+        setServicesSauvegarde([]);
+        // Récupération des détails par période
+        if (date1 !== '' && date2 !== '') {
+            const data = new FormData();
+            data.append('date1', date1);
+            data.append('date2', date2);
+
+            const req = new XMLHttpRequest();
+            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?details`);
+
+            req.addEventListener('load', () => {
+                if(req.status >= 200 && req.status < 400) {
+                    const result = JSON.parse(req.responseText);
+                    setServices(result);
+                    setServicesSauvegarde(result);
+                }
+            });
+
+            req.send(data);
+        }
     }
 
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
         setServices(servicesSauvegarde);
-    }
-
-    const fermerModaValidation = () => {
-        setmodalValidation(false);
     }
 
     const fermerModalReussi = () => {
@@ -417,6 +428,70 @@ export default function GestionRecette(props) {
 
     const ouvrirModalReussi = () => {
         setModalReussi(true)
+    }
+
+    const onChangePlusOption = (e) => {
+        props.role.toUpperCase() === 'admin'.toUpperCase() && setPlusOptions(!plusOptions);
+    }
+
+    const majDonneesFinales = (response) => {
+        // Mise à jour de la recette totale
+        let total = response.reduce((acc, item) => acc + parseInt(item.total), 0);
+        setTotal(total);
+        
+        let materiel = response.reduce((acc, item) => acc + parseInt(item.materiel), 0);
+        setFrais(materiel);
+
+        let recette = response.reduce((acc, item) => acc + parseInt(item.recette), 0);
+        setRecetteTotal(recette + materiel);
+
+        let labelsC = response.map(item => {
+            return item.date_vente;
+        });
+
+        let data1C = response.map(item => {
+            return parseInt(item.total) + parseInt(item.materiel);
+        });
+
+        let data2C = response.map(item => {
+            return parseInt(item.recette) + parseInt(item.materiel);
+        });
+
+        setData1ChartTotal(data1C);
+        setData2ChartRecette(data2C);
+        setLabelsChart(labelsC);
+    }
+
+    const handleChangeRadio = (e) => {
+        setIdRadio(e.target.id);
+        const id = e.target.id;
+        let date1;
+        let date2;
+
+        switch(id) {
+            case "7":
+                date1 = soustraireUnNombreAUneDate(1) + ' 23:59:59';
+                date2 = soustraireUnNombreAUneDate(7) + ' 00:00:00';
+                rechercheParPeriode(date2, date1);
+                break;
+            case "10":
+                date1 = soustraireUnNombreAUneDate(1) + ' 23:59:59';
+                date2 = soustraireUnNombreAUneDate(10) + ' 00:00:00';
+                rechercheParPeriode(date2, date1);
+                break;
+            case "0":
+                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+                date2 = ceMoisCi() + '-' + '01 00:00:00';
+                rechercheParPeriode(date2, date1);
+                break;
+            case "30":
+                date1 = leMoisDernier() + '-' + '31 23:59:59';
+                date2 = leMoisDernier() + '-' + '01 00:00:00';
+                rechercheParPeriode(date2, date1);
+                break;
+            default:
+                break;
+        }
     }
 
     return (
@@ -430,6 +505,8 @@ export default function GestionRecette(props) {
                 <div>
                     <AfficherRecetteGeneralites
                         recetteGeneralites={recetteGeneralites}
+                        totalGeneralites={totalGeneralites}
+                        fermerModalReussi={fermerModalReussi}
                     />
                 </div>
             </Modal>
@@ -441,51 +518,61 @@ export default function GestionRecette(props) {
             >
                 {changerContenuModal()}
             </Modal>
-            <Modal
-                isOpen={modalValidation}
-                style={customStyles1}
-                contentLabel=""
-            >
-                <div style={{color: '#fff'}}>
-                    <h2>
-                        Vous allez valider cette recette voulez-vous continuer ?
-                    </h2>
-                    <div style={{textAlign: 'center'}}>
-                        <button style={{padding: '6px', cursor: 'pointer', margin: '8px'}} onClick={() => setmodalValidation(false)}>NON</button>
-                        <button id="oui" style={{padding: '6px', cursor: 'pointer', margin: '8px'}} onClick={terminer}>OUI</button>
-                    </div>
-                </div>
-            </Modal>
             <h1>Gestions des recettes</h1>
 
             <div className="container-gestion">
                 <div className="box-1">
-                    <h1>Options</h1>
-                    <div>
-                        <p>
-                            <label htmlFor="">Du : </label>
-                            <input type="date" ref={date_select1} />
-                            <input type="time" ref={heure_select1} />
-                        </p>
-                        <p>
-                            <label htmlFor="">Au : </label>
-                            <input type="date" ref={date_select2} />
-                            <input type="time" ref={heure_select2} />
-                        </p>
-                        <p>
-                            <label htmlFor="">Caissier : </label>
-                            <select name="caissier" id="caissier">
-                                {props.role === "caissier" ? 
-                                <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> :
-                                listeComptes.map(item => (
-                                    <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
-                                ))                               }
-                            </select>
-                        </p>
+                    <div style={{display: `${plusOptions ? 'none' : 'block'}`}}>
+                        <CContainer>
+                            <CRow>
+                                <CCol>
+                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "7" ? true : false} type="radio" name="radioRecette" id="7" label="7 derniers jours" />
+                                </CCol>
+                                <CCol>
+                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "10" ? true : false} type="radio" name="radioRecette" id="10" label="10 derniers jours"/>
+                                </CCol>
+                            </CRow>
+                            <CRow>
+                                <CCol>
+                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "0" ? true : false} type="radio" name="radioRecette" id="0" label="ce mois ci"/>
+                                </CCol>
+                                <CCol>
+                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "30" ? true : false} type="radio" name="radioRecette" id="30" label="le mois dernier"/>
+                                </CCol>
+                            </CRow>
+                        </CContainer>
                     </div>
-                    <div style={{paddingLeft: '20px'}}>
-                        <button style={styleBtnAutre} className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
-                    </div>
+                    <CFormCheck id="flexCheckDefault" label="plus d'options" checked={plusOptions} onChange={onChangePlusOption} />
+                    {plusOptions &&
+                        <>
+                            <h1>Options</h1>
+                            <div>
+                                <p>
+                                    <label htmlFor="">Du : </label>
+                                    <input type="date" ref={date_select1} />
+                                    <input type="time" ref={heure_select1} />
+                                </p>
+                                <p>
+                                    <label htmlFor="">Au : </label>
+                                    <input type="date" ref={date_select2} />
+                                    <input type="time" ref={heure_select2} />
+                                </p>
+                                <p>
+                                    <label htmlFor="">Caissier : </label>
+                                    <select name="caissier" id="caissier">
+                                        {props.role.toUpperCase() === "caissier".toUpperCase() ? 
+                                        <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> :
+                                        listeComptes.map(item => (
+                                            <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
+                                            ))                               }
+                                    </select>
+                                </p>
+                            </div>
+                            <div style={{paddingLeft: '20px'}}>
+                                <button style={styleBtnAutre} className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
+                            </div>
+                        </>
+                    }
                 </div>
                 <div className="box-2">
                     <div className="btn-container" style={{textAlign: 'center'}}>
@@ -509,7 +596,7 @@ export default function GestionRecette(props) {
                         </tbody>
                     </table>
                     <div style={{marginTop: '50px', textAlign: 'center'}}>
-                        <div>
+                        {/* <div>
                             <input style={{width: '100px', height: '3vh'}} type="text" id="retire" />
                             <button
                                 className='bootstrap-btn'
@@ -518,7 +605,7 @@ export default function GestionRecette(props) {
                             >
                                 OK
                             </button>
-                        </div>
+                        </div> */}
                         <div>
                             Total : <span style={{fontWeight: '600'}}>{total ? (total + frais) + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
@@ -528,9 +615,35 @@ export default function GestionRecette(props) {
                         <div>
                             Recette : <span style={{fontWeight: '600'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span>
                         </div>
+                        {/* <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
+                            <button className='bootstrap-btn h-25' onClick={terminer}>Terminer</button>
+                        </div> */}
                     </div>
-                    <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
-                        <button className='bootstrap-btn h-25' onClick={terminer}>Terminer</button>
+                    <div className='mb-4' style={{display: `${props.role.toUpperCase() === "admin".toUpperCase() ? 'block' : 'none'}`}}>
+                        <CChart
+                            type="line"
+                            data={{
+                                labels: labelsChart,
+                                datasets: [
+                                {
+                                    label: "Total",
+                                    backgroundColor: "rgba(220, 220, 220, 0.2)",
+                                    borderColor: "rgba(220, 220, 220, 1)",
+                                    pointBackgroundColor: "#BFC0C0",
+                                    pointBorderColor: "#BFC0C0",
+                                    data: data1ChartTotal
+                                },
+                                {
+                                    label: "Recette",
+                                    backgroundColor: "rgba(151, 187, 205, 0.2)",
+                                    borderColor: "rgba(151, 187, 205, 1)",
+                                    pointBackgroundColor: "#5A7684",
+                                    pointBorderColor: "#5A7684",
+                                    data: data2ChartRecette
+                                },
+                                ],
+                            }}
+                        />
                     </div>
                 </div>
             </div>

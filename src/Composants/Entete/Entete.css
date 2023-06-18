@@ -43,3 +43,7 @@
     left: 10px;
     top: -5px; */
 }
+
+.deconnexion {
+    transform: rotate(180deg);
+}

@@ -1,11 +1,14 @@
 import React from 'react';
 import { CListGroup, CListGroupItem, CBadge } from '@coreui/react';
 import { extraireCode } from '../../shared/Globals';
+import { CCloseButton } from '@coreui/react';
 
-export default function AfficherRecetteGeneralites({ recetteGeneralites }) {
+export default function AfficherRecetteGeneralites({ recetteGeneralites, totalGeneralites, fermerModalReussi }) {
   return (
     <div className='afficher-generalites'>
+        <CCloseButton onClick={fermerModalReussi} />
         <h4 className='text-center'>Liste des généralités</h4>
+        <h6 className='text-center fw-bold'>Total: {totalGeneralites + ' Fcfa'}</h6>
         {recetteGeneralites.length > 0 
             &&
             <CListGroup flush>
