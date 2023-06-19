@@ -76,7 +76,7 @@ export default class ImprimerHistorique extends Component {
                                 <tbody>
                                     {this.props.historique.length > 0  ? this.props.historique.map(item => (
                                         <tr>
-                                            <td style={table_styles1}>{extraireCode(item.designation)}</td>
+                                            <td style={table_styles1}>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
                                             <td style={table_styles2}>{item.prix_total}</td>
                                         </tr>
                                     )) : null

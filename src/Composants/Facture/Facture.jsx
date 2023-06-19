@@ -66,13 +66,17 @@ export default class Facture extends Component {
                                 <table style={table_styles}>
                                     <thead>
                                         <th style={table_styles1}>Désignation</th>
-                                        <th style={table_styles2}>Prix</th>
+                                        <th style={table_styles2}>Pu</th>
+                                        <th style={table_styles2}>Qtés</th>
+                                        <th style={table_styles2}>Total</th>
                                     </thead>
                                     <tbody>
                                         {this.props.medocCommandes.map(item => (
                                             <tr>
                                                 <td style={table_styles1}>{extraireCode(item.designation)}</td>
                                                 <td style={table_styles2}>{item.prix}</td>
+                                                <td style={table_styles2}>{item.qte_commander}</td>
+                                                <td style={table_styles2}>{item.prix_total}</td>
                                             </tr>
                                         ))}
                                     </tbody>

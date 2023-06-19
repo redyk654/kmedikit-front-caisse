@@ -226,7 +226,7 @@ export default function Commande(props) {
         let prixTotalT = 0;
         if (medocSelect || designation.length > 0 && prix.length > 0) {
             
-            prixTotalT = medocCommandes.reduce((som, curr) => som + parseInt(curr.prix), 0)
+            prixTotalT = medocCommandes.reduce((som, curr) => som + parseInt(curr.prix_total), 0)
             prixTotalT += montantMateriel;
 
         }
@@ -249,7 +249,7 @@ export default function Commande(props) {
             return parseInt(resteAPayer);
         } else {
             resteAPayer = (calculerNetAPayer() - montantVerse);
-            return parseInt(resteAPayer);
+            return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
         }
     }
     
@@ -291,8 +291,19 @@ export default function Commande(props) {
         }, 1000);
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
-
+            console.log(medocSelect);
             setMessageErreur('');
+            Object.defineProperty(medocSelect[0], 'qte_commander', {
+                value: qteDesire,
+                configurable: true,
+                enumerable: true
+            });
+            
+            Object.defineProperty(medocSelect[0], 'prix_total', {
+                value: parseInt(medocSelect[0].prix) * parseInt(qteDesire),
+                configurable: true,
+                enumerable: true
+            });
             
             medocSelect[0].reduction = false;
             setMessageErreur('');
@@ -418,7 +429,9 @@ export default function Commande(props) {
                 data2.append('code_patient', patientChoisi.code);
                 data2.append('id_facture', id);
                 data2.append('designation', item.designation);
-                data2.append('prix_total', item.prix);
+                data2.append('pu', item.prix);
+                data2.append('qte', item.qte_commander);
+                data2.append('prix_total', item.prix_total);
                 data2.append('categorie', item.categorie);
                 data2.append('caissier', props.nomConnecte);
                 data2.append('reduction', valeurReduction);
@@ -758,12 +771,12 @@ export default function Commande(props) {
                 style={customStyles2}
                 contentLabel="Commande réussie"
             >
-                {/* <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' /> */}
+                <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' />
                 <h2 style={{color: '#fff'}}>Service effectué !</h2>
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
-                    onAfterPrint={fermerModalReussi}
+                    // onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">
@@ -803,7 +816,8 @@ export default function Commande(props) {
                 </div>
                 <div className="box" style={{marginLeft: 5}}>
                     <div className="">
-                        <button className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}} onClick={ajouterMedoc}>ajouter</button>
+                        <input type="text" name="qteDesire" value={qteDesire} onChange={(e) => {setQteDesire(e.target.value)}} autoComplete='off' />
+                        <button onClick={ajouterMedoc} className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}}>ajouter</button>
                         {/* <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button> */}
                     </div>
                     <div style={{textAlign: 'center'}}>
@@ -845,14 +859,18 @@ export default function Commande(props) {
                         <thead>
                             <tr>
                                 <td>Désignation</td>
-                                <td>Prix</td>
+                                <td>Pu</td>
+                                <td>Qtés</td>
+                                <td>Total</td>
                             </tr>
                         </thead>
                         <tbody>
                             {medocCommandes.map(item => (
                                 <tr style={{cursor: 'pointer'}} onClick={retirerCommande}>
                                     <td>{extraireCode(item.designation).toUpperCase()}</td>
-                                    <td>{item.prix + ' Fcfa' }</td>
+                                    <td>{item.prix}</td>
+                                    <td>{item.qte_commander}</td>
+                                    <td>{item.prix_total}</td>
                                 </tr>
                             ))}
                         </tbody>

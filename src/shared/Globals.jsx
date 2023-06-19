@@ -121,7 +121,7 @@ export const styleEntete = {
     fontSize: 8
 }
 
-export const nomDns = 'http://serveur/backend-cmab/';
+export const nomDns = 'http://localhost/backend-cmab/';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT"]

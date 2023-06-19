@@ -57,8 +57,7 @@ export default function Apercu(props) {
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
-                console.log(result);
-
+                
                 let t = 0;
                 result.forEach(item => {
                     t += parseInt(item.prix_total);
@@ -204,7 +203,7 @@ export default function Apercu(props) {
                         <tbody>
                             {historique.length > 0 && historique.map(item => (
                                 <tr key={item.id}>
-                                    <td>{extraireCode(item.designation)}</td>
+                                    <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
                                     <td>{item.prix_total + ' Fcfa'}</td>
                                 </tr>
                             ))}

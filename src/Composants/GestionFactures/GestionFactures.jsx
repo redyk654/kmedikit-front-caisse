@@ -261,7 +261,7 @@ export default function GestionFactures(props) {
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
                 setdetailsFacture(filterDetailsFacture);
-                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) - (parseInt(acte.prix) - (parseInt(acte.prix) * (parseInt(acte.reduction) / 100)));
+                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) - (parseInt(acte.prix_total) - (parseInt(acte.prix_total) * (parseInt(acte.reduction) / 100)));
                 majNetAPayer(idFacture, nouveauNetAPayer);
             }
         });
@@ -307,7 +307,7 @@ export default function GestionFactures(props) {
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
                 setdetailsFacture(filterDetailsFacture);
-                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) + (parseInt(acte.prix) - (parseInt(acte.prix) * (parseInt(acte.reduction) / 100)));
+                let nouveauNetAPayer = parseInt(factureSelectionne[0].a_payer) + (parseInt(acte.prix_total) - (parseInt(acte.prix_total) * (parseInt(acte.reduction) / 100)));
                 majNetAPayer(idFacture, nouveauNetAPayer);
             }
         });
@@ -379,7 +379,9 @@ export default function GestionFactures(props) {
                         <table style={table_styles}>
                             <thead>
                                 <th style={table_styles1}>Désignation </th>
-                                <th style={table_styles2}>Prix</th>
+                                <td>Pu</td>
+                                <td>Qtés</td>
+                                <td>Total</td>
                             </thead>
                             <tbody>
                                 {detailsFacture.map(item => (
@@ -389,6 +391,8 @@ export default function GestionFactures(props) {
                                             {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
                                         </td>
                                         <td style={table_styles2}>{item.prix}</td>
+                                        <td style={table_styles2}>{item.qte}</td>
+                                        <td style={table_styles2}>{item.prix_total}</td>
                                         {(props.role.toUpperCase() === ROLES.regisseur.toUpperCase() || props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (                                            
                                             <td>
                                                 {parseInt(item.statu_acte) ? 
