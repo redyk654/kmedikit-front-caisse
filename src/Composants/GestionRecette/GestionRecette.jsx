@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
-import { extraireCode, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi } from '../../shared/Globals';
+import { extraireCode, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi, nomDns, CATEGORIES } from '../../shared/Globals';
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
 import { CFormCheck, CContainer, CRow, CCol } from '@coreui/react';
 import { CChart } from '@coreui/react-chartjs';
@@ -114,7 +114,7 @@ export default function GestionRecette(props) {
 
     useEffect(() => {
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/recuperer_caissier.php');
+        req.open('GET', `${nomDns}recuperer_caissier.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -140,7 +140,7 @@ export default function GestionRecette(props) {
             data.append('caissier', caissier);
     
             const req = new XMLHttpRequest();
-            req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?par_categories`);
+            req.open('POST', `${nomDns}gestion_pourcentage.php?par_categories`);
     
             req.addEventListener('load', () => {
                 fetchDetails();
@@ -161,7 +161,7 @@ export default function GestionRecette(props) {
 
     const recupererRecetteGeneralites = (data, categories) => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php?recette_generalite');
+        req.open('POST', `${nomDns}gestion_pourcentage.php?recette_generalite`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -179,7 +179,7 @@ export default function GestionRecette(props) {
 
     const recupererRecetteTotal = (data) => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/recuperer_recette.php');
+        req.open('POST', `${nomDns}recuperer_recette.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -209,7 +209,7 @@ export default function GestionRecette(props) {
         data.append('caissier', caissier);
 
         const req = new XMLHttpRequest();
-        req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?details=oui`);
+        req.open('POST', `${nomDns}gestion_pourcentage.php?details=oui`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -273,14 +273,9 @@ export default function GestionRecette(props) {
                 <div style={{margin: 10}}>
                     <select name="categorie" id="categorie" onChange={changerCategorie}>
                         <option value="">Selectionnez une catégorie</option>
-                        <option value="maternité">Maternité</option>
-                        <option value="imagerie">Imagerie</option>
-                        <option value="laboratoire">Laboratoire</option>
-                        <option value="carnet">Carnet</option>
-                        <option value="medecine">Medecine</option>
-                        <option value="chirurgie">Chirurgie</option>
-                        <option value="upec">Upec</option>
-                        <option value="consultation spécialiste">Consultation Spécialiste</option>
+                        {CATEGORIES.map(item => (
+                            <option value={item}>{item}</option>
+                        ))}
                     </select>
                 </div>
                 <div>
@@ -332,7 +327,7 @@ export default function GestionRecette(props) {
     //     data.append('regisseur', props.nomConnecte);
 
     //     const req = new XMLHttpRequest();
-    //     req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php');
+    //     req.open('POST', `${nomDns}gestion_pourcentage.php');
 
     //     req.addEventListener('load', () => {
     //         if(req.status >= 200 && req.status < 400) {
@@ -353,7 +348,7 @@ export default function GestionRecette(props) {
             data.append('date2', date2);
 
             const req = new XMLHttpRequest();
-            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?recette`);
+            req.open('POST', `${nomDns}recette_par_periode.php?recette`);
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
@@ -378,7 +373,7 @@ export default function GestionRecette(props) {
             data.append('date2', date2);
 
             const req = new XMLHttpRequest();
-            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?generalites`);
+            req.open('POST', `${nomDns}recette_par_periode.php?generalites`);
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
@@ -403,7 +398,7 @@ export default function GestionRecette(props) {
             data.append('date2', date2);
 
             const req = new XMLHttpRequest();
-            req.open('POST', `http://serveur/backend-cmab/recette_par_periode.php?details`);
+            req.open('POST', `${nomDns}recette_par_periode.php?details`);
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {

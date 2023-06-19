@@ -5,7 +5,7 @@ import { CFormSwitch, CBadge } from '@coreui/react';
 
 // Importation des librairies installées
 import Modal from 'react-modal';
-import { extraireCode } from '../../shared/Globals';
+import { CATEGORIES, extraireCode, nomDns } from '../../shared/Globals';
 import ModifService from './ModifService';
 import { toast, Toaster } from "react-hot-toast";
 import AfficherGeneralites from './AfficherGeneralites';
@@ -83,9 +83,9 @@ export default function Modifier(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php?urgence=oui');
+                req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
             } else {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
+                req.open('GET', `${nomDns}recuperer_services.php`);
             }
 
             req.addEventListener("load", () => {
@@ -131,15 +131,15 @@ export default function Modifier(props) {
             setListeMedocSauvegarde(listeMedocSauvegarde2)
         } else {
 
-            setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
-            setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
+            setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value.toLowerCase()));
+            setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value.toLowerCase()));
         }
     }
 
     const supprimer = () => {
         if (medocSelect) {
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/gestion_services.php?id=${medocSelect.id}`);
+            req.open('GET', `${nomDns}gestion_services.php?id=${medocSelect.id}`);
 
             req.addEventListener('load', () => {
                 setRerender(!renrender);
@@ -172,7 +172,7 @@ export default function Modifier(props) {
             data.append('id', medocSelect.id);
             
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php');
+            req.open('POST', `${nomDns}gestion_services.php`);
 
             req.addEventListener('load', () => {
                 setMedoSelect(service);
@@ -191,7 +191,7 @@ export default function Modifier(props) {
             data.append('id', e.target.id);
             
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/gestion_services.php?retirer_generalite');
+            req.open('POST', `${nomDns}gestion_services.php?retirer_generalite`);
     
             req.addEventListener('load', () => {
                 setListeDesGeneralites(listeDesGeneralites.filter(item => item.id !== e.target.id));
@@ -232,14 +232,9 @@ export default function Modifier(props) {
                         <label htmlFor="categorie1">Catégorie : </label>
                         <select name="categorie1" id="categorie1" onChange={changerCategorie}>
                             <option value="tout">Tout les services</option>
-                            <option value="maternité">Maternité</option>
-                            <option value="imagerie">Imagerie</option>
-                            <option value="laboratoire">Laboratoire</option>
-                            <option value="carnet">Carnet</option>
-                            <option value="medecine">Medecine</option>
-                            <option value="chirurgie">Chirurgie</option>
-                            <option value="upec">Upec</option>
-                            <option value="consultation spécialiste">Consultation Spécialiste</option>
+                            {CATEGORIES.map(item => (
+                                <option value={item}>{item}</option>
+                            ))}
                         </select>
                     </div>
                     <div>

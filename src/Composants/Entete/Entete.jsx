@@ -4,6 +4,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import Loader from "react-loader-spinner";
+import { nomDns } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -63,65 +64,6 @@ export default function Entete(props) {
 
     const { ancien, nouveau, confirmation } = nouveauMdp;
 
-
-    const calculRecetteJour = () => {
-        // Récupération de la recette en cours du vendeur
-        setModalReussi(true);
-        setMdpReussi(false);
-        const d = new Date();
-        let i = 0;
-
-        services.map(item => {
-            const data = new FormData();
-            data.append('code', item.code);
-            data.append('caissier', props.nomConnecte);
-
-            const req = new XMLHttpRequest();
-
-            if (d.getHours() >= 5 && d.getHours() <= 12) {
-                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=nuit`);
-                req.send(data);
-            } else if (d.getHours() <= 22 && d.getHours() >= 13) {
-                req.open('POST', `http://serveur/backend-cmab/gestion_pourcentage.php?moment=jour`);
-                req.send(data);
-            } else {
-                deconnection();
-            }
-
-            req.addEventListener('load', () => {
-                i++;
-                const result = JSON.parse(req.responseText).recette;
-                item.recette = JSON.parse(req.responseText).recette != null ? result : 0;
-                item.recetteRestante = JSON.parse(req.responseText).recette != null ? result : 0;
-                if (services.length === i) {
-                    let recetteT = 0;
-                    services.map(item => {recetteT += parseInt(item.recette)});
-                    setenCours(false);
-                }
-
-            });
-        });
-    }
-
-    const enregisterRecette = () => {
-        // Enreistrement de la recette dans la base de données
-        const data = new FormData();
-        data.append('nom', props.nomConnecte);
-        data.append('ancien', ancien);
-        data.append('montant', recettejour.recette);
-
-        const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_recette.php');
-
-        req.addEventListener('load', () => {
-            if (req.status >= 200 && req.status < 400) {
-                deconnection();
-            }
-        })
-
-        req.send(data);
-    }
-
     const handleChange = (e) => {
         setNouveauMdp({...nouveauMdp, [e.target.name]: e.target.value});
     }
@@ -139,7 +81,7 @@ export default function Entete(props) {
             data.append('nouveau', nouveau);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/modif_pass_caisse.php');
+            req.open('POST', `${nomDns}modif_pass_caisse.php`);
 
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {

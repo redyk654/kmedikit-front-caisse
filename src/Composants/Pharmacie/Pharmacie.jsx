@@ -5,6 +5,7 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck, FaCross, FaCrosshairs } from 'react-icons/fa';
+import { nomDns } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -93,9 +94,9 @@ export default function GestionFactures(props) {
         
         const req = new XMLHttpRequest();
         if (filtrer) {
-            req.open('GET', `http://serveur/backend-cmab/factures_pharmacie.php?filtrer=oui&caissier=${props.nomConnecte}`);
+            req.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&caissier=${props.nomConnecte}`);
             const req2 = new XMLHttpRequest();
-            req2.open('GET', 'http://serveur/backend-cmab/factures_pharmacie.php?filtrer=oui&manquant');
+            req2.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
                 setMessageErreur('');
                 const result = JSON.parse(req2.responseText);
@@ -110,7 +111,7 @@ export default function GestionFactures(props) {
             req2.send();
 
         } else {
-            req.open('GET', 'http://serveur/backend-cmab/factures_pharmacie.php');
+            req.open('GET', `${nomDns}factures_pharmacie.php`);
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -149,9 +150,9 @@ export default function GestionFactures(props) {
     
             const req = new XMLHttpRequest();
             if (dateD === dateF) {
-                req.open('POST', `http://serveur/backend-cmab/recette_pharmacie.php?moment=jour`);
+                req.open('POST', `${nomDns}recette_pharmacie.php?moment=jour`);
             } else {
-                req.open('POST', `http://serveur/backend-cmab/recette_pharmacie.php?moment=nuit`);
+                req.open('POST', `${nomDns}recette_pharmacie.php?moment=nuit`);
             }
     
             req.addEventListener('load', () => {
@@ -179,7 +180,7 @@ export default function GestionFactures(props) {
         if (factureSelectionne.length > 0) {
             const req = new XMLHttpRequest();
     
-            req.open('GET', `http://serveur/backend-cmab/factures_pharmacie.php?id=${factureSelectionne[0].id}`);
+            req.open('GET', `${nomDns}factures_pharmacie.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
                 setMessageErreur('');
@@ -238,7 +239,7 @@ export default function GestionFactures(props) {
             data.append('caissier', props.nomConnecte);
 
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/factures_pharmacie.php')
+            req.open('POST', `${nomDns}factures_pharmacie.php`)
 
             req.addEventListener('load', () => {
                 // Mise à jour des stocks des médicaments vendus
@@ -250,7 +251,7 @@ export default function GestionFactures(props) {
                     data1.append('caissier', props.nomConnecte);
 
                     const req1 = new XMLHttpRequest();
-                    req1.open('POST', 'http://serveur/backend-cmab/maj_medocs.php');
+                    req1.open('POST', `${nomDns}maj_medocs.php`);
 
                     req1.addEventListener("load", function () {
                         if (req1.status >= 200 && req1.status < 400) {
@@ -299,7 +300,7 @@ export default function GestionFactures(props) {
 
                 
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/data_assurance.php');
+                req.open('POST', `${nomDns}data_assurance.php`);
                 
                 req.send(data);
                 
@@ -327,9 +328,9 @@ export default function GestionFactures(props) {
         const req = new XMLHttpRequest();
 
         if (filtrer) {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}&caissier=${props.nomConnecte}`);
+            req.open('GET', `${nomDns}rechercher_facture_phar.php?str=${e.target.value.trim()}&caissier=${props.nomConnecte}`);
         } else {
-            req.open('GET', `http://serveur/backend-cmab/rechercher_facture_phar.php?str=${e.target.value.trim()}`);
+            req.open('GET', `${nomDns}rechercher_facture_phar.php?str=${e.target.value.trim()}`);
         }
 
         req.addEventListener('load', () => {
@@ -348,7 +349,7 @@ export default function GestionFactures(props) {
         document.querySelector('.supp').disabled = true;
 
         const req2 = new XMLHttpRequest();
-        req2.open('GET', `http://serveur/backend-cmab/supprimer_facture.php?id=${factureSelectionne[0].id}`);
+        req2.open('GET', `${nomDns}supprimer_facture.php?id=${factureSelectionne[0].id}`);
         req2.addEventListener('load', () => {
             fermerModalConfirmation();
             setSupp(true);

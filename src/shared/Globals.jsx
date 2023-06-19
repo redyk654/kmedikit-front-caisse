@@ -35,3 +35,9 @@ export const ceMoisCi = () => {
     const date1 = new Date();
     return date1.getFullYear() + '-' + (date1.getMonth() + 1);
 }
+
+export const CATEGORIES = ['IMAGERIE', 'MATERNITÉ', 'LABORATOIRE',
+                            'BIOCHIMIE', 'CARNET', 'MEDECINE', 'CHIRURGIE',
+                            'UPEC', 'CONSULTATION SPÉCIALISTE']
+
+export const nomDns = "http://localhost/backend-cmab/";

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { CFormInput, CFormSwitch } from '@coreui/react';
+import { CATEGORIES } from '../../shared/Globals';
 
 export default function ModifService({ designation, prix, categorie, generalite, handleChange, enregistrerModif }) {
     const refBtn = useRef();
@@ -28,14 +29,9 @@ export default function ModifService({ designation, prix, categorie, generalite,
         </p>
         <p className='ps-3'>
             <select name="categorie" id="categorie" onChange={handleChange} value={categorie}>
-                <option value="IMAGERIE">Imagerie</option>
-                <option value="MATERNITÉ">Maternité</option>
-                <option value="LABORATOIRE">Laboratoire</option>
-                <option value="CARNET">Carnet</option>
-                <option value="MEDECINE">Medecine</option>
-                <option value="CHIRURGIE">Chirurgie</option>
-                <option value="UPEC">Upec</option>
-                <option value="CONSULTATION SPÉCIALISTE">Consultation Spécialiste</option>
+                {CATEGORIES.map(item => (
+                    <option value={item}>{item}</option>
+                ))}
             </select>
         </p>
         <p className='ps-3'>

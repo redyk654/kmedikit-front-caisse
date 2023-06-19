@@ -14,9 +14,9 @@ import Apercu from './Composants/Apercu/Apercu';
 import Assurance from './Composants/Assurance/Assurance';
 import FacturesAssurances from './Composants/FacturesAssurances/FacturesAssurances';
 import Modifier from './Composants/Modifier/Modifier';
-import { FaChartBar, FaClipboardList, FaLayerGroup, FaPlusSquare, FaReceipt, FaStore, FaTr, FaPlusSquareuck, FaUsers } from 'react-icons/fa';
-
-
+import { FaUsers, FaCoins, FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
+import { RiSurveyFill } from "react-icons/ri";
+import { FiSettings } from "react-icons/fi";
 
 function App() {
 
@@ -93,13 +93,37 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95%'}}>
-              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>Historique</div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>Listing</div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>Modifier</div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>Comptes</div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>Factures-services</div>
+            <div className="onglets-blocs" style={{width: '95%', fontSize: '12px'}}>
+              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
+                <RiSurveyFill size={20} />
+                &nbsp;
+                Historique
+              </div>
+              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                <FaClipboardList size={19} />
+                &nbsp;
+                Listing
+              </div>
+              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
+                <FaCoins size={18} />
+                &nbsp;
+                Recettes
+              </div>
+              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <FiSettings size={20} />
+                &nbsp;
+                Modifier
+              </div>
+              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
+                <FaUsers size={20} />
+                &nbsp;
+                Comptes
+              </div>
+              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                <FaReceipt size={19} />
+                &nbsp;
+                Factures-services
+              </div>
             </div>
             <div className="onglets-contenu">
                 {contenu}
@@ -112,24 +136,24 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '83%', fontSize: '14px'}}>
+            <div className="onglets-blocs" style={{width: '83%', fontSize: '11px'}}>
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
-                <FaStore size={22} />
+                <FaStore size={18} />
                 &nbsp;
                 Services
               </div>
               <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
-                <FaPlusSquare size={24} />
+                <FaPlusSquare size={18} />
                 &nbsp;
                 Pharmacie
               </div>
               <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
-                <FaClipboardList size={22} />
+                <FaClipboardList size={18} />
                 &nbsp;
                 Listing
               </div>
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                <FaReceipt size={22} />
+                <FaReceipt size={18} />
                 &nbsp;
                 Factures-services
               </div>
@@ -145,13 +169,32 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95%'}}>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>Les états</div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>Listing</div>
-              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>Historique</div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>Modifier</div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>Comptes</div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>Factures-services</div>
+            <div className="onglets-blocs" style={{width: '95%', fontSize: '11px'}}>
+            <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                <FaClipboardList size={19} />
+                &nbsp;
+                Listing
+              </div>
+              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
+                <FaCoins size={18} />
+                &nbsp;
+                Recettes
+              </div>
+              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <FiSettings size={20} />
+                &nbsp;
+                Modifier
+              </div>
+              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
+                <FaUsers size={20} />
+                &nbsp;
+                Comptes
+              </div>
+              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                <FaReceipt size={19} />
+                &nbsp;
+                Factures-services
+              </div>
             </div>
             <div className="onglets-contenu">
                 {contenu}

@@ -8,7 +8,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
-import { extraireCode, ServiceExiste } from '../../shared/Globals';
+import { extraireCode, ServiceExiste, nomDns, CATEGORIES } from '../../shared/Globals';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -172,9 +172,9 @@ export default function Commande(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php?urgence=oui');
+                req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
             } else {
-                req.open('GET', 'http://serveur/backend-cmab/recuperer_services.php');
+                req.open('GET', `${nomDns}recuperer_services.php`);
             }
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
@@ -358,7 +358,7 @@ export default function Commande(props) {
 
     const sauvegarder = () => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/backup.php');
+        req.open('POST', `${nomDns}backup.php`);
 
         req.addEventListener("error", function () {
             // La requête n'a pas réussi à atteindre le serveur
@@ -404,7 +404,7 @@ export default function Commande(props) {
         data.append('statu', statu);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_factures.php');
+        req.open('POST', `${nomDns}gestion_factures.php`);
 
         req.addEventListener('load', () => {
             setMedoSelect(false);
@@ -438,7 +438,7 @@ export default function Commande(props) {
                 data.append('type_assurance', 0);        
                 
                 const req = new XMLHttpRequest();
-                req.open('POST', 'http://serveur/backend-cmab/gestion_patients.php');
+                req.open('POST', `${nomDns}gestion_patients.php`);
     
                 req.send(data);
             }
@@ -449,7 +449,7 @@ export default function Commande(props) {
         data.append('quantite', qteDesire);
 
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/data_assurance.php');
+        req.open('POST', `${nomDns}data_assurance.php`);
 
         req.addEventListener("load", function () {
             // La requête n'a pas réussi à atteindre le serveur
@@ -497,7 +497,7 @@ export default function Commande(props) {
 
                 // Envoi des données
                 const req2 = new XMLHttpRequest();
-                req2.open('POST', 'http://serveur/backend-cmab/maj_historique_service.php');
+                req2.open('POST', `${nomDns}maj_historique_service.php`);
                 
                 // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
@@ -605,7 +605,7 @@ export default function Commande(props) {
         setModalPatient(true);
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/gestion_patients.php');
+        req.open('GET', `${nomDns}gestion_patients.php`);
 
         req.addEventListener('load', () => {
             const result = JSON.parse(req.responseText);
@@ -641,7 +641,7 @@ export default function Commande(props) {
             data.append('categorie', document.getElementById('categorie').value);
     
             const req = new XMLHttpRequest();
-            req.open('POST', 'http://serveur/backend-cmab/nouveau_service.php');
+            req.open('POST', `${nomDns}nouveau_service.php`);
     
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
@@ -708,14 +708,9 @@ export default function Commande(props) {
                         <p style={styleBox}>
                             <label htmlFor="categorie">Catégorie</label>
                             <select name="categorie" id="categorie">
-                                <option value="maternité">Maternité</option>
-                                <option value="imagerie">Imagerie</option>
-                                <option value="laboratoire">Laboratoire</option>
-                                <option value="carnet">Carnet</option>
-                                <option value="medecine">Medecine</option>
-                                <option value="chirurgie">Chirurgie</option>
-                                <option value="upec">Upec</option>
-                                <option value="consultation spécialiste">Consultation Spécialiste</option>
+                                {CATEGORIES.map(item => (
+                                    <option value={item}>{item}</option>
+                                ))}
                             </select>
                         </p>
                         <p className='text-light text-center'>{messageErreur}</p>
@@ -749,7 +744,7 @@ export default function Commande(props) {
 
         const req = new XMLHttpRequest();
 
-        req.open('GET', `http://serveur/backend-cmab/rechercher_patient.php?str=${(e.target.value).trim()}`);
+        req.open('GET', `${nomDns}rechercher_patient.php?str=${(e.target.value).trim()}`);
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {

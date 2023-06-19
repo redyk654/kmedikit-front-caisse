@@ -4,13 +4,12 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, nomDns } from '../../shared/Globals';
 
 
 export default function Apercu(props) {
 
     const componentRef = useRef();
-
 
     let date_select1 = useRef();
     let date_select2 = useRef();
@@ -57,7 +56,7 @@ export default function Apercu(props) {
     
             const req = new XMLHttpRequest();
     
-            req.open('POST', `http://serveur/backend-cmab/apercu.php`);
+            req.open('POST', `${nomDns}apercu.php`);
     
             req.addEventListener('load', () => {
                 setMessageErreur('');
@@ -89,7 +88,7 @@ export default function Apercu(props) {
         // Récupération des comptes
 
         const req = new XMLHttpRequest();
-        req.open('GET', 'http://serveur/backend-cmab/recuperer_caissier.php');
+        req.open('GET', `${nomDns}recuperer_caissier.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -110,7 +109,7 @@ export default function Apercu(props) {
 
     const recupererRecetteTotal = (data) => {
         const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/recuperer_recette.php');
+        req.open('POST', `${nomDns}recuperer_recette.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
@@ -170,7 +169,7 @@ export default function Apercu(props) {
 
         const req = new XMLHttpRequest();
         // Récupération des frais matériel
-        req.open('POST', `http://serveur/backend-cmab/frais.php`);
+        req.open('POST', `${nomDns}frais.php`);
 
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {

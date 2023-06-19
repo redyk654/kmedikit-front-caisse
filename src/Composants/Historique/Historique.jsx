@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
-import { extraireCode } from '../../shared/Globals';
+import { extraireCode, nomDns } from '../../shared/Globals';
 
 
 export default function Historique(props) {
@@ -49,7 +49,7 @@ export default function Historique(props) {
             let dateF = dateFin;
 
             const req = new XMLHttpRequest();
-            req.open('GET', `http://serveur/backend-cmab/recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}`);
+            req.open('GET', `${nomDns}recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}`);
 
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
@@ -57,7 +57,7 @@ export default function Historique(props) {
                 stopChargement();
 
                 const req2 = new XMLHttpRequest();
-                req2.open('GET', `http://serveur/backend-cmab/recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}&recette=oui`);
+                req2.open('GET', `${nomDns}recuperer_services_fait.php?dateD=${dateD}&dateF=${dateF}&recette=oui`);
                 req2.onload = () => {setRecetteTotal(JSON.parse(req2.responseText)[0].recette);}
                 req2.send();
 
