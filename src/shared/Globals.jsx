@@ -123,5 +123,5 @@ export const styleEntete = {
 
 export const nomDns = 'http://localhost/backend-cmab/';
 
-export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE",
-                            "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT"]
+export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
+                            "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]

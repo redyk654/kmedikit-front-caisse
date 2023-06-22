@@ -150,7 +150,8 @@ export default function GestionRecette(props) {
                 fetchDetails();
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
-                recupererRecetteGeneralites(data, result);
+                sethistorique(result);
+                // recupererRecetteGeneralites(data, result);
 
                 let t = 0;
                 t = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
@@ -279,6 +280,7 @@ export default function GestionRecette(props) {
                 <h2 style={{color: '#fff', textAlign: 'center'}}></h2>
                 <div style={{margin: 10}}>
                     <select name="categorie" id="categorie" onChange={changerCategorie}>
+                        <option value="">sélectionné une catégorie</option>
                         {CATEGORIES.map(item => (
                             <option value={item}>{item}</option>
                         ))}

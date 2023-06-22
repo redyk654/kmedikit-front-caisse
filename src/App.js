@@ -14,7 +14,7 @@ import Apercu from './Composants/Apercu/Apercu';
 import Assurance from './Composants/Assurance/Assurance';
 import FacturesAssurances from './Composants/FacturesAssurances/FacturesAssurances';
 import Modifier from './Composants/Modifier/Modifier';
-import { FaUsers, FaChartBar, FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
+import { FaUsers, FaCoins, FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
 import { RiSurveyFill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
 
@@ -106,7 +106,9 @@ function App() {
                 Listing
               </div>
               <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
-                Les états
+                <FaCoins size={18} />
+                &nbsp;
+                Recettes
               </div>
               <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                 <FiSettings size={20} />
@@ -174,18 +176,20 @@ function App() {
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
             <div className="onglets-blocs" style={{width: '98%', fontSize: '13px'}}>
-              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
+              {/* <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
                 <RiSurveyFill size={20} />
                 &nbsp;
                 Historique
-              </div>
+              </div> */}
               <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
                 <FaClipboardList size={19} />
                 &nbsp;
                 Listing
               </div>
               <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
-                Les états
+                <FaCoins size={18} />
+                &nbsp;
+                Recettes
               </div>
               <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                 <FiSettings size={20} />
