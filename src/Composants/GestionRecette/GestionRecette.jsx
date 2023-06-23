@@ -191,7 +191,7 @@ export default function GestionRecette(props) {
                     recette += parseInt(item.a_payer);
                     f += parseInt(item.frais);
                 });
-                setRecetteTotal(recette + f);
+                setRecetteTotal(recette);
                 setFrais(f);
             }
         });
