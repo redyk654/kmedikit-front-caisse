@@ -2,7 +2,7 @@
   "main": "public/electron.js",
   "homepage": "./",
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
-  "name": "KMD-Caisse",
+  "name": "KMD Caisse",
   "author": "Chrisppo Youmbissi Kamdem",
   "version": "2.2.4",
   "build": {

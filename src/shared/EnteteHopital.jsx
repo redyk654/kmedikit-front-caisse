@@ -9,7 +9,7 @@ export default function EnteteHopital() {
             <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
             <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
             <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-            <div style={styleEntete}><strong>Hôpital de District sante de Mbanga</strong></div>
+            <div style={styleEntete}><strong>Hôpital de District de Mbanga</strong></div>
             <div style={styleEntete}>
                 <strong>
                     B.P. 29 Mbanga <br />
