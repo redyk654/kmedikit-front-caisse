@@ -6,7 +6,7 @@ const stylesDuContainer = {
     fontSize: 8, 
     backgroundColor: '#fff', 
     height: '32vh', 
-    marginLeft: '350px', 
+    marginLeft: '440px', 
     transform: 'rotate(90deg)'
 }
 
@@ -14,7 +14,7 @@ export default class Facture extends Component {
 
     render() {
         return (
-            <div className='border border-danger' style={{width: '89vw', display: 'flex', flexDirection: 'column'}}>
+            <div className='' style={{overflow: 'hidden', width: '96vw', display: 'flex', flexDirection: 'column'}}>
                 <div style={stylesDuContainer}>
                     <EnteteHopital />
                     <CorpsFacture
