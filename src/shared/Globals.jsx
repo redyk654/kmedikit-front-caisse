@@ -118,7 +118,7 @@ export const styleEntete = {
     color: 'black',
     borderBottom: '1px dotted #000',
     letterSpacing: '1px',
-    fontSize: 8
+    fontSize: 5
 }
 
 export const nomDns = 'http://localhost/backend-cmab/';
