@@ -121,7 +121,7 @@ export const styleEntete = {
     fontSize: 5
 }
 
-export const nomDns = 'http://serveur/hdmbanga/';
+export const nomDns = 'http://localhost/backend-cmab/';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]

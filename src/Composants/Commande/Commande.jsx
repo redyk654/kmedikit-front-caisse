@@ -771,12 +771,12 @@ export default function Commande(props) {
                 style={customStyles2}
                 contentLabel="Commande réussie"
             >
-                <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' />
+                {/* <CIcon onClick={fermerModalReussi} icon={cilX} size='lg' className=' text-bg-light' role='button' /> */}
                 <h2 style={{color: '#fff'}}>Service effectué !</h2>
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '7vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
-                    // onAfterPrint={fermerModalReussi}
+                    onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">

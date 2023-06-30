@@ -27,12 +27,13 @@ const table_styles = {
     color: 'black'
 }
 
-export default function CorpsFactureEnreg(props) {
+export default function CorpsFacturePharmacie(props) {
   return (
     <div className='' style={{height: '35vh', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px',}}>
         <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
-            <h3 style={{color: 'black', background: 'none', marginBottom: '10px'}}>Caisse</h3>
-            <h4 style={{color: 'black', background: 'none', marginBottom: '10px'}}>Réedition</h4>
+            <h3 style={{color: 'black', background: 'none', marginBottom: '10px'}}>
+                Pharmacie
+            </h3>
             <div style={{marginTop: 2}}>
                 Facture N°
                 <span style={{fontWeight: '600', marginTop: '15px', letterSpacing: '1px', color: 'black'}}>
@@ -74,11 +75,11 @@ export default function CorpsFactureEnreg(props) {
                         <th style={table_styles2}>Total</th>
                     </thead>
                     <tbody>
-                        {props.detailsFacture.map(item => (
+                        {props.medocCommandes.map(item => (
                             <tr>
                                 <td style={table_styles1}>{extraireCode(item.designation)}</td>
-                                <td style={table_styles2}>{item.prix}</td>
-                                <td style={table_styles2}>{item.qte}</td>
+                                <td style={table_styles2}>{parseInt(item.prix_total) / parseInt(item.quantite)}</td>
+                                <td style={table_styles2}>{item.quantite}</td>
                                 <td style={table_styles2}>{item.prix_total}</td>
                             </tr>
                         ))}
@@ -88,8 +89,6 @@ export default function CorpsFactureEnreg(props) {
             <div style={{display: 'flex', justifyContent: 'space-between',}}>
                 <div style={{ lineHeight: '11px'}}>
                     <div>Total</div>
-                    {/* <div>Matériel</div> */}
-                    <div>Reduction</div>
                     {/* <div>Assurance</div> */}
                     <div>Net à payer</div>
                     <div>Montant versé</div>
@@ -98,8 +97,6 @@ export default function CorpsFactureEnreg(props) {
                 </div>
                 <div style={{ lineHeight: '11px', color: 'black'}}>
                     <div><strong>{props.prixTotal + ' Fcfa'}</strong></div>
-                    {/* <div><strong>{props.montantFrais + ' Fcfa'}</strong></div> */}
-                    <div><strong>{props.reduction + ' %'}</strong></div>
                     {/* <div><strong>{props.type_assurance + ' %'}</strong></div> */}
                     <div><strong>{props.aPayer + ' Fcfa'}</strong></div>
                     <div><strong>{props.montantVerse + ' Fcfa'}</strong></div>
