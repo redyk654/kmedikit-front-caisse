@@ -227,7 +227,7 @@ export default function GestionFactures(props) {
 
 
     const reglerFacture = (e) => {
-        if (parseInt(verse) >= parseInt(factureSelectionne[0].reste_a_payer)) {
+        if (factureSelectionne.length > 0) {
             e.target.disabled = true;
              // Règlement de la facture
 
@@ -235,9 +235,9 @@ export default function GestionFactures(props) {
             let newMontantVerse = parseInt(factureSelectionne[0].montant_verse) + parseInt(verse);
 
             data.append('id', factureSelectionne[0].id);
-            data.append('montant_verse', newMontantVerse);
-            data.append('reste_a_payer', resteaPayer);
-            data.append('relicat', relicat);
+            data.append('montant_verse', factureSelectionne[0].reste_a_payer);
+            data.append('reste_a_payer', 0);
+            data.append('relicat', 0);
             data.append('caissier', props.nomConnecte);
 
             const req = new XMLHttpRequest();
@@ -516,7 +516,7 @@ export default function GestionFactures(props) {
                         <button className='bootstrap-btn annuler' style={{width: '20%', height: '5vh'}} onClick={() => {if(detailsFacture.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0) setModalConfirmation(true)}}>Annuler</button>
                     </div>
                     <h3 style={{marginTop: 5, display: `${filtrer ? 'block' : 'none'}`}}>Régler la facture</h3>
-                    {filtrer ? (
+                    {/* {filtrer ? (
                         <div style={{marginTop: 13}}>
                             <p>
                                 <label htmlFor="">Montant versé: </label>
@@ -533,7 +533,7 @@ export default function GestionFactures(props) {
                                 Reste à payer: <span style={{fontWeight: 'bold'}}>{resteaPayer + ' Fcfa'}</span>
                             </p>
                         </div>
-                    ) : null}
+                    ) : null} */}
                     <button ref={btn} className='bootstrap-btn valider' style={{display: `${filtrer ? 'inline' : 'none'}`, width: '20%', height: '5vh'}} onClick={(e) => {if(filtrer && detailsFacture.length > 0) {reglerFacture(e)} else {}}}>Régler</button>
                     <div>
                         {factureSelectionne.length > 0 && (

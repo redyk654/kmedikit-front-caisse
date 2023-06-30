@@ -9,6 +9,10 @@ export default function AfficherPatient({ patientChoisi, fermerModalPatient }) {
         <h2 style={{textAlign: 'center', color: '#fff'}}>Détails Infos</h2>
         <div className="box-input">
             <p className="input-zone">
+                <label htmlFor="">Code : </label>
+                <input style={{color: `${'#fff'}`}} type="text" name="code" readOnly value={patientChoisi.code.toUpperCase()} autoComplete="off" />
+            </p>
+            <p className="input-zone">
                 <label htmlFor="">Noms et Prénoms : </label>
                 <input style={{color: `${'#fff'}`}} type="text" name="nom" readOnly value={patientChoisi.nom.toUpperCase()} autoComplete="off" />
             </p>

@@ -31,6 +31,7 @@ export default class FacturePharmacie extends Component {
                         relicat={this.props.relicat}
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.caissier}
+                        date={this.props.date}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -50,6 +51,7 @@ export default class FacturePharmacie extends Component {
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.caissier}
                         montantFrais={this.props.montantFrais}
+                        date={this.props.date}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -68,6 +70,7 @@ export default class FacturePharmacie extends Component {
                         relicat={this.props.relicat}
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.caissier}
+                        date={this.props.date}
                     />
                 </div>
             </div>

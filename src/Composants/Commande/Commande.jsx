@@ -79,7 +79,7 @@ const customStyles3 = {
       transform: 'translate(-50%, -50%)',
       background: '#038654',
       width: '80%',
-      height: '90vh'
+      height: '95vh'
     }, 
 };
 
@@ -237,7 +237,7 @@ export default function Commande(props) {
         let netAPayer = (calculerPrixTotal() * ((100 - parseInt(patientChoisi.type_assurance)) / 100));
 
         if (!isNaN(valeurReduction))
-            netAPayer = netAPayer - (netAPayer * (parseInt(valeurReduction) / 100))
+            netAPayer = netAPayer - (netAPayer * (parseFloat(valeurReduction) / 100))
         
         return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
     }
@@ -291,7 +291,6 @@ export default function Commande(props) {
         }, 1000);
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
-            console.log(medocSelect);
             setMessageErreur('');
             Object.defineProperty(medocSelect[0], 'qte_commander', {
                 value: qteDesire,
@@ -326,6 +325,7 @@ export default function Commande(props) {
         setMedocCommandes([]);
         setPatient('');
         setvaleurReduction(0);
+        document.querySelector('#montant-reduction').value = "";
         setMessageErreur('');
         setMontantVerse('');
         document.querySelector('.recherche').value = "";
@@ -377,9 +377,9 @@ export default function Commande(props) {
         data.append('prix_total', calculerPrixTotal());
         data.append('reduction', valeurReduction);
         data.append('net_a_payer', calculerNetAPayer());
-        data.append('montant_verse', montantVerse);
-        data.append('relicat', calculerRelicat());
-        data.append('reste_a_payer', calculerResteAPayer());
+        data.append('montant_verse', calculerNetAPayer());
+        data.append('relicat', 0);
+        data.append('reste_a_payer', 0);
         data.append('assurance', patientChoisi.assurance);
         data.append('type_assurance', patientChoisi.type_assurance);
         data.append('statu', statu);
@@ -476,11 +476,7 @@ export default function Commande(props) {
     const demanderConfirmation = () => {
         if (medocCommandes.length > 0) {
             if (patientChoisi.nom.length > 0) {
-                if (calculerResteAPayer() > 0) {
-                    setMessageErreur('Veuillez entrer le montant versé');
-                } else {
-                    validerCommande();
-                }
+                validerCommande();
             } else {
                 setMessageErreur('Entrez le nom et le prénom du patient');
             }
@@ -680,8 +676,10 @@ export default function Commande(props) {
     const handleChangeReduction = (e) => {
         if(e.target.value.length === 0)
             setvaleurReduction(0);
-        else
-            setvaleurReduction(parseInt(e.target.value))
+        else {
+            const valeurDuPourcentage = 100 - ((parseInt(e.target.value) * 100) / calculerPrixTotal())
+            setvaleurReduction(parseFloat(valeurDuPourcentage))
+        }
     }
 
     const handleChangeMontantVerse = (e) => {
@@ -825,7 +823,7 @@ export default function Commande(props) {
                     </div>
                     <div>
                         <div>
-                            <input type="number" name="reduction" value={valeurReduction} onChange={handleChangeReduction} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
+                            <input id='montant-reduction' type="text" name="reduction" onChange={handleChangeReduction} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
                             <button className='bootstrap-btn' style={{display: reduction ? 'none' : 'inline-block', backgroundColor: '#6d6f94'}}  onClick={appliquerReduction}>reduction</button>
                         </div>
                     </div>
@@ -845,8 +843,8 @@ export default function Commande(props) {
                                 Couvert par: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.assurance.toLocaleUpperCase()}</span>
                             </div>
                         ) : null}
-                        <label htmlFor="">Montant versé : </label>
-                        <input type="number" name='verse' value={montantVerse} onChange={handleChangeMontantVerse} autoComplete='off' />
+                        {/* <label htmlFor="">Montant versé : </label>
+                        <input type="number" name='verse' value={montantVerse} onChange={handleChangeMontantVerse} autoComplete='off' /> */}
                     </div>
                 </div>
 
@@ -890,7 +888,7 @@ export default function Commande(props) {
                             <div>
                                 Net à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerNetAPayer() + ' Fcfa'}</span>
                             </div>
-                            <div>
+                            {/* <div>
                                 Montant versé : <span style={{color: "#012557", fontWeight: "600"}}>{montantVerse > 0 ? montantVerse + ' Fcfa': 0 + ' Fcfa'}</span>
                             </div>
                             <div>
@@ -898,10 +896,22 @@ export default function Commande(props) {
                             </div>
                             <div>
                                 Reste à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerResteAPayer() + ' Fcfa'}</span>
-                            </div>
+                            </div> */}
                         </div>
-                        <button className='bootstrap-btn annuler' id='annuler-facture' onClick={annulerCommande}>Annnuler</button>
-                        <button className='bootstrap-btn valider' id='valider-facture' onClick={demanderConfirmation}>Valider</button>
+                        <button 
+                            className='bootstrap-btn annuler' 
+                            id='annuler-facture' 
+                            onClick={annulerCommande}
+                        >
+                            Annnuler
+                        </button>
+                        <button 
+                            className='bootstrap-btn valider' 
+                            id='valider-facture' 
+                            onClick={demanderConfirmation}
+                        >
+                            Valider
+                        </button>
 
                     </div>
 
@@ -918,9 +928,9 @@ export default function Commande(props) {
                                 prixTotal={calculerPrixTotal}
                                 reduction={valeurReduction}
                                 aPayer={calculerNetAPayer}
-                                montantVerse={montantVerse}
-                                relicat={calculerRelicat}
-                                resteaPayer={calculerResteAPayer}
+                                montantVerse={calculerNetAPayer}
+                                relicat={0}
+                                resteaPayer={0}
                                 nomConnecte={props.nomConnecte}
                                 montantFrais={montantMateriel}
                             />

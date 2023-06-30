@@ -92,18 +92,18 @@ export default function CorpsFactureEnreg(props) {
                     <div>Reduction</div>
                     {/* <div>Assurance</div> */}
                     <div>Net à payer</div>
-                    <div>Montant versé</div>
-                    <div>Relicat</div>
+                    <div>Payé</div>
+                    {/* <div>Relicat</div> */}
                     <div>Reste à payer</div>
                 </div>
                 <div style={{ lineHeight: '11px', color: 'black'}}>
                     <div><strong>{props.prixTotal + ' Fcfa'}</strong></div>
                     {/* <div><strong>{props.montantFrais + ' Fcfa'}</strong></div> */}
-                    <div><strong>{props.reduction + ' %'}</strong></div>
+                    <div><strong>{props.reduction.toString().substring(0, 5) + ' %'}</strong></div>
                     {/* <div><strong>{props.type_assurance + ' %'}</strong></div> */}
                     <div><strong>{props.aPayer + ' Fcfa'}</strong></div>
                     <div><strong>{props.montantVerse + ' Fcfa'}</strong></div>
-                    <div><strong>{props.relicat + ' Fcfa'}</strong></div>
+                    {/* <div><strong>{props.relicat + ' Fcfa'}</strong></div> */}
                     <div><strong>{props.resteaPayer + ' Fcfa'}</strong></div>
                 </div>
             </div>
