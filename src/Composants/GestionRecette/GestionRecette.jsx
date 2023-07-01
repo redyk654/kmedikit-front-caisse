@@ -2,9 +2,7 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
-import ReactToPrint from 'react-to-print';
-import ImprimerRecette from '../ImprimerRecette/ImprimerRecette';
-import { extraireCode, nomDns, CATEGORIES } from '../../shared/Globals';
+import { extraireCode, nomDns, CATEGORIES, recupererDateJour } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -77,34 +75,27 @@ export default function GestionRecette(props) {
 
     const [historique, sethistorique] = useState([]);
     const [listeComptes, setListeComptes] = useState([]);
-    const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(0);
     const [total, setTotal] = useState('');
     const [dateDepart, setdateDepart] = useState('');
     const [dateFin, setdateFin] = useState('');
     const [services, setServices] = useState([]);
     const [servicesSauvegarde, setServicesSauvegarde] = useState([]);
-    const [categorie, setCategorie]= useState('');
     const [recetteRestante, setrecetteRestante] = useState(0);
     const [frais, setFrais] = useState(0);
     const [montantRetire, setmontantRetire] = useState(0);
     const [caissier, setCaissier] = useState('');
-    const [rerender, setRerender] = useState(false);
     const [modalContenu, setModalContenu] = useState(true);
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [modalValidation, setmodalValidation] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
-    const [valeur, setValeur] = useState('');
-    const [generalites, setGeneralites] = useState([]);
     const [recetteGeneralites, setRecetteGeneralites] = useState(0);
-    const [totalGeneralites, setTotalGeneralites] = useState(0);
-    const [itemPourcentage, setitemPourcentage] = useState('');
-    const [detailsState, setDetailsState] = useState([detail]);
-    const [detailsSauvegarde, setDetailsSauvegarde] = useState([]);
-    const [state, setState] = useState(false);
 
     useEffect(() => {
         // Récupération des médicaments dans la base via une requête Ajax
+        recupererDateJour('date-d-recette');
+        recupererDateJour('date-f-recette');
+
         if (date_j.getTime() <= date_e.getTime()) {
             
         } else {
@@ -163,23 +154,6 @@ export default function GestionRecette(props) {
         }
 
     }, [dateDepart, dateFin, caissier]);
-
-    const recupererRecetteGeneralites = (data, categories) => {
-        const req = new XMLHttpRequest();
-        req.open('POST', 'http://serveur/backend-cmab/gestion_pourcentage.php?recette_generalite');
-
-        req.addEventListener('load', () => {
-            if(req.status >= 200 && req.status < 400) {
-                let result = JSON.parse(req.responseText);
-                setRecetteGeneralites(result);
-
-                let recetteGen = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
-                sethistorique([...categories, {categorie: 'GÉNÉRALITÉS', recette: recetteGen}]);
-            }
-        });
-
-        req.send(data);
-    }
 
     useEffect(() => {
         setrecetteRestante(recetteTotal - montantRetire);
@@ -242,37 +216,6 @@ export default function GestionRecette(props) {
         return modalContenu ?
         (
             <Fragment>
-                <h2 style={{color: '#fff', textAlign: 'center', marginBottom: '10px'}}>{itemPourcentage}</h2>
-                <div style={{color: '#fff', textAlign: 'center',}}>Entrez le pourcentage</div>
-                <div style={{textAlign: 'center'}} className='modal-button'>
-                    <input type="text"value={valeur} onChange={(e) => {if (!isNaN(e.target.value)) {setValeur(e.target.value)}}} style={{width: '40%', height: '3vh', marginBottom: '6px'}} />
-                    <button 
-                        id='confirmer' 
-                        className='btn-confirmation' 
-                        style={{width: '15%', height: '3vh', cursor: 'pointer', marginLeft: '5px'}} 
-                        onClick={appliquerPourcentage}>
-                        OK
-                    </button>
-                </div>
-                <p>
-                    <input style={searchInput} type="text" placeholder="recherchez..." autoComplete='off' />
-                </p>
-                <div>
-                    <table>
-                        <thead>
-                            <th>Services</th>
-                            <th>Total</th>
-                        </thead>
-                        <tbody>
-                            {services.length > 0 && services.map(item => (
-                                <tr>
-                                    <td>{item.designation}</td>
-                                    <td style={{color: '#0e771a', fontWeight: '600'}}>{item.prix_total}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
             </Fragment>
         ) : 
         (
@@ -297,112 +240,9 @@ export default function GestionRecette(props) {
         )
     }
 
-    const appliquerGeneralite = (e) => {
-        // On retire les généralités de la liste des détails et on fait la soustraction sur le montant de la recette
-        services.map(item => {
-            if(item.code === detailsState[0].code) {
-                item.detailsServices = item.detailsServices.filter(item2 => (item2.designation !== e.target.id));
-                setDetailsSauvegarde(detailsSauvegarde.filter(item2 => (item2.designation !== e.target.id)));
-                setGeneralites([...generalites, {designation: e.target.id, prix: e.target.value}]);
-                item.recetteRestante = (parseInt(item.recetteRestante) - parseInt(e.target.value));
-                setrecetteRestante(parseInt(recetteRestante) - parseInt(e.target.value));
-                setState(!state);
-            }
-        });
-
-    }
-
-    const appliquerPourcentage = () => {
-        // Application du pourcentage sur un service
-        if (valeur.length > 0 && !isNaN(valeur)) {
-            const item = services.filter(item => (item.service === itemPourcentage));
-            item[0].pourcentage = parseInt(valeur);
-            item[0].recetteRestante = parseInt(item[0].recetteRestante) - parseInt(item[0].recetteRestante) * (item[0].pourcentage / 100);
-
-            // On met à jour la recette restante
-            let recetteT = 0
-            services.map(item => {recetteT += parseInt(item.recetteRestante)});
-            setrecetteRestante(recetteT);
-
-            setValeur('');
-            fermerModalConfirmation();
-        }
-        
-    }
-
-    const genererId = () => {
-        // Fonction pour générer un identifiant unique pour une commande
-        return Math.floor((1 + Math.random()) * 0x10000)
-               .toString(16)
-               .substring(1) + recetteTotal;
-    }
-
-    // const enregitrerDetails = (id_recette) => {
-    //     // On enregistre les détails de la recette
-    //     let i = 0
-    //     services.map(item => {
-    //         const data = new FormData();
-    //         data.append('id_recette', id_recette);
-    //         data.append('categorie', item.service);
-    //         data.append('recette', item.recette);
-    //         data.append('pourcentage', item.pourcentage);
-    //         data.append('recette_restante', item.recetteRestante);
-
-    //         const req = new XMLHttpRequest();
-    //         req.open('POST', `${nomDns}gestion_pourcentage.php`);
-
-    //         req.addEventListener('load', () => {
-    //             i++
-    //             if (services.length === i) {
-    //                 fermerModaValidation();
-    //             }
-    //         });
-
-    //         req.send(data);
-    //     })
-    // }
-
-    const terminer = () => {
-        // Enregistrement de la recette et de tous les détails
-        const id_recette = genererId();
-
-        const data = new FormData();
-        data.append('id_recette', id_recette);
-        data.append('recette_total', recetteTotal);
-        data.append('montant_retire', montantRetire);
-        data.append('recette_restante', recetteRestante);
-        data.append('caissier', caissier);
-        data.append('regisseur', props.nomConnecte);
-
-        const req = new XMLHttpRequest();
-        req.open('POST', `${nomDns}gestion_pourcentage.php`);
-
-        req.addEventListener('load', () => {
-            if(req.status >= 200 && req.status < 400) {
-                fermerModaValidation();
-                annuler()
-            }
-        })
-
-        req.send(data);
-
-    }
-
-    const annuler = () => {
-        setmontantRetire(0);
-        setrecetteRestante(0);
-        setRecetteTotal(0);
-        sethistorique([]);
-        setServices([]);
-    }
-
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
         setServices(servicesSauvegarde);
-    }
-
-    const fermerModaValidation = () => {
-        setmodalValidation(false);
     }
 
     const fermerModalReussi = () => {
@@ -446,7 +286,7 @@ export default function GestionRecette(props) {
                     </h2>
                     <div style={{textAlign: 'center'}}>
                         <button style={{padding: '6px', cursor: 'pointer', margin: '8px'}} onClick={() => setmodalValidation(false)}>NON</button>
-                        <button id="oui" style={{padding: '6px', cursor: 'pointer', margin: '8px'}} onClick={terminer}>OUI</button>
+                        {/* <button id="oui" style={{padding: '6px', cursor: 'pointer', margin: '8px'}} onClick={terminer}>OUI</button> */}
                     </div>
                 </div>
             </Modal>
@@ -458,12 +298,12 @@ export default function GestionRecette(props) {
                     <div>
                         <p>
                             <label htmlFor="">Du : </label>
-                            <input type="date" ref={date_select1} />
+                            <input id='date-d-recette' type="date" ref={date_select1} />
                             <input type="time" ref={heure_select1} />
                         </p>
                         <p>
                             <label htmlFor="">Au : </label>
-                            <input type="date" ref={date_select2} />
+                            <input id='date-f-recette' type="date" ref={date_select2} />
                             <input type="time" ref={heure_select2} />
                         </p>
                         <p>

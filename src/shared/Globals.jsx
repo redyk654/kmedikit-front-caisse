@@ -121,7 +121,13 @@ export const styleEntete = {
     fontSize: 5
 }
 
-export const nomDns = 'http://localhost/backend-cmab/';
+export const recupererDateJour = (idElement) => {
+    var today = new Date();
+
+    document.querySelector(`#${idElement}`).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+}
+
+export const nomDns = 'http://serveur/hdmbanga/';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]

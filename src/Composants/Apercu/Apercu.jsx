@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
-import { extraireCode, nomDns } from '../../shared/Globals';
+import { extraireCode, nomDns, recupererDateJour } from '../../shared/Globals';
 
 
 export default function Apercu(props) {
@@ -80,6 +80,9 @@ export default function Apercu(props) {
 
     useEffect(() => {
         // Récupération des comptes
+
+        recupererDateJour('date-d-listing');
+        recupererDateJour('date-f-listing');
 
         const req = new XMLHttpRequest();
         req.open('GET', `${nomDns}recuperer_caissier.php`);
@@ -162,12 +165,12 @@ export default function Apercu(props) {
                         <div>
                             <p>
                                 <label htmlFor="">Du : </label>
-                                <input type="date" ref={date_select1} />
+                                <input id='date-d-listing' type="date" onLoad={recupererDateJour} ref={date_select1} />
                                 <input type="time" ref={heure_select1} />
                             </p>
                             <p>
                                 <label htmlFor="">Au : </label>
-                                <input type="date" ref={date_select2} />
+                                <input id='date-f-listing' type="date" onLoad={recupererDateJour} ref={date_select2} />
                                 <input type="time" ref={heure_select2} />
                             </p>
                             <p>
