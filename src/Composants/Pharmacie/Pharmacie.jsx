@@ -403,7 +403,7 @@ export default function GestionFactures(props) {
                     </Fragment>
                     )
                 }
-                {/* <button style={{width: '45%', height: '5vh', cursor: 'pointer', fontSize: 'large', marginTop: '9px'}} onClick={fermerModalReussi}>Fermer</button> */}
+                <button style={{width: '45%', height: '5vh', cursor: 'pointer', fontSize: 'large', marginTop: '9px'}} onClick={fermerModalReussi}>Fermer</button>
             </Modal>
             <Modal
                 isOpen={modalConfirmation}
@@ -547,9 +547,9 @@ export default function GestionFactures(props) {
                                     prixTotal={factureSelectionne[0].prix_total}
                                     reduction={factureSelectionne[0].reduction}
                                     aPayer={factureSelectionne[0].a_payer}
-                                    montantVerse={verse}
+                                    montantVerse={factureSelectionne[0].a_payer}
                                     relicat={relicat}
-                                    resteaPayer={resteaPayer}
+                                    resteaPayer={0}
                                     date={factureSelectionne[0].date_heure}
                                     caissier={props.nomConnecte}
                                     assurance={factureSelectionne[0].assurance}

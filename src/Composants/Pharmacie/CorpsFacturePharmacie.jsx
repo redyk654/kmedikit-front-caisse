@@ -91,8 +91,8 @@ export default function CorpsFacturePharmacie(props) {
                     <div>Total</div>
                     {/* <div>Assurance</div> */}
                     <div>Net à payer</div>
-                    <div>Montant versé</div>
-                    <div>Relicat</div>
+                    <div>Payé</div>
+                    {/* <div>Relicat</div> */}
                     <div>Reste à payer</div>
                 </div>
                 <div style={{ lineHeight: '11px', color: 'black'}}>
@@ -100,7 +100,7 @@ export default function CorpsFacturePharmacie(props) {
                     {/* <div><strong>{props.type_assurance + ' %'}</strong></div> */}
                     <div><strong>{props.aPayer + ' Fcfa'}</strong></div>
                     <div><strong>{props.montantVerse + ' Fcfa'}</strong></div>
-                    <div><strong>{props.relicat + ' Fcfa'}</strong></div>
+                    {/* <div><strong>{props.relicat + ' Fcfa'}</strong></div> */}
                     <div><strong>{props.resteaPayer + ' Fcfa'}</strong></div>
                 </div>
             </div>
