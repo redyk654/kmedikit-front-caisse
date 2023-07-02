@@ -159,8 +159,8 @@ export default function Modifier(props) {
             setListeMedocSauvegarde(listeMedocSauvegarde2)
         } else {
 
-            setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
-            setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toLowerCase() === e.target.value));
+            setListeMedoc(listeMedocSauvegarde2.filter(item => item.categorie.toUpperCase() === e.target.value.toUpperCase()));
+            setListeMedocSauvegarde(listeMedocSauvegarde2.filter(item => item.categorie.toUpperCase() === e.target.value.toUpperCase()));
         }
     }
 
@@ -336,6 +336,7 @@ export default function Modifier(props) {
                     <div>
                         <label htmlFor="categorie1">Catégorie : </label>
                         <select name="categorie1" id="categorie1" onChange={changerCategorie}>
+                            <option value="tout">toutes catégorie</option>
                             {CATEGORIES.map(item => (
                                 <option value={item}>{item}</option>
                             ))}

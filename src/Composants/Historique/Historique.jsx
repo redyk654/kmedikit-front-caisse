@@ -4,11 +4,11 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
-import { extraireCode, mois, nomDns, nomServeur, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { extraireCode, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CBadge } from '@coreui/react';
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`http://${nomServeur}:3010`);
+const socket = io.connect(`${nomServeurNode}`);
 
 
 export default function Historique(props) {

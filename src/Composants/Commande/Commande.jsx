@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeur } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -16,7 +16,7 @@ import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`http://${nomServeur}:3010`);
+const socket = io.connect(`${nomServeurNode}`);
 
 // Styles pour les fenêtres modales
 const customStyles1 = {

@@ -5,10 +5,10 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck } from 'react-icons/fa';
-import { mois, nomDns, nomServeur } from "../../shared/Globals";
+import { mois, nomDns, nomServeurNode } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`http://${nomServeur}:3010`);
+const socket = io.connect(`${nomServeurNode}`);
 
 const customStyles1 = {
     content: {
