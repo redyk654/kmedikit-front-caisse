@@ -4,8 +4,12 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
-import { extraireCode, mois, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { extraireCode, mois, nomDns, nomServeur, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CBadge } from '@coreui/react';
+import { io } from 'socket.io-client';
+
+const socket = io.connect(`http://${nomServeur}:3010`);
+
 
 export default function Historique(props) {
 
@@ -24,6 +28,7 @@ export default function Historique(props) {
     const [historique, sethistorique] = useState([])
     const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(false);
+    const [total, setTotal] = useState(0)
     const [dette, setDette] = useState(false);
     const [dateDepart, setdateDepart] = useState('');
     const [dateFin, setdateFin] = useState('');
@@ -46,7 +51,20 @@ export default function Historique(props) {
     }, []);
 
     useEffect(() => {
+        socket.on('actualiser_historique', () => {
+            recupererHeureJour('heure-f-listing');
+            setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
+            setSearch(!search);
+            execRechercherHistorique();
+        });
+  
+      }, [socket])
 
+    useEffect(() => {
+        execRechercherHistorique();
+    }, [dateDepart, dateFin, search]);
+
+    const execRechercherHistorique = () => {
         if (dateDepart.length > 0 && dateFin.length > 0) {
             startChargement();
             let dateD = dateDepart;
@@ -58,6 +76,7 @@ export default function Historique(props) {
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
+                calculerTotal(result);
                 stopChargement();
 
                 const req2 = new XMLHttpRequest();
@@ -75,8 +94,12 @@ export default function Historique(props) {
 
             req.send();
         }
+    }
 
-    }, [dateDepart, dateFin, search]);
+    const calculerTotal = (result) => {
+        const total = result.reduce((acc, curr) => acc + parseInt(curr.prix_total), 0);
+        setTotal(total);
+    }
 
     const rechercherHistorique = () => {
         setSearch(!search);
@@ -101,19 +124,22 @@ export default function Historique(props) {
                                 <input id='heure-f-listing' type="time" ref={heure_select2} />
                             </p>
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
-                        <div>Recette total : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div>Total : <span style={{fontWeight: '700'}}>{recetteTotal ? total + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div>Recette : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
                         {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
                     </div>
                     <table>
                         <thead>
                             <tr>
                                 <td>Désignation</td>
-                                <td>Prix</td>
+                                <td>qte</td>
+                                <td>Pu</td>
+                                <td>Pt</td>
                                 <td>Caissier</td>
-                                <td>Le</td>
-                                <td>À</td>
+                                <td>Date</td>
+                                <td>Heure</td>
                                 {/* <td>Patient</td> */}
-                                <td>Reduction</td>
+                                <td>Réduc</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -123,7 +149,9 @@ export default function Historique(props) {
                                         {extraireCode(item.designation)}
                                         {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
                                     </td>
+                                    <td>{item.qte}</td>
                                     <td>{item.prix}</td>
+                                    <td>{item.prix_total}</td>
                                     <td>{item.caissier}</td>
                                     <td>{mois(item.date_fait)}</td>
                                     <td>{item.heure_fait}</td>
@@ -134,12 +162,12 @@ export default function Historique(props) {
                         </tbody>
                     </table>
                 </div>
-                <div style={{textAlign: 'center'}}>
+                {/* <div style={{textAlign: 'center'}}>
                     <ReactToPrint
                         trigger={() => <button className='bootstrap-btn' style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                         content={() => componentRef.current}
                     />
-                </div>
+                </div> */}
             </div>
             <div style={{display: 'none'}}>
                 <RecetteG

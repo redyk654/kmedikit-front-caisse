@@ -134,6 +134,7 @@ export const recupererHeureJour = (idElement) => {
 }
 
 export const nomDns = 'http://serveur/hdmbanga/';
+export const nomServeur = 'serveur';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]

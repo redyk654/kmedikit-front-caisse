@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, CATEGORIES, nomDns, ServiceExiste } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeur } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -14,6 +14,10 @@ import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
 import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
+import { io } from 'socket.io-client';
+
+const socket = io.connect(`http://${nomServeur}:3010`);
+
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -362,6 +366,12 @@ export default function Commande(props) {
                .substring(1).toUpperCase();
     }
 
+    const actualisationHistorique = () => {
+        setTimeout(() => {
+            socket.emit('actualisation_historique');
+        }, 5000);
+    }
+
     const enregisterFacture = (id) => {
 
         // Enregistrement de la facture
@@ -389,6 +399,7 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             setMessageErreur('');
+            actualisationHistorique();
             // setActualiserQte(!actualiserQte);
             // Activation de la fenêtre modale qui indique la réussite de la commmande
             setModalReussi(true);

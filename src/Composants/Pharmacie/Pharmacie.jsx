@@ -5,10 +5,10 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck } from 'react-icons/fa';
-import { mois, nomDns } from "../../shared/Globals";
+import { mois, nomDns, nomServeur } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
-const socket = io.connect('http://serveur:3010');
+const socket = io.connect(`http://${nomServeur}:3010`);
 
 const customStyles1 = {
     content: {
@@ -88,6 +88,18 @@ export default function GestionFactures(props) {
     const [messageErreur, setMessageErreur] = useState('');
 
     useEffect(() => {
+        socket.on('maj_produits', (data) => {
+            setFiltrer(true);
+            rechercherListePatients();
+        });
+  
+      }, [socket])
+
+    useEffect(() => {
+        rechercherListePatients();
+    }, [filtrer, effet])
+
+    const rechercherListePatients = () => {
         setFactures([])
         setfactureSauvegarde([]);
         setdetailsFacture([]);
@@ -134,7 +146,7 @@ export default function GestionFactures(props) {
         });
 
         req.send();
-    }, [filtrer, effet])
+    }
 
     useEffect(() => {
 
@@ -371,11 +383,11 @@ export default function GestionFactures(props) {
         btn.current.disabled = false;
         document.querySelector('.recherche-patient').value = '';
         setModalReussi(false);
-        seteffet(!effet);
         reinitialsation();
         setfactureSelectionne([]);
         setdetailsFacture([]);
         setFiltrer(false);
+        seteffet(!effet);
     }
 
     const fermerModalConfirmation = () => {
