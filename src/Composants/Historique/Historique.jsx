@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import RecetteG from '../ImprimerRecette/RecetteG';
-import { extraireCode, mois, nomDns, recupererDateJour } from '../../shared/Globals';
+import { extraireCode, mois, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CBadge } from '@coreui/react';
 
 export default function Historique(props) {
@@ -33,6 +33,7 @@ export default function Historique(props) {
         
         recupererDateJour('date-d-hist');
         recupererDateJour('date-f-hist');
+        recupererHeureJour('heure-f-listing');
 
         if (date_j.getTime() <= date_e.getTime()) {
             
@@ -97,7 +98,7 @@ export default function Historique(props) {
                             <p>
                                 <label htmlFor="">Au : </label>
                                 <input id='date-f-hist' type="date" ref={date_select2} />
-                                <input type="time" ref={heure_select2} />
+                                <input id='heure-f-listing' type="time" ref={heure_select2} />
                             </p>
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Recette total : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>

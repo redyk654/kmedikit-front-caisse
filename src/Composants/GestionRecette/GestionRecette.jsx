@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './GestionRecette.css';
 import Modal from "react-modal";
 import AfficherRecetteGeneralites from './AfficherRecetteGeneralites';
-import { extraireCode, nomDns, CATEGORIES, recupererDateJour } from '../../shared/Globals';
+import { extraireCode, nomDns, CATEGORIES, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 
 const customStyles1 = {
     content: {
@@ -95,6 +95,7 @@ export default function GestionRecette(props) {
         // Récupération des médicaments dans la base via une requête Ajax
         recupererDateJour('date-d-recette');
         recupererDateJour('date-f-recette');
+        recupererHeureJour('heure-f-listing')
 
         if (date_j.getTime() <= date_e.getTime()) {
             
@@ -304,7 +305,7 @@ export default function GestionRecette(props) {
                         <p>
                             <label htmlFor="">Au : </label>
                             <input id='date-f-recette' type="date" ref={date_select2} />
-                            <input type="time" ref={heure_select2} />
+                            <input id='heure-f-listing' type="time" ref={heure_select2} />
                         </p>
                         <p>
                             <label htmlFor="">Caissier : </label>
