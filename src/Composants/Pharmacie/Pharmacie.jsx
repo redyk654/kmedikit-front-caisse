@@ -5,7 +5,7 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck } from 'react-icons/fa';
-import { mois, nomDns, nomServeurNode } from "../../shared/Globals";
+import { mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
 const socket = io.connect(`${nomServeurNode}`);
@@ -65,6 +65,8 @@ export default function GestionFactures(props) {
 
     let date_select1 = useRef();
     let date_select2 = useRef();
+    let heure_select1 = useRef();
+    let heure_select2 = useRef();
 
     const [factures, setFactures] = useState([]);
     const [factureSauvegarde, setfactureSauvegarde] = useState([]);
@@ -87,8 +89,40 @@ export default function GestionFactures(props) {
     const [reccetteTotal, setRecetteTotal] = useState(0);
     const [messageErreur, setMessageErreur] = useState('');
 
+
+    useEffect(() => {
+        recupererDateJour('date-d-recette-phar');
+        recupererDateJour('date-f-recette-phar');
+        recupererHeureJour('heure-f-recette-phar');
+        recupererHeureDernierService();
+    }, [])
+
+    const recupererHeureDernierService = () => {
+        const req = new XMLHttpRequest();
+        req.open('GET', `${nomDns}horaire_pharmacie.php?recup_heure`);
+
+        req.addEventListener('load', () => {
+            if(req.status >= 200 && req.status < 400) {
+                const result = JSON.parse(req.response);
+                document.querySelector('#heure-d-recette-phar').value = result.date_heure.slice(11, 16);
+            }
+        });
+
+        req.addEventListener("error", function () {
+            // La requête n'a pas réussi à atteindre le serveur
+            setMessageErreur('Erreur réseau');
+        });
+
+        req.send();
+    }
+
     useEffect(() => {
         socket.on('maj_produits', (data) => {
+            setFiltrer(true);
+            rechercherListePatients();
+        });
+
+        socket.on('maj_facture_pharmacie', () => {
             setFiltrer(true);
             rechercherListePatients();
         });
@@ -150,11 +184,10 @@ export default function GestionFactures(props) {
 
     useEffect(() => {
 
-        const d = new Date();
         let dateD;
         let dateF;
 
-        if (dateDepart.length === 10) {
+        if (dateDepart.length > 0) {
             dateD = dateDepart;
             dateF = dateFin;
 
@@ -164,12 +197,8 @@ export default function GestionFactures(props) {
             data.append('caissier', caissier);
     
             const req = new XMLHttpRequest();
-            if (dateD === dateF) {
-                req.open('POST', `${nomDns}recette_pharmacie.php?moment=jour`);
-            } else {
-                req.open('POST', `${nomDns}recette_pharmacie.php?moment=nuit`);
-            }
-    
+            req.open('POST', `${nomDns}recette_pharmacie.php?moment=jour`);
+
             req.addEventListener('load', () => {
                 setMessageErreur('');
                 const result = JSON.parse(req.responseText);
@@ -270,6 +299,7 @@ export default function GestionFactures(props) {
                     req1.addEventListener("load", function () {
                         if (req1.status >= 200 && req1.status < 400) {
                             setMessageErreur('');
+                            socket.emit('actualiser_facture_pharmacie');
                             i++;
                             if (i === detailsFacture.length) {
                                 enregistrerAssurance()
@@ -374,8 +404,8 @@ export default function GestionFactures(props) {
     }
 
     const rechercherHistorique = () => {
-        setdateDepart(date_select1.current.value);
-        setdateFin(date_select2.current.value);
+        setdateDepart(date_select1.current.value + ' ' + heure_select1.current.value + ':00');
+        setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
         setCaissier(props.nomConnecte);
     }
 
@@ -431,14 +461,21 @@ export default function GestionFactures(props) {
             <div className="liste-medoc">
                 <p>
                     <label htmlFor="">Du : </label>
-                    <input type="date" ref={date_select1} />
+                    <input id='date-d-recette-phar' type="date" ref={date_select1} />
+                    <input id='heure-d-recette-phar' type="time" ref={heure_select1} />
                 </p>
                 <p>
                     <label htmlFor="">Au : </label>
-                    <input type="date" ref={date_select2} />
+                    <input id='date-f-recette-phar' type="date" ref={date_select2} />
+                    <input id='heure-f-recette-phar' type="time" ref={heure_select2} />
                 </p>
                 <p>
-                    <button className='bootstrap-btn valider' style={{width: '35%', margin: '4px', backgroundColor: '#6d6f94'}} onClick={rechercherHistorique}>rechercher</button>
+                    <button 
+                        onClick={rechercherHistorique}
+                        className='bootstrap-btn valider' style={{width: '35%', margin: '4px', backgroundColor: '#6d6f94'}}
+                    >
+                            rechercher
+                    </button>
                 </p>
                 <p>
                     recette du jour : <strong>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</strong>

@@ -292,7 +292,7 @@ export default function Commande(props) {
         btnAjout.current.disabled = true;
         setTimeout(() => {
             btnAjout.current.disabled = false;
-        }, 1000);
+        }, 2500);
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
             setMessageErreur('');
