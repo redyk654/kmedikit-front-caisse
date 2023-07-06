@@ -20,7 +20,7 @@
     width: 100%;
     text-align: center;
     font-size: larger;
-    
+    font-weight: bolder;
 }
 
 .container-facture .search-zone input {

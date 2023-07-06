@@ -327,7 +327,7 @@ export default function GestionRecette(props) {
                         <button className='bootstrap-btn h-25' onClick={() => {setModalContenu(false); setModalConfirmation(true);}}>Catégories</button>
                     </div>
                     <div className='text-center'>
-                        <button className='bootstrap-btn' onClick={ouvrirModalReussi}>Généralités</button>
+                        {/* <button className='bootstrap-btn' onClick={ouvrirModalReussi}>Généralités</button> */}
                     </div>
                     <table>
                         <thead>

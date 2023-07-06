@@ -246,24 +246,24 @@ export default function Commande(props) {
         return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
     }
 
-    const calculerResteAPayer = () => {
-        let resteAPayer = 0;
-        if (isNaN(parseInt(montantVerse))) {
-            resteAPayer = (calculerNetAPayer() - resteAPayer);
-            return parseInt(resteAPayer);
-        } else {
-            resteAPayer = (calculerNetAPayer() - montantVerse);
-            return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
-        }
-    }
+    // const calculerResteAPayer = () => {
+    //     let resteAPayer = 0;
+    //     if (isNaN(parseInt(montantVerse))) {
+    //         resteAPayer = (calculerNetAPayer() - resteAPayer);
+    //         return parseInt(resteAPayer);
+    //     } else {
+    //         resteAPayer = (calculerNetAPayer() - montantVerse);
+    //         return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
+    //     }
+    // }
     
-    const calculerRelicat = () => {
-        let relicat = 0;
-        if (parseInt(montantVerse) > calculerNetAPayer())
-            relicat = (montantVerse - calculerNetAPayer())
+    // const calculerRelicat = () => {
+    //     let relicat = 0;
+    //     if (parseInt(montantVerse) > calculerNetAPayer())
+    //         relicat = (montantVerse - calculerNetAPayer())
 
-        return parseInt(relicat);
-    }
+    //     return parseInt(relicat);
+    // }
 
     // permet de récolter les informations sur le médicament sélectioné
     const afficherInfos = (e) => {
@@ -292,7 +292,7 @@ export default function Commande(props) {
         btnAjout.current.disabled = true;
         setTimeout(() => {
             btnAjout.current.disabled = false;
-        }, 2500);
+        }, 1500);
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
             setMessageErreur('');
@@ -424,6 +424,7 @@ export default function Commande(props) {
                 - pour la mise à jour des stocks de médicaments
                 - pour la mise à jour de l'historique des commandes
         */
+    //    console.log("test");
        const id = idUnique();
        setidFacture(id);
        if(medocCommandes.length > 0) {
@@ -693,12 +694,12 @@ export default function Commande(props) {
         }
     }
 
-    const handleChangeMontantVerse = (e) => {
-        if(e.target.value.length === 0)
-            setMontantVerse('');
-        else
-            setMontantVerse(parseInt(e.target.value))
-    }
+    // const handleChangeMontantVerse = (e) => {
+    //     if(e.target.value.length === 0)
+    //         setMontantVerse('');
+    //     else
+    //         setMontantVerse(parseInt(e.target.value))
+    // }
 
     const handleChangePatient = (e) => {
         setNouveauPatient({...nouveauPatient, [e.target.name]: e.target.value});

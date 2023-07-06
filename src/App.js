@@ -17,9 +17,11 @@ import Modifier from './Composants/Modifier/Modifier';
 import { FaUsers, FaCoins, FaClipboardList, FaPlusSquare, FaReceipt, FaStore } from 'react-icons/fa';
 import { RiSurveyFill } from "react-icons/ri";
 import { FiSettings } from "react-icons/fi";
+import { BsSpeedometer2 } from "react-icons/bs";
 
 import { ContextChargement } from './Context/Chargement';
 import { ROLES } from "./shared/Globals";
+import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
 
 
 
@@ -43,7 +45,7 @@ function App() {
     if(role === ROLES.regisseur) {
       setOnglet(5);
     } else if (role === ROLES.admin) {
-      setOnglet(3);
+      setOnglet(12);
     } else if (role === ROLES.secretaire) {
       setOnglet(9);
     } else {
@@ -86,6 +88,11 @@ function App() {
     case 11:
       contenu = <Modifier nomConnecte={nomConnecte} />
       break;
+    case 12:
+      contenu = <TableauDeBord nomConnecte={nomConnecte} />
+      break;
+    default:
+      break;
   }
 
   if (connecter) {
@@ -94,7 +101,12 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '98%', fontSize: '13px'}}>
+            <div className="onglets-blocs" style={{width: '95vw', fontSize: '10px'}}>
+              <div className={`tab ${onglet === 12 ? 'active' : ''}`} onClick={ () => {setOnglet(12)}}>
+                <BsSpeedometer2 size={20} />
+                &nbsp;
+                Tableau de bord
+              </div>
               <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
                 <RiSurveyFill size={20} />
                 &nbsp;
@@ -137,7 +149,7 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95%', fontSize: '12px'}}>
+            <div className="onglets-blocs" style={{width: '95vw', fontSize: '11px'}}>
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                 <FaStore size={22} />
                 &nbsp;
