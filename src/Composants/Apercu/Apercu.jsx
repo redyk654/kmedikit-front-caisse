@@ -81,7 +81,7 @@ export default function Apercu(props) {
     useEffect(() => {
         // Récupération des comptes
 
-        recupererDateJour('date-d-listing');
+        recupererHeureDernierService();
         recupererDateJour('date-f-listing');
         recupererHeureJour('heure-f-listing');
 
@@ -156,6 +156,49 @@ export default function Apercu(props) {
         setCaissier(document.getElementById('caissier').value.toLowerCase());
     }
 
+    const enregistrerHeureFin = () => {
+        let dateDuJour = new Date();
+        
+        let dateDuJourFormate = dateDuJour.getFullYear() + '-' + ('0' + (dateDuJour.getMonth() + 1)).slice(-2) + '-' + ('0' + dateDuJour.getDate()).slice(-2);
+        if (dateDuJourFormate === dateFin.slice(0, 10)) {
+            const req = new XMLHttpRequest();
+            req.open('GET', `${nomDns}horaire_caisse.php?heure_fin=${dateFin}`);
+    
+            req.addEventListener('load', () => {
+                if(req.status >= 200 && req.status < 400) {
+                    console.log(req.responseText);
+                }
+            });
+    
+            req.addEventListener("error", function () {
+                // La requête n'a pas réussi à atteindre le serveur
+                setMessageErreur('Erreur réseau');
+            });
+    
+            req.send();
+        }
+    }
+
+    const recupererHeureDernierService = () => {
+        const req = new XMLHttpRequest();
+        req.open('GET', `${nomDns}horaire_caisse.php?recup_heure`);
+
+        req.addEventListener('load', () => {
+            if(req.status >= 200 && req.status < 400) {
+                const result = JSON.parse(req.response);
+                document.querySelector('#date-d-listing').value = result.date_heure.slice(0, 10);
+                document.querySelector('#heure-d-listing').value = result.date_heure.slice(11, 16);
+            }
+        });
+
+        req.addEventListener("error", function () {
+            // La requête n'a pas réussi à atteindre le serveur
+            setMessageErreur('Erreur réseau');
+        });
+
+        req.send();
+    }
+
     return (
         <section className="historique">
             <h1>Listing des caissiers</h1>
@@ -167,7 +210,7 @@ export default function Apercu(props) {
                             <p>
                                 <label htmlFor="">Du : </label>
                                 <input id='date-d-listing' type="date" ref={date_select1} />
-                                <input type="time" ref={heure_select1} />
+                                <input id='heure-d-listing' type="time" ref={heure_select1} />
                             </p>
                             <p>
                                 <label htmlFor="">Au : </label>
@@ -219,6 +262,7 @@ export default function Apercu(props) {
                         <ReactToPrint
                             trigger={() => <button className='bootstrap-btn valider' style={{marginTop: '8px', color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                             content={() => componentRef.current}
+                            onAfterPrint={enregistrerHeureFin}
                         />
                     </div>
                 )}
