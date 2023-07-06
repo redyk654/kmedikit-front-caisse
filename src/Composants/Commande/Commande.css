@@ -216,35 +216,6 @@
     cursor: pointer;
 }
 
-.bootstrap-btn {
-	display: inline-block;
-	font-weight: 500;
-	color: #212529;
-	text-align: center;
-	border: 1px solid transparent;
-	padding: .275rem .75rem;
-	font-size: 1rem;
-	line-height: 1.5;
-	border-radius: .25rem;
-	color: #fff;
-	background-color: #007bff;
-    cursor: pointer;
-    width: 13%;
-
-}
-
-.bootstrap-btn.valider:hover {
-    background-color: #0069d9;
-}
-
-.bootstrap-btn.annuler:hover {
-    background-color: #df322d;
-}
-
-.bootstrap-btn.annuler {
-    background-color: #ec4641;
-}
-
 .detail-item {
     display: flex;
     justify-content: space-between;

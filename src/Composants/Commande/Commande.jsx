@@ -292,7 +292,7 @@ export default function Commande(props) {
         btnAjout.current.disabled = true;
         setTimeout(() => {
             btnAjout.current.disabled = false;
-        }, 1500);
+        }, 1000);
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
             setMessageErreur('');
@@ -339,6 +339,7 @@ export default function Commande(props) {
         setPatientChoisi(detailsDuPatient)
         document.querySelector('#valider-facture').disabled = false;
         document.querySelector('#annuler-facture').disabled = false;
+        activeBtnValidation();
     }
 
     const sauvegarder = () => {
@@ -685,12 +686,33 @@ export default function Commande(props) {
         fermerModalPatient();
     }
 
+    const disabledBtnValidation = () => {
+        const btnValidation = document.querySelector('#valider-facture');
+        btnValidation.disabled = true;
+        btnValidation.classList.add('disabled');
+    }
+
+    const activeBtnValidation = () => {
+        const btnValidation = document.querySelector('#valider-facture');
+        btnValidation.disabled = false;
+        btnValidation.classList.remove('disabled');
+    }
+
     const handleChangeReduction = (e) => {
         if(e.target.value.length === 0)
             setvaleurReduction(0);
         else {
-            const valeurDuPourcentage = 100 - ((parseInt(e.target.value) * 100) / calculerPrixTotal())
-            setvaleurReduction(parseFloat(valeurDuPourcentage))
+            if (parseInt(e.target.value) > calculerPrixTotal()) {
+                disabledBtnValidation();
+                setMessageErreur('le montant de la réduction ne peut pas être supérieur au prix total');
+                const valeurDuPourcentage = 100 - ((parseInt(e.target.value) * 100) / calculerPrixTotal())
+                setvaleurReduction(parseFloat(valeurDuPourcentage))
+            } else {
+                activeBtnValidation();
+                setMessageErreur('');
+                const valeurDuPourcentage = 100 - ((parseInt(e.target.value) * 100) / calculerPrixTotal())
+                setvaleurReduction(parseFloat(valeurDuPourcentage))
+            }
         }
     }
 
@@ -912,7 +934,7 @@ export default function Commande(props) {
                         </div>
                         <button 
                             className='bootstrap-btn annuler' 
-                            id='annuler-facture' 
+                            id='annuler-facture'
                             onClick={annulerCommande}
                         >
                             Annnuler
