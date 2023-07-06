@@ -307,39 +307,6 @@ export default function GestionRecette(props) {
         
     }
 
-    // const genererId = () => {
-    //     // Fonction pour générer un identifiant unique pour une commande
-    //     return Math.floor((1 + Math.random()) * 0x10000)
-    //            .toString(16)
-    //            .substring(1) + recetteTotal;
-    // }
-
-    // const terminer = () => {
-    //     // Enregistrement de la recette et de tous les détails
-    //     const id_recette = genererId();
-
-    //     const data = new FormData();
-    //     data.append('id_recette', id_recette);
-    //     data.append('recette_total', recetteTotal);
-    //     data.append('montant_retire', montantRetire);
-    //     data.append('recette_restante', recetteRestante);
-    //     data.append('caissier', caissier);
-    //     data.append('regisseur', props.nomConnecte);
-
-    //     const req = new XMLHttpRequest();
-    //     req.open('POST', `${nomDns}gestion_pourcentage.php');
-
-    //     req.addEventListener('load', () => {
-    //         if(req.status >= 200 && req.status < 400) {
-    //             fermerModaValidation();
-    //             annuler()
-    //         }
-    //     })
-
-    //     req.send(data);
-
-    // }
-
     const rechercheParPeriode = (date1, date2) => {
         // Recherche des recettes par période
         if (date1 !== '' && date2 !== '') {
@@ -517,25 +484,7 @@ export default function GestionRecette(props) {
 
             <div className="container-gestion">
                 <div className="box-1">
-                    <div style={{display: `${plusOptions ? 'none' : 'block'}`}}>
-                        <CContainer>
-                            <CRow>
-                                <CCol>
-                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "7" ? true : false} type="radio" name="radioRecette" id="7" label="7 derniers jours" />
-                                </CCol>
-                                <CCol>
-                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "10" ? true : false} type="radio" name="radioRecette" id="10" label="10 derniers jours"/>
-                                </CCol>
-                            </CRow>
-                            <CRow>
-                                <CCol>
-                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "0" ? true : false} type="radio" name="radioRecette" id="0" label="ce mois ci"/>
-                                </CCol>
-                                <CCol>
-                                    <CFormCheck onChange={handleChangeRadio} checked={idRadio === "30" ? true : false} type="radio" name="radioRecette" id="30" label="le mois dernier"/>
-                                </CCol>
-                            </CRow>
-                        </CContainer>
+                    <div style={{display: `${plusOptions ? 'none' : 'none'}`}}>
                     </div>
                     <CFormCheck id="flexCheckDefault" label="plus d'options" checked={plusOptions} onChange={onChangePlusOption} />
                     {plusOptions &&
@@ -613,32 +562,6 @@ export default function GestionRecette(props) {
                         {/* <div className="btn-valid-annul" style={{textAlign: 'center', marginTop: '10px',}}>
                             <button className='bootstrap-btn h-25' onClick={terminer}>Terminer</button>
                         </div> */}
-                    </div>
-                    <div className='mb-4' style={{display: `${props.role.toUpperCase() === "admin".toUpperCase() ? 'block' : 'none'}`}}>
-                        <CChart
-                            type="line"
-                            data={{
-                                labels: labelsChart,
-                                datasets: [
-                                {
-                                    label: "Total",
-                                    backgroundColor: "rgba(220, 220, 220, 0.2)",
-                                    borderColor: "rgba(220, 220, 220, 1)",
-                                    pointBackgroundColor: "#BFC0C0",
-                                    pointBorderColor: "#BFC0C0",
-                                    data: data1ChartTotal
-                                },
-                                {
-                                    label: "Recette",
-                                    backgroundColor: "rgba(151, 187, 205, 0.2)",
-                                    borderColor: "rgba(151, 187, 205, 1)",
-                                    pointBackgroundColor: "#5A7684",
-                                    pointBorderColor: "#5A7684",
-                                    data: data2ChartRecette
-                                },
-                                ],
-                            }}
-                        />
                     </div>
                 </div>
             </div>
