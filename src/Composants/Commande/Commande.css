@@ -190,16 +190,6 @@
     padding: 10px 0px;
 }
 
-/* .commande .right-side .details-commande .valider-annuler button {
-    width: 150px;
-    height: 6vh;
-    color: #f1f1f1;
-    background-color: #012557;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 17px;
-} */
-
 .commande .right-side .details-commande .valider-annuler button:last-child {
     margin-left: 20px;
 }
