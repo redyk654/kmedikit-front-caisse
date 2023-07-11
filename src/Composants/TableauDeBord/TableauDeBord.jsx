@@ -42,6 +42,7 @@ export default function TableauDeBord(props) {
     const [historique, sethistorique] = useState([]);
     const [recetteTotal, setRecetteTotal] = useState(0);
     const [total, setTotal] = useState('');
+    const [materiel, setMateriel] = useState(0)
     const [services, setServices] = useState([]);
     const [servicesSauvegarde, setServicesSauvegarde] = useState([]);
     const [categorieSelectionne, setCategorieSelectionne] = useState('');
@@ -181,14 +182,17 @@ export default function TableauDeBord(props) {
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
                     let result = JSON.parse(req.responseText);
+                    let moitieBiochimie = parseInt(result.filter(item => item.categorie.toUpperCase() === "biochimie".toUpperCase())[0]?.moitie);
+                    if (isNaN(moitieBiochimie)) 
+                        moitieBiochimie = 0;
                     result = result.map(item => {
                         return {
                             ...item,
                             total_reel: Math.round(parseFloat(item.total_reel)),
                         }
                     })
-                    sethistorique([...result, pharmacie]);
-                    recupererRecetteGeneralites(date1, date2, [...result, pharmacie]);
+                    // sethistorique([...result, {categorie: "biochimie 50%", total_reel: moitieBiochimie}, pharmacie]);
+                    recupererRecetteGeneralites(date1, date2, [{categorie: "biochimie 50%", total_reel: moitieBiochimie}, ...result, pharmacie]);
                 }
             });
 
@@ -209,6 +213,7 @@ export default function TableauDeBord(props) {
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
                     const res = JSON.parse(req.responseText);
+                    setMateriel(res.reduce((acc, curr) => acc + parseInt(curr.materiel), 0));
                     recettePharmacieParPeriode(res, date1, date2);
                     recupDetailsParPeriode(date1, date2);
                 }
@@ -329,6 +334,7 @@ export default function TableauDeBord(props) {
                 <AfficherTotaux
                     total={total}
                     recetteTotal={recetteTotal}
+                    materiel={materiel}
                 />
                 <CContainer>                    
                     <CRow className='pb-4'>
