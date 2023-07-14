@@ -127,4 +127,4 @@ export const CATEGORIES = ['IMAGERIE', 'MATERNITÉ', 'LABORATOIRE',
                             'BIOCHIMIE', 'CARNET', 'MEDECINE', 'CHIRURGIE',
                             'UPEC', 'CONSULTATION SPÉCIALISTE']
 
-export const nomDns = "http://serveur/backend-cmab/";
+export const nomDns = "http://localhost/backend-cmab/";
