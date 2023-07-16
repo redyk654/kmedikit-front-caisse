@@ -45,6 +45,7 @@ export const ROLES = {
     secretaire: "secretaire",
     regisseur: "regisseur",
     admin: "admin",
+    laborantin: "laborantin",
 }
 
 export const SEXES = {

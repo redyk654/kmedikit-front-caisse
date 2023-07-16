@@ -15,11 +15,16 @@ function createWindow () {
   })
 
   win.loadURL(
-      isDev ? 'http:localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
-    )
+    isDev ? 'http:localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
+  )
+  
+  // win.webContents.on('before-print', (e) => {
+  //   e.preventDefault();
+  //   win.webContents.print({silent: true, printBackground: true})
+  // })
 
-    win.setMenuBarVisibility(false)
-    win.removeMenu()
+  win.setMenuBarVisibility(false)
+  win.removeMenu()
 }
 
 app.whenReady().then(() => {

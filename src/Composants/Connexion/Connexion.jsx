@@ -56,9 +56,21 @@ export default function Connexion(props) {
         req.send(data);
     }
 
+    const ouvrirLaboratoire = () => {
+        props.setOnglet(13)
+        props.setRole('laborantin');
+        props.setNomConnecte('technicien-labo');
+        props.setConnecter(true);
+    }
+
     return (
         <div className='form'>
-            <div style={{fontWeight: '600', opacity: '.1', position: 'absolute', top: 0}}>Chrisppo Youmbissi Kamdem</div>
+            <div style={{fontWeight: '600', opacity: '.1', position: 'absolute', top: 0}}>Chrisppo Youmbissi Kamdem</div>\
+            <div className='float-end px-3'>
+                <a onClick={ouvrirLaboratoire} className='link-light' role='button'>
+                    laboratoire
+                </a>
+            </div>
             <form action="">
                 <h1 className='title'>Caisse</h1>
                 <p className='text-field'>

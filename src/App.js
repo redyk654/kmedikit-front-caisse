@@ -22,6 +22,7 @@ import { BsSpeedometer2 } from "react-icons/bs";
 import { ContextChargement } from './Context/Chargement';
 import { ROLES } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
+import Laboratoire from './Composants/Laboratoire/Laboratoire';
 
 
 
@@ -48,6 +49,8 @@ function App() {
       setOnglet(12);
     } else if (role === ROLES.secretaire) {
       setOnglet(9);
+    } else if (role === ROLES.laborantin) {
+      setOnglet(13);
     } else {
       setOnglet(1);
     }
@@ -90,6 +93,9 @@ function App() {
       break;
     case 12:
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
+      break;
+    case 13:
+      contenu = <Laboratoire nomConnecte={nomConnecte} />
       break;
     default:
       break;
@@ -240,6 +246,22 @@ function App() {
           </section>
         </main>
       )
+    } else if (role.toLowerCase() === ROLES.laborantin) {
+      return (
+        <main className='app'>
+          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
+          <section className="conteneur-onglets">
+            <div className="onglets-blocs" style={{width: '35%'}}>
+              <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
+                Laboratoire
+              </div>
+            </div>
+            <div className="onglets-contenu">
+                {contenu}
+            </div>
+          </section>
+        </main>
+      )
     } else {
       return (
         <main className='app'>
@@ -256,6 +278,7 @@ function App() {
         setNomConnecte={setNomConnecte}
         role={role}
         setRole={setRole}
+        setOnglet={setOnglet}
       />
     )
   }
