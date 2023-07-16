@@ -3,12 +3,12 @@ import { CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCardTitle, CForm,
 import { useForm, Controller } from 'react-hook-form';
 import CIcon from '@coreui/icons-react';
 import { cilPlus } from '@coreui/icons';
-import { nomDns } from '../../shared/Globals';
+import { extraireCode, nomDns } from '../../shared/Globals';
 import AfficherRecherche from './AfficherRecherche';
 
 export default function CardSpecalite(props) {
 
-    const  { specalite, examens, ajouterUnExamen } = props;
+    const  { specalite, examens, ajouterUnExamen, retirerUnExamen } = props;
     const { control, handleSubmit, reset, watch } = useForm({
         defaultValues: {
             'designation': ''
@@ -36,28 +36,37 @@ export default function CardSpecalite(props) {
     }
 
     const execAjouterExamen = (e) => {
-        ajouterUnExamen(e.target.id);
-        // reset();
+        e.preventDefault();
+        const id = e.target.id;
+        const examen = listeDesExamens.find(item => item.id === id);
+        ajouterUnExamen(examen);
+        reset();
+        setListeDesExamens([]);
+    }
+
+    const execRetirerUnExamen = (e) => {
+        e.preventDefault();
+        const id = e.target.id;
+        const examen = examens.find(item => item.id === id);
+        retirerUnExamen(examen);
     }
 
   return (
     <CRow>
-        <CCard className='mb-3 shadow'>
+        <CCard className='mb-3'>
             <CCardHeader>
                 <CCardTitle>{specalite}</CCardTitle>
             </CCardHeader>
             <CCardBody>
-                    {examens?.length > 0 ? 
-                        <CListGroup className='w-75'>
-                            {examens.map(item => (
-                                    <CListGroupItem>
-                                        {item.designation}
-                                    </CListGroupItem>
-                            ))}
-                        </CListGroup>
-                    : null}
-            </CCardBody>
-            <CCardFooter>
+                {examens?.length > 0 ? 
+                    <CListGroup className='w-75'>
+                        {examens.map(item => (
+                                <CListGroupItem className='' onClick={execRetirerUnExamen} id={item?.id}>
+                                    {extraireCode(item?.designation)}
+                                </CListGroupItem>
+                        ))}
+                    </CListGroup>
+                : null}
                 <Controller
                     name='designation'
                     control={control}
@@ -66,9 +75,9 @@ export default function CardSpecalite(props) {
                             {...field}
                             type='text'
                             placeholder="saisissez l'examen"
-                            className='p-2 w-75 fw-bold'
+                            className='p-2 w-75 fw-bold mt-4'
                             id='designation'
-                            required
+                            // required
                         />
                     )}
                 />
@@ -78,7 +87,7 @@ export default function CardSpecalite(props) {
                     valeur='designation'
                     cle='id'
                 />
-            </CCardFooter>
+            </CCardBody>
         </CCard>
     </CRow>
   )

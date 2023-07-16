@@ -3,7 +3,7 @@ import { CButton, CCol, CContainer, CForm, CFormInput, CFormSelect, CRow } from 
 import { nomDns } from '../../../shared/Globals';
 import AfficherRecherche from '../AfficherRecherche';
 import { IMaskMixin } from 'react-imask';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, set } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import CardSpecalite from '../CardSpecalite';
@@ -64,10 +64,30 @@ export default function EnregExamens() {
     const formaterSpecialites = (data) => {
         const specialites = data?.map(item => {
             return {
-                key: item.id,
+                id: item.id,
                 specialite: item.designation,
                 examens: []
             }
+        });
+        setListeSpecialites(specialites);
+    }
+
+    const ajouterUnExamen = (examen, idSpecialite) => {
+        const specialites = listeSpecialites.map(item => {
+            if (item.id === idSpecialite) {
+                item.examens.push(examen);
+            }
+            return item;
+        });
+        setListeSpecialites(specialites);
+    }
+
+    const retirerUnExamen = (examen, idSpecialite) => {
+        const specialites = listeSpecialites.map(item => {
+            if (item.id === idSpecialite) {
+                item.examens = item.examens.filter(item => item.id !== examen.id);
+            }
+            return item;
         });
         setListeSpecialites(specialites);
     }
@@ -180,8 +200,31 @@ export default function EnregExamens() {
         setListeRecu([]);
     }
 
+    const verifierAuMoinsUnExamenAEteAjouter = () => {
+        let resultat = 0;
+        listeSpecialites.forEach(item => {
+            if (item.examens.length > 0) {
+                resultat++;
+            }
+        })
+
+        return resultat > 0;
+    }
+
     const enregistrerExamens = (data) => {
-        console.log(data);
+        if (verifierAuMoinsUnExamenAEteAjouter()) {
+            setMsgErreur('');
+            
+            const req = new XMLHttpRequest();
+            const dataPost = new FormData();
+
+            dataPost.append('data', JSON.stringify(data));
+            dataPost.append('examens', JSON.stringify(listeSpecialites));
+            req.open('POST', `${nomDns}enregistrer_examens.php`);
+
+        } else {
+            setMsgErreur('Veuillez ajouter au moins un examen');
+        }
     }
 
     const CFormInputTelephone = IMaskMixin(({ inputRef, ...props }) => (
@@ -210,10 +253,20 @@ export default function EnregExamens() {
         <p className='text-danger text-center fw-bold'>{msgErreur}</p>
         <CForm onSubmit={handleSubmit(enregistrerExamens)}>
             <CContainer fluid className='px-4'>
+            <CRow className='mt-4 pb-3 text-end'>
+                    <CCol xs={12}>
+                        <CButton
+                            color="dark" 
+                            type="submit" 
+                        >
+                            Enregister
+                        </CButton>
+                    </CCol>
+                </CRow>
                 <CRow>
                     <CCol>
                         <CContainer>
-                            <h4>infos du patients</h4>
+                            <h4 className='fw-bold'>infos du patients</h4>
                             <CRow className='mt-2'>
                                 <Controller
                                     name='code-examen'
@@ -334,8 +387,8 @@ export default function EnregExamens() {
                     </CCol>
                     <CCol>
                         <CContainer>
-                            <h4>infos générales</h4>
-                            <CRow>
+                            <h4 className='fw-bold'>infos générales</h4>
+                            <CRow className='mt-2'>
                                 <Controller
                                     name='service'
                                     control={control}
@@ -358,7 +411,7 @@ export default function EnregExamens() {
                                     cle='id'
                                 />
                             </CRow>
-                            <CRow>
+                            <CRow className='mt-2'>
                                 <Controller
                                     name='prescripteur'
                                     control={control}
@@ -381,7 +434,7 @@ export default function EnregExamens() {
                                     cle='id'
                                 />
                             </CRow>
-                            <CRow>
+                            <CRow className='mt-2'>
                                 <Controller
                                     name='num-recu'
                                     control={control}
@@ -404,7 +457,7 @@ export default function EnregExamens() {
                                     cle='id'
                                 />
                             </CRow>
-                            <CRow>
+                            <CRow className='mt-2'>
                                 <Controller
                                     name='montant'
                                     control={control}
@@ -423,27 +476,19 @@ export default function EnregExamens() {
                             </CRow>
                         </CContainer>
                     </CCol>
-                    <CCol>
-                        <h4>liste des examens</h4>
-                        <CContainer className='h-25 overflow-scroll'>
+                    <CCol style={{ height: '70vh'}} className=''>
+                        <h4 className='fw-bold'>liste des examens</h4>
+                        <CContainer className='h-75 overflow-auto'>
                             {listeSpecialites.map(item => (
                                 <CardSpecalite
-                                    key={item.key}
+                                    key={item.id}
                                     specalite={item.specialite}
                                     examens={item.examens}
+                                    ajouterUnExamen={(examen) => ajouterUnExamen(examen, item.id)}
+                                    retirerUnExamen={(examen) => retirerUnExamen(examen, item.id)}
                                 />
                             ))}
                         </CContainer>
-                    </CCol>
-                </CRow>
-                <CRow className='mt-4 pb-3 float-end'>
-                    <CCol xs={12}>
-                        <CButton
-                            color="dark" 
-                            type="submit" 
-                        >
-                            Enregister
-                        </CButton>
                     </CCol>
                 </CRow>
             </CContainer>
