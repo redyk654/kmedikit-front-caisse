@@ -12,7 +12,7 @@
 
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 6px;
 }
 
@@ -23,7 +23,7 @@
 ::-webkit-scrollbar-thumb {
   background-color: #03ca7e;
   border-radius: 150px;
-}
+} */
 
 body {
   /* font-family: poppins, Arial, Helvetica, sans-serif; */

@@ -15,6 +15,10 @@ export function extraireCode (designation) {
     return designation_extrait.toUpperCase();
 }
 
+export function filtrerListe(prop, val, liste) {
+    return liste.filter(item => (item[prop].toLowerCase().includes(val.toLowerCase())));
+}
+
 export const ServiceExiste = "Ce service existe déjà";	
 
 export function afficherSexe (sexe) {
@@ -56,7 +60,8 @@ export const SEXES = {
 export const MONTANTMATERIEL = 500;
 
 export function mois (str) {
-
+    // verifier si str est undefined
+    if (str === undefined) return;
     switch(parseInt(str.substring(3, 5))) {
         case 1:
             return str.substring(0, 2) + " janvier " + str.substring(6, 10);
@@ -240,8 +245,8 @@ export const convertirFormatDateJMA = (date) => {
     return formattedDate;
 }
 
-export const nomDns = 'http://localhost/backend-cmab/';
-export const nomServeurNode = 'http://localhost:3010';
+export const nomDns = 'http://serveur/hdmbanga/';
+export const nomServeurNode = 'http://serveur:3010';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]

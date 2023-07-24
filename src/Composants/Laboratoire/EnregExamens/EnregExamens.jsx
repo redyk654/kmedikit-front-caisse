@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CButton, CCol, CContainer, CForm, CFormInput, CFormSelect, CRow } from '@coreui/react';
 import { nomDns } from '../../../shared/Globals';
 import AfficherRecherche from '../AfficherRecherche';
@@ -7,15 +7,16 @@ import { useForm, Controller, set } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import CardSpecalite from '../CardSpecalite';
+import { Toaster, toast } from "react-hot-toast";
 
 const schema = yup.object({
-    'code-examen': yup.string().required(),
-    'noms-examen': yup.string().required(),
-    'age-examen': yup.number().min(0).required(),
-    'sexe-examen': yup.string().required(),
-    'quartier-examen': yup.string().required(),
-    'profession-examen': yup.string().required(),
-    'telephone-examen': yup.string().required(),
+    'code-patient-examen': yup.string().required(),
+    'noms-patient-examen': yup.string().required(),
+    'age-patient-examen': yup.number().min(0).required(),
+    'sexe-patient-examen': yup.string().required(),
+    'quartier-patient-examen': yup.string().required(),
+    'profession-patient-examen': yup.string().required(),
+    'telephone-patient-examen': yup.string().required(),
     'service': yup.string().required(),
     'prescripteur': yup.string().required(),
     'num-recu': yup.string().required(),
@@ -24,6 +25,8 @@ const schema = yup.object({
 
 export default function EnregExamens() {
 
+    const boutonEnreg = useRef();
+
     const [msgErreur, setMsgErreur] = useState('');
     const [listePatients, setListePatients] = useState([]);
     const [listeServices, setListeServices] = useState([]);
@@ -31,15 +34,15 @@ export default function EnregExamens() {
     const [listeRecu, setListeRecu] = useState([]);
     const [listeSpecialites, setListeSpecialites] = useState([]);
 
-    const { control, watch, handleSubmit, setValue, formState: { errors } } = useForm({
+    const { control, watch, handleSubmit, setValue, reset, formState: { errors } } = useForm({
         defaultValues: {
-            'code-examen': '',
-            'noms-examen': '',
-            'age-examen': '',
-            'sexe-examen': '',
-            'quartier-examen': '',
-            'profession-examen': '',
-            'telephone-examen': '',
+            'code-patient-examen': '',
+            'noms-patient-examen': '',
+            'age-patient-examen': '',
+            'sexe-patient-examen': '',
+            'quartier-patient-examen': '',
+            'profession-patient-examen': '',
+            'telephone-patient-examen': '',
             'service': '',
             'prescripteur': '',
             'num-recu': '',
@@ -94,7 +97,7 @@ export default function EnregExamens() {
 
     useEffect(() => {
         rechercherPatientParCode();
-    }, [watch('code-examen')])
+    }, [watch('code-patient-examen')])
 
     useEffect(() => {
         rechercherService();
@@ -109,7 +112,7 @@ export default function EnregExamens() {
     }, [watch('num-recu')])
     
     const rechercherPatientParCode = () => {
-        const code = watch('code-examen').trim();
+        const code = watch('code-patient-examen').trim();
         if (code.length === 0) {
             setListePatients([]);
             setMsgErreur('');
@@ -125,13 +128,13 @@ export default function EnregExamens() {
 
     const selectionnerPatient = (e) => {
         const patient = listePatients.filter(item => item.code === e.target.id)[0];
-        setValue('code-examen', patient.code);
-        setValue('noms-examen', patient.nom);
-        setValue('age-examen', patient.age);
-        setValue('sexe-examen', patient.sexe);
-        setValue('quartier-examen', patient.quartier);
-        setValue('profession-examen', patient.profession);
-        setValue('telephone-examen', patient.telephone);
+        setValue('code-patient-examen', patient.code);
+        setValue('noms-patient-examen', patient.nom);
+        setValue('age-patient-examen', patient.age);
+        setValue('sexe-patient-examen', patient.sexe);
+        setValue('quartier-patient-examen', patient.quartier);
+        setValue('profession-patient-examen', patient.profession);
+        setValue('telephone-patient-examen', patient.telephone);
 
         setListePatients([]);
     }
@@ -211,16 +214,43 @@ export default function EnregExamens() {
         return resultat > 0;
     }
 
+    const creerIdFactureExamen = () => {
+        const date = new Date();
+        const annee = date.getFullYear();
+        const mois = date.getMonth() + 1;
+        const jour = date.getDate();
+
+        const heure = date.getHours();
+        const minute = date.getMinutes();
+        const seconde = date.getSeconds();
+
+        const id = `${annee}${mois}${jour}${heure}${minute}${seconde}`;
+
+        return id;
+    }
+
     const enregistrerExamens = (data) => {
         if (verifierAuMoinsUnExamenAEteAjouter()) {
             setMsgErreur('');
-            
+            boutonEnreg.current.disabled = true;
+
             const req = new XMLHttpRequest();
             const dataPost = new FormData();
+            const idFactureExam = creerIdFactureExamen();
 
-            dataPost.append('data', JSON.stringify(data));
+            dataPost.append('id_facture_exam', idFactureExam);
+            dataPost.append('infos_generales', JSON.stringify(data));
             dataPost.append('examens', JSON.stringify(listeSpecialites));
-            req.open('POST', `${nomDns}enregistrer_examens.php`);
+            req.open('POST', `${nomDns}examens_labo.php?enregistrer_examens`);
+
+            req.addEventListener('load', () => {
+                reset();
+                recupererListeSpecialites();
+                boutonEnreg.current.disabled = false;
+                toast.success('Enregistrement effectué avec succès');
+            })
+
+            req.send(dataPost);
 
         } else {
             setMsgErreur('Veuillez ajouter au moins un examen');
@@ -229,7 +259,7 @@ export default function EnregExamens() {
 
     const CFormInputTelephone = IMaskMixin(({ inputRef, ...props }) => (
         <Controller
-            name='telephone-examen'
+            name='telephone-patient-examen'
             control={control}
             render={({ field }) => (
                 <CFormInput
@@ -237,7 +267,7 @@ export default function EnregExamens() {
                     type='text'
                     label='Téléphone'
                     placeholder='Téléphone'
-                    id='telephone-examen'
+                    id='telephone-patient-examen'
                     className='p-2 w-75 fw-bold'
                     {...props}
                     ref={inputRef} // bind internal input
@@ -249,6 +279,7 @@ export default function EnregExamens() {
 
   return (
     <div>
+        <div><Toaster/></div>
         <h2 className='text-center bg-dark text-light'>Enregistrer examens</h2>
         <p className='text-danger text-center fw-bold'>{msgErreur}</p>
         <CForm onSubmit={handleSubmit(enregistrerExamens)}>
@@ -256,20 +287,21 @@ export default function EnregExamens() {
             <CRow className='mt-4 pb-3 text-end'>
                     <CCol xs={12}>
                         <CButton
-                            color="dark" 
-                            type="submit" 
+                            color="dark"
+                            type="submit"
+                            ref={boutonEnreg}
                         >
                             Enregister
                         </CButton>
                     </CCol>
                 </CRow>
-                <CRow>
+                <CRow className='mb-4'>
                     <CCol>
                         <CContainer>
                             <h4 className='fw-bold'>infos du patients</h4>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='code-examen'
+                                    name='code-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormInput
@@ -278,7 +310,7 @@ export default function EnregExamens() {
                                             label='code'
                                             placeholder="code"
                                             className='p-2 w-75 fw-bold'
-                                            id='code-examen'
+                                            id='code-patient-examen'
                                             required
                                         />
                                     )}
@@ -292,7 +324,7 @@ export default function EnregExamens() {
                             </CRow>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='noms-examen'
+                                    name='noms-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormInput
@@ -301,7 +333,7 @@ export default function EnregExamens() {
                                             label='noms prénoms'
                                             placeholder="noms prénoms"
                                             className='p-2 w-75 fw-bold'
-                                            id='noms-examen'
+                                            id='noms-patient-examen'
                                             required
                                         />
                                     )}
@@ -309,7 +341,7 @@ export default function EnregExamens() {
                             </CRow>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='age-examen'
+                                    name='age-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormInput
@@ -318,16 +350,16 @@ export default function EnregExamens() {
                                             label='age'
                                             placeholder="age"
                                             className='p-2 w-75 fw-bold'
-                                            id='age-examen'
+                                            id='age-patient-examen'
                                             required
                                         />
                                     )}
                                 />
-                                {/* <p className='text-danger fw-bold'>{errors['age-examen']?.message}</p> */}
+                                {/* <p className='text-danger fw-bold'>{errors['age-patient-examen']?.message}</p> */}
                             </CRow>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='sexe-examen'
+                                    name='sexe-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormSelect
@@ -346,7 +378,7 @@ export default function EnregExamens() {
                             </CRow>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='quartier-examen'
+                                    name='quartier-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormInput
@@ -355,7 +387,7 @@ export default function EnregExamens() {
                                             label='quartier'
                                             placeholder="quartier"
                                             className='p-2 w-75 fw-bold'
-                                            id='quartier-examen'
+                                            id='quartier-patient-examen'
                                             required
                                         />
                                     )}
@@ -363,7 +395,7 @@ export default function EnregExamens() {
                             </CRow>
                             <CRow className='mt-2'>
                                 <Controller
-                                    name='profession-examen'
+                                    name='profession-patient-examen'
                                     control={control}
                                     render={({ field }) => (
                                         <CFormInput
@@ -372,7 +404,7 @@ export default function EnregExamens() {
                                             label='profession'
                                             placeholder="profession"
                                             className='p-2 w-75 fw-bold'
-                                            id='profession-examen'
+                                            id='profession-patient-examen'
                                             required
                                         />
                                     )}
