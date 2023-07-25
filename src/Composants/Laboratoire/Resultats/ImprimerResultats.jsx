@@ -19,11 +19,14 @@ export default class ImprimerResultats extends Component {
                 <EnteteFicheResultat />
                 <h2 className='text-center text-uppercase'>Fiche des resultats des examens</h2>
                 <div className='px-4'>
-                    <p>
+                    <p className='text-center'>
                         Date &nbsp;
                         <strong>
                             {mois((new Date().toLocaleDateString()))}
                         </strong>
+                    </p>
+                    <p>
+                        Code labo <strong>{this.props.examenSelectionne?.code_labo}</strong>
                     </p>
                     <p>
                         Nom <strong>{this.props.examenSelectionne?.nom}</strong>

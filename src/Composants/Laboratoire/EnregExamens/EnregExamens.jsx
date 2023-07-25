@@ -43,6 +43,7 @@ export default function EnregExamens() {
             'quartier-patient-examen': '',
             'profession-patient-examen': '',
             'telephone-patient-examen': '',
+            'code-labo': '',
             'service': '',
             'prescripteur': '',
             'num-recu': '',
@@ -422,6 +423,23 @@ export default function EnregExamens() {
                             <h4 className='fw-bold'>infos générales</h4>
                             <CRow className='mt-2'>
                                 <Controller
+                                    name='code-labo'
+                                    control={control}
+                                    render={({ field }) => (
+                                        <CFormInput
+                                            {...field}
+                                            type='text'
+                                            label='code labo'
+                                            placeholder="code labo"
+                                            className='p-2 w-75 fw-bold'
+                                            id='code-labo'
+                                            required
+                                        />
+                                    )}
+                                />
+                            </CRow>
+                            <CRow className='mt-2'>
+                                <Controller
                                     name='service'
                                     control={control}
                                     render={({ field }) => (
@@ -474,8 +492,8 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='numéro recu'
-                                            placeholder="numéro recu"
+                                            label='numéro facture'
+                                            placeholder="numéro facture"
                                             className='p-2 w-75 fw-bold'
                                             id='num-recu'
                                             required

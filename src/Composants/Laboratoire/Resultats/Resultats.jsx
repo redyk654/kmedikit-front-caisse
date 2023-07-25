@@ -140,7 +140,7 @@ export default function Resultats() {
       <CTable striped>
         <CTableHead>
           <CTableRow>
-          <CTableHeaderCell scope='col'>code</CTableHeaderCell>
+          <CTableHeaderCell scope='col'>code labo</CTableHeaderCell>
             <CTableHeaderCell scope='col'>patient</CTableHeaderCell>
             <CTableHeaderCell scope='col'>service</CTableHeaderCell>
             <CTableHeaderCell scope='col'>prescripteur</CTableHeaderCell>
@@ -151,7 +151,7 @@ export default function Resultats() {
         <CTableBody>
           {vueListeDesExamens.map(item => (
             <CTableRow key={item.id} id={item.id_fac_exam} onClick={(afficherExamens)} role='button'>
-              <CTableDataCell>{item.code_patient}</CTableDataCell>
+              <CTableDataCell>{item.code_labo}</CTableDataCell>
               <CTableDataCell>{item.nom}</CTableDataCell>
               <CTableDataCell>{item.service_patient}</CTableDataCell>
               <CTableDataCell>{item.prescripteur}</CTableDataCell>
@@ -174,6 +174,9 @@ export default function Resultats() {
               onBeforePrint={enregistrerLesResultats}
               onAfterPrint={fermerModalResultats}
             />
+          </p>
+          <p>
+            Code labo <strong>{examenSelectionne?.code_labo}</strong>
           </p>
           <p>
             Nom <strong>{examenSelectionne?.nom}</strong>

@@ -23,8 +23,8 @@ function createWindow () {
   //   win.webContents.print({silent: true, printBackground: true})
   // })
 
-  // win.setMenuBarVisibility(false)
-  // win.removeMenu()
+  win.setMenuBarVisibility(false)
+  win.removeMenu()
 }
 
 app.whenReady().then(() => {
