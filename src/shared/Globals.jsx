@@ -245,8 +245,8 @@ export const convertirFormatDateJMA = (date) => {
     return formattedDate;
 }
 
-export const nomDns = 'http://serveur/hdmbanga/';
-export const nomServeurNode = 'http://serveur:3010';
+export const nomDns = 'http://localhost/backend-cmab/';
+export const nomServeurNode = 'http://localhost:3010';
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]
