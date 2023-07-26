@@ -52,7 +52,7 @@ export default class ImprimerResultats extends Component {
                                     <CTableRow>
                                         <CTableHeaderCell scope='col'>examens</CTableHeaderCell>
                                         <CTableHeaderCell scope='col'>résultats</CTableHeaderCell>
-                                        <CTableHeaderCell scope='col'>observations</CTableHeaderCell>
+                                        <CTableHeaderCell scope='col'>valeurs usuelles</CTableHeaderCell>
                                     </CTableRow>
                                 </CTableHead>
                                 <CTableBody>
