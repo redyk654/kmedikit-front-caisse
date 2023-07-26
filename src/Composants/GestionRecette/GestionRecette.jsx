@@ -307,78 +307,6 @@ export default function GestionRecette(props) {
         
     }
 
-    const rechercheParPeriode = (date1, date2) => {
-        // Recherche des recettes par période
-        if (date1 !== '' && date2 !== '') {
-            const data = new FormData();
-            data.append('date1', date1);
-            data.append('date2', date2);
-
-            const req = new XMLHttpRequest();
-            req.open('POST', `${nomDns}recette_par_periode.php?recette`);
-
-            req.addEventListener('load', () => {
-                if(req.status >= 200 && req.status < 400) {
-                    const res = JSON.parse(req.responseText);
-                    majDonneesFinales(res);
-                    recupGeneralitesParPeriode(date1, date2);
-                    recupDetailsParPeriode(date1, date2);
-                }
-            });
-
-            req.send(data);
-        }
-    }
-
-    const recupGeneralitesParPeriode = (date1, date2) => {
-        setRecetteGeneralites([]);
-        setTotalGeneralites(0);
-        // Récupération des généralités par période
-        if (date1 !== '' && date2 !== '') {
-            const data = new FormData();
-            data.append('date1', date1);
-            data.append('date2', date2);
-
-            const req = new XMLHttpRequest();
-            req.open('POST', `${nomDns}recette_par_periode.php?generalites`);
-
-            req.addEventListener('load', () => {
-                if(req.status >= 200 && req.status < 400) {
-                    const result = JSON.parse(req.responseText);
-                    setRecetteGeneralites(result);
-                    let recetteGen = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
-                    setTotalGeneralites(recetteGen);
-                }
-            });
-
-            req.send(data);
-        }
-    }
-
-    const recupDetailsParPeriode = (date1, date2) => {
-        setServices([]);
-        setServicesSauvegarde([]);
-        // Récupération des détails par période
-        if (date1 !== '' && date2 !== '') {
-            const data = new FormData();
-            data.append('date1', date1);
-            data.append('date2', date2);
-
-            const req = new XMLHttpRequest();
-            req.open('POST', `${nomDns}recette_par_periode.php?details`);
-
-            req.addEventListener('load', () => {
-                if(req.status >= 200 && req.status < 400) {
-                    const result = JSON.parse(req.responseText);
-                    setServices(result);
-                    setServicesSauvegarde(result);
-                }
-            });
-
-            req.send(data);
-        }
-    }
-
     const fermerModalConfirmation = () => {
         setModalConfirmation(false);
         setServices(servicesSauvegarde);
@@ -394,66 +322,6 @@ export default function GestionRecette(props) {
 
     const onChangePlusOption = (e) => {
         props.role.toUpperCase() === 'admin'.toUpperCase() && setPlusOptions(!plusOptions);
-    }
-
-    const majDonneesFinales = (response) => {
-        // Mise à jour de la recette totale
-        let total = response.reduce((acc, item) => acc + parseInt(item.total), 0);
-        setTotal(total);
-        
-        let materiel = response.reduce((acc, item) => acc + parseInt(item.materiel), 0);
-        setFrais(materiel);
-
-        let recette = response.reduce((acc, item) => acc + parseInt(item.recette), 0);
-        setRecetteTotal(recette + materiel);
-
-        let labelsC = response.map(item => {
-            return item.date_vente;
-        });
-
-        let data1C = response.map(item => {
-            return parseInt(item.total) + parseInt(item.materiel);
-        });
-
-        let data2C = response.map(item => {
-            return parseInt(item.recette) + parseInt(item.materiel);
-        });
-
-        setData1ChartTotal(data1C);
-        setData2ChartRecette(data2C);
-        setLabelsChart(labelsC);
-    }
-
-    const handleChangeRadio = (e) => {
-        setIdRadio(e.target.id);
-        const id = e.target.id;
-        let date1;
-        let date2;
-
-        switch(id) {
-            case "7":
-                date1 = soustraireUnNombreAUneDate(1) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(7) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "10":
-                date1 = soustraireUnNombreAUneDate(1) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(10) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "0":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = ceMoisCi() + '-' + '01 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "30":
-                date1 = leMoisDernier() + '-' + '31 23:59:59';
-                date2 = leMoisDernier() + '-' + '01 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            default:
-                break;
-        }
     }
 
     return (
@@ -484,39 +352,32 @@ export default function GestionRecette(props) {
 
             <div className="container-gestion">
                 <div className="box-1">
-                    <div style={{display: `${plusOptions ? 'none' : 'none'}`}}>
+                    <h1>Options</h1>
+                    <div>
+                        <p>
+                            <label htmlFor="">Du : </label>
+                            <input type="date" ref={date_select1} />
+                            <input type="time" ref={heure_select1} />
+                        </p>
+                        <p>
+                            <label htmlFor="">Au : </label>
+                            <input type="date" ref={date_select2} />
+                            <input type="time" ref={heure_select2} />
+                        </p>
+                        <p>
+                            <label htmlFor="">Caissier : </label>
+                            <select name="caissier" id="caissier">
+                                {props.role.toUpperCase() === "caissier".toUpperCase() ? 
+                                <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> :
+                                listeComptes.map(item => (
+                                    <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
+                                    ))                               }
+                            </select>
+                        </p>
                     </div>
-                    <CFormCheck id="flexCheckDefault" label="plus d'options" checked={plusOptions} onChange={onChangePlusOption} />
-                    {plusOptions &&
-                        <>
-                            <h1>Options</h1>
-                            <div>
-                                <p>
-                                    <label htmlFor="">Du : </label>
-                                    <input type="date" ref={date_select1} />
-                                    <input type="time" ref={heure_select1} />
-                                </p>
-                                <p>
-                                    <label htmlFor="">Au : </label>
-                                    <input type="date" ref={date_select2} />
-                                    <input type="time" ref={heure_select2} />
-                                </p>
-                                <p>
-                                    <label htmlFor="">Caissier : </label>
-                                    <select name="caissier" id="caissier">
-                                        {props.role.toUpperCase() === "caissier".toUpperCase() ? 
-                                        <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> :
-                                        listeComptes.map(item => (
-                                            <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
-                                            ))                               }
-                                    </select>
-                                </p>
-                            </div>
-                            <div style={{paddingLeft: '20px'}}>
-                                <button style={styleBtnAutre} className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
-                            </div>
-                        </>
-                    }
+                    <div style={{paddingLeft: '20px'}}>
+                        <button style={styleBtnAutre} className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
+                    </div>
                 </div>
                 <div className="box-2">
                     <div className="btn-container" style={{textAlign: 'center'}}>
