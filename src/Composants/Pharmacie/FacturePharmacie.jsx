@@ -131,7 +131,10 @@ export default class FacturePharmacie extends Component {
                                     <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                                 </div>
                             </div>
-                            <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.caissier}</span></div>
+                            <div className='d-flex justify-content-between'>
+                                <div style={{marginTop: '19px', textAlign: 'right', paddingRight: '30px'}}>Commis de pharmacie : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.vendeur.toUpperCase()}</span></div>
+                                <div style={{marginTop: '19px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.caissier.toUpperCase()}</span></div>
+                            </div>
                             <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                         </div>
                     </div>
@@ -200,7 +203,10 @@ export default class FacturePharmacie extends Component {
                                 <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                             </div>
                         </div>
-                        <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.caissier}</span></div>
+                        <div className='d-flex justify-content-between'>
+                            <div style={{marginTop: '19px', textAlign: 'right', paddingRight: '30px'}}>Commis de pharmacie : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.vendeur.toUpperCase()}</span></div>
+                            <div style={{marginTop: '19px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.caissier.toUpperCase()}</span></div>
+                        </div>
                         <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                     </div>
                 </div>

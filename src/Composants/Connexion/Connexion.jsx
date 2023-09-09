@@ -87,8 +87,8 @@ export default function Connexion(props) {
                     />
                 </p>
                 <p style={{marginTop: 8}}>
-                    <label htmlFor="" style={{color: '#fff'}}>Afficher mot de passe</label>
-                    <input type="checkbox" checked={showMdp} id="" onChange={(e) => setShowMdp(!showMdp)} />
+                    <label htmlFor="afficher-mdp" style={{color: '#fff'}}>Afficher mot de passe</label>
+                    <input type="checkbox" checked={showMdp} id="afficher-mdp" onChange={(e) => setShowMdp(!showMdp)} />
                 </p>
                 <button type='submit' onClick={verifConnexion} >Se connecter</button>
                 <div className='message-erreur'>{erreur}</div>

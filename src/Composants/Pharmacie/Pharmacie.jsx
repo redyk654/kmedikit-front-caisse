@@ -468,7 +468,7 @@ export default function GestionFactures(props) {
                     <input type="text" placeholder="Nom du patient" className="recherche-patient" onChange={filtrerListe} />
                 </p>
                 <p>
-                    <label htmlFor="" style={{marginRight: 5, fontWeight: 700}}>Non réglés</label>
+                    <label htmlFor="non_regle" style={{marginRight: 5, fontWeight: 700}}>Non réglés</label>
                     <input type="checkbox" name="non_regle" id="non_regle" checked={filtrer} onChange={() => setFiltrer(!filtrer)} />
                 </p>
                 {/* <div>
@@ -569,6 +569,7 @@ export default function GestionFactures(props) {
                                     resteaPayer={resteaPayer}
                                     date={factureSelectionne[0].date_heure}
                                     caissier={props.nomConnecte}
+                                    vendeur={factureSelectionne[0].vendeur}
                                     assurance={factureSelectionne[0].assurance}
                                 />
                             </div>
