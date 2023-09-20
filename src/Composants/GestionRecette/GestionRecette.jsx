@@ -147,6 +147,7 @@ export default function GestionRecette(props) {
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 recupererRecetteGeneralites(data, result);
+                console.log(result);
 
                 let t = 0;
                 t = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);

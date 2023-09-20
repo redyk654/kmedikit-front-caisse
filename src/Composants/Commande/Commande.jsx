@@ -841,6 +841,7 @@ export default function Commande(props) {
                     opacity: '.9',
                     width: '50px',
                     height: '20px',
+                    cursor: 'default'
                     }}
                     onClick={() => {setState(s => s+1);}}
                 >
