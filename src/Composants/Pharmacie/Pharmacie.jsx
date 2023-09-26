@@ -5,7 +5,10 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck, FaCross, FaCrosshairs } from 'react-icons/fa';
-import { nomDns } from '../../shared/Globals';
+import { nomDns, serveurNodeProd } from '../../shared/Globals';
+import { io } from 'socket.io-client';
+
+const socket = io.connect(`${serveurNodeProd}`);
 
 const customStyles1 = {
     content: {
@@ -261,6 +264,7 @@ export default function GestionFactures(props) {
                                 enregistrerAssurance()
                                 setSupp(false);
                                 setModalReussi(true);
+                                socket.emit('sortie_produits');
                             }
                         }
                     });
