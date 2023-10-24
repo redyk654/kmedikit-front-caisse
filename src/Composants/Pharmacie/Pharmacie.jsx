@@ -228,6 +228,8 @@ export default function GestionFactures(props) {
 
 
     const reglerFacture = (e) => {
+        socket.emit('sortie_produits');
+        console.log("ok");
         if (parseInt(verse) >= parseInt(factureSelectionne[0].reste_a_payer)) {
             e.target.disabled = true;
              // Règlement de la facture
@@ -285,7 +287,7 @@ export default function GestionFactures(props) {
             });
     
 
-            req.send(data);
+            // req.send(data);
         }
     }
 

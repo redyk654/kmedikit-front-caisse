@@ -131,5 +131,5 @@ const dnsServeur = "serveur";
 const dnsLocal = "localhost";
 const ipLocal = "localhost";
 
-export const serveurNodeProd = `http://${dnsServeur}:3015`;
-export const nomDns = `http://${dnsServeur}/backend-cmab/`;
+export const serveurNodeProd = `http://${dnsLocal}:3015`;
+export const nomDns = `http://${dnsLocal}/backend-cmab/`;
