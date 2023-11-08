@@ -345,55 +345,36 @@ export default function GestionFactures(props) {
                     <div>
                         <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
                     </div>
-                    <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'flex'}`, justifyContent: 'center'}}>                        
-                        <div style={{display: `${props.role.toLowerCase() === "caissier" ? 'none' : 'block'}`}}>
+                    <div style={{display: `${'flex'}`, justifyContent: 'center'}}>                        
+                        <div>
                             <ReactToPrint
-                                trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                                trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '6vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Réimprimer</button>}
                                 content={() => componentRef.current}
                             />
                         </div>
                         <div>
-                            <button className='bootstrap-btn annuler' style={{width: '15vw', height: '5vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
+                            <button className='bootstrap-btn annuler' style={{width: '15vw', height: '6vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
                         </div>
                     </div>
-                    {/* <h3 style={{marginTop: 5}}>Régler la facture</h3>
-                    {factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer > 0 ? (
-                        <div style={{marginTop: 13}}>
-                            <p>
-                                <label htmlFor="">Montant versé: </label>
-                                <input style={{height: '4vh', width: '15%'}} type="text" value={montantVerse} onChange={(e) => !isNaN(e.target.value) && setmontantVerse(e.target.value)} />
-                                <button style={{width: '5%', marginLeft: 5}} onClick={mettreAjourData}>ok</button>
-                            </p>
-                            <p>
-                                Montant versé: <span style={{fontWeight: 'bold'}}>{verse + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Relicat: <span style={{fontWeight: 'bold'}}>{relicat + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Restant à payer: <span style={{fontWeight: 'bold'}}>{resteaPayer + ' Fcfa'}</span>
-                            </p>
-                        </div>
-                    ) : null}
-                    <button onClick={reglerFacture}>Régler</button> */}
                     <div>
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
                                 <Facture 
-                                ref={componentRef}
-                                medocCommandes={detailsFacture}
-                                idFacture={factureSelectionne[0].id}
-                                patient={factureSelectionne[0].patient}
-                                prixTotal={factureSelectionne[0].prix_total}
-                                reduction={factureSelectionne[0].reduction}
-                                aPayer={factureSelectionne[0].a_payer}
-                                montantVerse={factureSelectionne[0].montant_verse}
-                                relicat={factureSelectionne[0].relicat}
-                                assurance={factureSelectionne[0].assurance}
-                                resteaPayer={factureSelectionne[0].reste_a_payer}
-                                date={factureSelectionne[0].date_heure}
-                                nomConnecte={factureSelectionne[0].caissier}
-                                montantFrais={factureSelectionne[0].frais}
+                                    ref={componentRef}
+                                    medocCommandes={detailsFacture}
+                                    idFacture={factureSelectionne[0].id}
+                                    patient={factureSelectionne[0].patient}
+                                    prixTotal={factureSelectionne[0].prix_total}
+                                    reduction={factureSelectionne[0].reduction}
+                                    aPayer={factureSelectionne[0].a_payer}
+                                    montantVerse={factureSelectionne[0].montant_verse}
+                                    relicat={factureSelectionne[0].relicat}
+                                    assurance={factureSelectionne[0].assurance}
+                                    resteaPayer={factureSelectionne[0].reste_a_payer}
+                                    date={factureSelectionne[0].date_heure}
+                                    nomConnecte={factureSelectionne[0].caissier}
+                                    montantFrais={factureSelectionne[0].frais}
+                                    reedition={true}
                                 />
                             </div>
                         )}

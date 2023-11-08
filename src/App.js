@@ -134,7 +134,7 @@ function App() {
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
                 <FaReceipt size={19} />
                 &nbsp;
-                Factures-services
+                Gestion des factures
               </div>
             </div>
             <div className="onglets-contenu">
@@ -148,11 +148,11 @@ function App() {
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
           <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '83%', fontSize: '11px'}}>
+            <div className="onglets-blocs" style={{width: '83%', fontSize: '10px'}}>
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                 <FaStore size={18} />
                 &nbsp;
-                Services
+                Facturer actes
               </div>
               <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
                 <FaPlusSquare size={18} />
@@ -167,7 +167,7 @@ function App() {
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
                 <FaReceipt size={18} />
                 &nbsp;
-                Factures-services
+                Gestion des factures
               </div>
             </div>
             <div className="onglets-contenu">
@@ -205,7 +205,7 @@ function App() {
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
                 <FaReceipt size={19} />
                 &nbsp;
-                Factures-services
+                Gestion des factures
               </div>
             </div>
             <div className="onglets-contenu">

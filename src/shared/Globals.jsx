@@ -129,7 +129,7 @@ export const CATEGORIES = ['IMAGERIE', 'MATERNITÉ', 'LABORATOIRE',
 
 const dnsServeur = "serveur";
 const dnsLocal = "localhost";
-const ipLocal = "localhost";
+const ipServeur = "192.168.100.6";
 
-export const serveurNodeProd = `http://${dnsLocal}:3015`;
-export const nomDns = `http://${dnsLocal}/backend-cmab/`;
+export const serveurNodeProd = `http://${dnsServeur}:3015`;
+export const nomDns = `http://${dnsServeur}/backend-cmab/`;

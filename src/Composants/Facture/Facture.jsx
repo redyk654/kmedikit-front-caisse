@@ -67,8 +67,8 @@ export default class Facture extends Component {
 
     render() {
         return (
-            <div style={{display: 'flex', flexDirection: 'column', width: '85%'}}>
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
+            <div style={{display: 'flex', flexDirection: 'column', width: '96vw', overflow: 'hidden'}}>
+                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '245px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                         <div style={{ lineHeight: '20px'}}>
                             <div style={{color: 'black', borderBottom: '1px dotted #000'}}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
@@ -85,9 +85,10 @@ export default class Facture extends Component {
                             <div style={{color: 'black',}}><strong>Bepanda CMA</strong></div> 
                         </div>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
-                        <div style={{textAlign: 'center', width: '320px'}}>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px', height: '25vh'}}>
+                        <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
+                            <p style={{color: 'black', background: 'none', marginBottom: '3px'}}>Réedition</p>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? this.mois(this.props.date.substring(0, 10)) : 
@@ -95,7 +96,7 @@ export default class Facture extends Component {
                                 </strong> à <strong>{this.props.date ? this.props.date.substring(11, 19) : 
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
-                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient && this.props.patient.toUpperCase()}</span></div>
                             {this.props.assurance !== "aucune" ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
                             ) : null}
@@ -135,12 +136,12 @@ export default class Facture extends Component {
                                     <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                                 </div>
                             </div>
-                            <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte}</span></div>
+                            <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
                             <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                         </div>
                     </div>
                 </div>                 
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
+                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '245px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '10px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                         <div style={{ lineHeight: '20px'}}>
                             <div style={{color: 'black', borderBottom: '1px dotted #000'}}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
@@ -157,9 +158,10 @@ export default class Facture extends Component {
                             <div style={{color: 'black',}}><strong>Bepanda CMA</strong></div> 
                         </div>
                     </div>
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
-                        <div style={{textAlign: 'center', width: '320px'}}>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px', height: '25vh'}}>
+                        <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
+                            <p style={{color: 'black', background: 'none', marginBottom: '3px'}}>Réedition</p>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? this.mois(this.props.date.substring(0, 10)) : 
@@ -167,7 +169,7 @@ export default class Facture extends Component {
                                 </strong> à <strong>{this.props.date ? this.props.date.substring(11, 19) : 
                                 (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
                             </div>
-                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient}</span></div>
+                            <div style={{marginTop: 5, textTransform: 'capitalize'}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.patient && this.props.patient.toUpperCase()}</span></div>
                             {this.props.assurance !== "aucune" ? (
                                 <div style={{marginTop: 3}}>couvert par : <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.assurance.toUpperCase()}</span></div>
                             ) : null}
@@ -207,7 +209,7 @@ export default class Facture extends Component {
                                     <div><strong>{this.props.resteaPayer + ' Fcfa'}</strong></div>
                                 </div>
                             </div>
-                            <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte}</span></div>
+                            <div style={{marginTop: '18px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
                             <div style={{fontStyle: 'italic', marginTop: '23px'}}> Bonne Guérison !!!</div>
                         </div>
                     </div>

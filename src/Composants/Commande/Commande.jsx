@@ -3,6 +3,8 @@ import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
 
 // Importation des librairies installées
+
+// import { usePDF } from "react-to-pdf";
 import Modal from 'react-modal';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
@@ -376,7 +378,7 @@ export default function Commande(props) {
 
     const idUnique = () => {
         // Création d'un identifiant unique pour la facture
-        return Math.floor((1 + Math.random()) * 0x1000000000)
+        return Math.floor((1 + Math.random()) * 0x10000000)
                .toString(32)
                .substring(1) + qtePrixTotal.prix_total;        
     }
@@ -820,7 +822,7 @@ export default function Commande(props) {
                     <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
                 </p>
                 <div>
-                    <button className='bootstrap-btn' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                    <button className='bootstrap-btn' style={styleBtnAutre} onClick={autreService}>nouvel acte</button>
                 </div>
                 <div className="liste-medoc">
                     <h1>Services</h1>
@@ -957,6 +959,7 @@ export default function Commande(props) {
                                 resteaPayer={resteaPayer}
                                 nomConnecte={props.nomConnecte}
                                 montantFrais={montantFrais}
+                                reedition={false}
                             />
                         </div>
                     </div>
