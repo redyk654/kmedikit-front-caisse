@@ -11,6 +11,8 @@ import Loader from "react-loader-spinner";
 import ReactToPrint from 'react-to-print';
 import Facture from '../Facture/Facture';
 import { extraireCode, ServiceExiste, nomDns, CATEGORIES } from '../../shared/Globals';
+import { CModal, CModalHeader, CModalTitle } from '@coreui/react';
+import ModalPatient from '../Patients/ModalPatient';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
@@ -88,6 +90,7 @@ const styleBox = {
 
 export default function Commande(props) {
 
+    const estReedition = false;
     const componentRef = useRef();
     const annuler = useRef();
     const btnAjout = useRef();
@@ -102,7 +105,6 @@ export default function Commande(props) {
     const [listeMedoc, setListeMedoc] = useState([]);
     const [listeMedocSauvegarde, setListeMedocSauvegarde] = useState([]);
     const [qteDesire, setQteDesire] = useState(1);
-    const [patient, setpatient] = useState('');
     const [clientSelect, setClientSelect] = useState([]);
     const [nomPatient, setNomPatient] = useState(false);
     const [autreState, setAutreState] = useState(autre);
@@ -120,8 +122,6 @@ export default function Commande(props) {
     const [relicat, setrelicat] = useState(0);
     const [resteaPayer, setresteaPayer] = useState(0);
     const [idFacture, setidFacture] = useState('');
-    // const [urgence, setUrgence] = useState(false);
-    const[actualiserQte, setActualiserQte] = useState(false);
     const [listePatient, setlistePatient] = useState([]);
     const [listePatientSauvegarde, setlistePatientSauvegarde] = useState([]);
     const [assurance, setAssurance] = useState(assuranceDefaut);
@@ -131,6 +131,7 @@ export default function Commande(props) {
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [modalPatient, setModalPatient] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
+    const [modalService, setModalService] = useState(false);
     const [statePourRerender, setStatePourRerender] = useState(true);
     const [state, setState] = useState(0);
     const [renrender, setRerender] = useState(true);
@@ -342,7 +343,6 @@ export default function Commande(props) {
         setMedocCommandes([]);
         setQtePrixTotal({});
         setNomPatient('');
-        setpatient('');
         setmontantVerse('')
         setrelicat(0);
         setremise(0);
@@ -428,24 +428,24 @@ export default function Commande(props) {
 
     }
 
-    const enregisterPatient = () => {
-        // On enregistre le patient dans la base de donnés s'il n'y est pas encore
-        if (nomPatient) {
+    // const enregisterPatient = () => {
+    //     // On enregistre le patient dans la base de donnés s'il n'y est pas encore
+    //     if (nomPatient) {
 
-            const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
-            if(patient.length === 0) {
-                const data = new FormData();
-                data.append('nom_patient', nomPatient);
-                data.append('assurance', assuranceDefaut);
-                data.append('type_assurance', 0);        
+    //         const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
+    //         if(patient.length === 0) {
+    //             const data = new FormData();
+    //             data.append('nom_patient', nomPatient);
+    //             data.append('assurance', assuranceDefaut);
+    //             data.append('type_assurance', 0);        
                 
-                const req = new XMLHttpRequest();
-                req.open('POST', `${nomDns}gestion_patients.php`);
+    //             const req = new XMLHttpRequest();
+    //             req.open('POST', `${nomDns}gestion_patients.php`);
     
-                req.send(data);
-            }
-        }
-    }
+    //             req.send(data);
+    //         }
+    //     }
+    // }
 
     const enregistrerAssurance = (data) => {
         data.append('quantite', qteDesire);
@@ -509,7 +509,6 @@ export default function Commande(props) {
                         if (medocCommandes.length === i) {
                             // Toutes les données ont été envoyées
                             enregisterFacture(id);
-                            enregisterPatient();
                         }
                     }
                 });
@@ -560,28 +559,9 @@ export default function Commande(props) {
         }
     }
 
-    const ajouterPatient = () => {
-        if(patient !== "") {
-            setNomPatient(patient.trim());
-            setpatient('');
-
-            if(assurance.toLowerCase() !== assuranceDefaut) {
-                if(parseInt(qtePrixTotal.a_payer)) {
-                    Object.defineProperty(qtePrixTotal, 'a_payer', {
-                        value: (parseInt(qtePrixTotal.prix_total) * (100 - typeAssurance)) / 100,
-                        configurable: true,
-                        enumerable: true,
-                    });
-                }
-                setStatu('pending');
-            } else {
-                setStatu('done');
-            }
-
-            setStatePourRerender(!statePourRerender);
-            fermerModalPatient();
-            setMessageErreur('');
-        }
+    const ajouterPatient = (noms) => {
+        setNomPatient(noms);
+        fermerModalPatient();
     }
 
     const demanderConfirmation = () => {
@@ -602,7 +582,6 @@ export default function Commande(props) {
     const infosPatient = () => {
 
         // Affiche la fenêtre des informations du patient
-        setpatient('');
         setoption('patient');
         setModalPatient(true);
 
@@ -626,7 +605,7 @@ export default function Commande(props) {
 
     const autreService = () => {
         setoption('autre');
-        setModalPatient(true);
+        setModalService(true);
     }
 
     const handleChange = (e) => {
@@ -653,7 +632,7 @@ export default function Commande(props) {
                         setMessageErreur('');
                         setAutreState({designation: '', prix: ''});
                         setRerender(true);
-                        fermerModalPatient();
+                        setModalService(false);
                     }
                 }
             });
@@ -663,38 +642,7 @@ export default function Commande(props) {
     }
 
     const contenuModal = () => {
-        if (option === 'patient') {
-            return (
-                <Fragment>
-                    <h2 style={{color: '#fff'}}>informations du patient</h2>
-                    <div className="detail-item">
-                        <div style={{display: 'flex', flexDirection: 'column' , width: '100%', marginTop: 10, color: '#f1f1f1'}}>
-                            <label htmlFor="" style={{display: 'block',}}>Nom et prénom</label>
-                            <div>
-                                <input type="text" name="qteDesire" style={{width: '250px', height: '4vh'}} value={patient} onChange={filtrerPatient} autoComplete='off' />
-                                <button style={{cursor: 'pointer', width: '45px', height: '4vh', marginLeft: '5px'}} onClick={ajouterPatient}>OK</button>
-                            </div>
-                            {
-                                clientSelect.length > 0 && (
-                                    <div style={{marginTop: '10px', lineHeight: '25px', display: `${clientSelect[0].nomAssurance === assuranceDefaut ? 'none' : 'block'}`}}>
-                                        <div>assurance <strong>{clientSelect[0].nomAssurance}</strong></div>
-                                        <div>pourcentage <strong>{clientSelect[0].type_assurance}</strong></div>
-                                    </div>
-                                )
-                            }
-                            <div style={{marginTop: '10px'}}>
-                                <h2>Liste des patients</h2>
-                                <ul style={stylePatient}>
-                                    {listePatient.length > 0 && listePatient.map(item => (
-                                        <li style={{padding: '6px'}} onClick={(e) => selectionnePatient(e, item.assurance, item.type_assurance)} id={item.nom}>{item.nom.toUpperCase()}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </Fragment>
-            )
-        } else if (option === 'autre') {
+        if (option === 'autre') {
             return (
                 <Fragment>
                     <h2 style={{color: '#fff', textAlign: 'center'}}>Nouveau Service</h2>
@@ -725,46 +673,29 @@ export default function Commande(props) {
         }
     }
 
-    const selectionnePatient = (e, nomAssurance, type_assurance) => {
-        setpatient(e.target.id)
-        setClientSelect([{nomAssurance: nomAssurance, type_assurance: type_assurance}])
-        setAssurance(nomAssurance);
-        setTypeAssurance(type_assurance);
-    }
+    // const filtrerPatient = (e) => {
+    //     setpatient(e.target.value);
 
-    const ajouterService = () => {
-        if (designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
-            autreState.id = Math.random().toString();
-            autreState.designation = document.getElementById('categorie').value + ' ' + autreState.designation
-            setMedocCommandes([...medocCommandes, autreState]);
-            fermerModalPatient();
-        }
-    }
+    //     const req = new XMLHttpRequest();
 
-    const filtrerPatient = (e) => {
-        setpatient(e.target.value);
+    //     req.open('GET', `${nomDns}rechercher_patient.php?str=${(e.target.value).trim()}`);
 
-        const req = new XMLHttpRequest();
+    //     req.addEventListener('load', () => {
+    //         if (req.status >= 200 && req.status < 400) {
+    //             const result = JSON.parse(req.responseText);
 
-        req.open('GET', `${nomDns}rechercher_patient.php?str=${(e.target.value).trim()}`);
-
-        req.addEventListener('load', () => {
-            if (req.status >= 200 && req.status < 400) {
-                const result = JSON.parse(req.responseText);
-
-                setlistePatient(result);
-                setlistePatientSauvegarde(result);
-            }
+    //             setlistePatient(result);
+    //             setlistePatientSauvegarde(result);
+    //         }
             
-        });
+    //     });
 
-        req.send();
-    }
+    //     req.send();
+    // }
     
     const fermerModalPatient = () => {
         setMessageErreur('');
         setModalPatient(false);
-        setpatient('');
         setAutreState(autre);
         setClientSelect([]);
     }
@@ -781,14 +712,32 @@ export default function Commande(props) {
         annulerCommande();
     }
 
+    const fermerModalService = () => {
+        setModalService(false);
+        setAutreState(autre);
+        setMessageErreur('');
+    }
+
     return (
         <section className="commande">
+            <CModal
+                visible={modalPatient}
+                onClose={fermerModalPatient}
+                color="success"
+                size="lg"
+                backdrop="static"
+                scrollable={true}
+            >
+                <ModalPatient
+                    ajouterPatient={ajouterPatient}
+                />
+            </CModal>
             <Modal
-                isOpen={modalPatient}
+                isOpen={modalService}
                 style={customStyles3}
-                contentLabel="validation commande"
+                contentLabel="nouveau service"
                 ariaHideApp={false}
-                onRequestClose={fermerModalPatient}
+                onRequestClose={fermerModalService}
             >
                 {contenuModal()}
             </Modal>
@@ -959,7 +908,7 @@ export default function Commande(props) {
                                 resteaPayer={resteaPayer}
                                 nomConnecte={props.nomConnecte}
                                 montantFrais={montantFrais}
-                                reedition={false}
+                                reedition={estReedition}
                             />
                         </div>
                     </div>

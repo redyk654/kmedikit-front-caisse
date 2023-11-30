@@ -57,6 +57,7 @@ const table_styles = {
 export default function GestionFactures(props) {
 
     const componentRef = useRef();
+    const estReedition = true;
 
     const [factures, setFactures] = useState([]);
     const [factureSauvegarde, setfactureSauvegarde] = useState([]);
@@ -352,7 +353,7 @@ export default function GestionFactures(props) {
                                 content={() => componentRef.current}
                             />
                         </div>
-                        <div>
+                        <div style={{display: `${props.role.toUpperCase() === "CAISSIER".toUpperCase() && 'none'}`}}>
                             <button className='bootstrap-btn annuler' style={{width: '15vw', height: '6vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
                         </div>
                     </div>
@@ -374,7 +375,7 @@ export default function GestionFactures(props) {
                                     date={factureSelectionne[0].date_heure}
                                     nomConnecte={factureSelectionne[0].caissier}
                                     montantFrais={factureSelectionne[0].frais}
-                                    reedition={true}
+                                    reedition={estReedition}
                                 />
                             </div>
                         )}

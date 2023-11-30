@@ -88,7 +88,7 @@ export default class Facture extends Component {
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px', height: '25vh'}}>
                         <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
-                            <p style={{color: 'black', background: 'none', marginBottom: '3px'}}>Réedition</p>
+                            <h3 style={{color: 'black', background: 'none', marginBottom: '3px', display: `${this.props.reedition ? 'block' : 'none'}`}}>Réedition</h3>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? this.mois(this.props.date.substring(0, 10)) : 
@@ -161,7 +161,7 @@ export default class Facture extends Component {
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px', height: '25vh'}}>
                         <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
                             <h3 style={{color: 'black', background: 'none', marginBottom: '25px'}}>Caisse</h3>
-                            <p style={{color: 'black', background: 'none', marginBottom: '3px'}}>Réedition</p>
+                            <h3 style={{color: 'black', background: 'none', marginBottom: '3px', display: `${this.props.reedition ? 'block' : 'none'}`}}>Réedition</h3>
                             <div style={{marginTop: 5}}>Facture N°<span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.idFacture}</span></div>
                             <div style={{marginTop: '5px'}}>
                                 Le <strong>{this.props.date ? this.mois(this.props.date.substring(0, 10)) : 

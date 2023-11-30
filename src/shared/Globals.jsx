@@ -123,6 +123,83 @@ export const convertirFormatDateJMA = (date) => {
     return formattedDate;
 }
 
+export const ROLES = {
+    caissier: "caissier",
+    secretaire: "secretaire",
+    regisseur: "regisseur",
+    admin: "admin",
+    laborantin: "laborantin",
+}
+
+export const SEXES = {
+    h: 'H',
+    f: 'F'
+}
+
+export function afficherSexe (sexe) {
+    let val;
+    switch(sexe) {
+        case 'H':
+            val = 'homme';
+            break;
+        case 'F':
+            val = 'femme';
+            break;
+        default:
+            val = 'non renseigné'
+    }
+
+    return val.toUpperCase();
+}
+
+export function afficherStatusMatrimonial (statu) {
+    let val;
+    switch(statu) {
+        case 'C':
+            val = 'célibataire';
+            break;
+        case 'M':
+            val = 'marié(e)';
+            break;
+        case 'D':
+            val = 'divorcé(e)';
+            break;
+        case 'V':
+            val = 'veuf(ve)';
+            break;
+        default:
+            val = 'non renseigné'
+    }
+
+    return val.toUpperCase();
+}
+
+export function calculerAge(dateDeNaissance) {
+    if (dateDeNaissance !==  "" && !isNaN(new Date(dateDeNaissance))) {
+        const dateNaissance = new Date(dateDeNaissance);
+        const dateActuelle = new Date();
+
+        return dateActuelle.getFullYear() - dateNaissance.getFullYear();
+    }
+}
+
+export function filtrerListe (liste, champRecherche, valeurRecherche) {
+    if (liste.length > 0) {
+        if (valeurRecherche === '')
+            return [];
+        else
+            return liste.filter(patient => patient[champRecherche].toLowerCase().includes(valeurRecherche.toLowerCase()));
+    }
+}
+
+
+export function afficherAge (age) {
+    if (parseInt(age) > 1) 
+        return age + "ans"
+    else
+        return "non renseigné".toUpperCase();
+}
+
 export const CATEGORIES = ['IMAGERIE', 'MATERNITÉ', 'LABORATOIRE',
                             'BIOCHIMIE', 'CARNET', 'MEDECINE', 'CHIRURGIE',
                             'UPEC', 'CONSULTATION SPÉCIALISTE']
@@ -131,5 +208,5 @@ const dnsServeur = "serveur";
 const dnsLocal = "localhost";
 const ipServeur = "192.168.100.6";
 
-export const serveurNodeProd = `http://${dnsServeur}:3015`;
-export const nomDns = `http://${dnsServeur}/backend-cmab/`;
+export const serveurNodeProd = `http://${dnsLocal}:3015`;
+export const nomDns = `http://${dnsLocal}/backend-cmab/`;
