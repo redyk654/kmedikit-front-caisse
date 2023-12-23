@@ -99,7 +99,7 @@ export default function Commande(props) {
     const autre  = {designation: '', prix: ''};
     const assuranceDefaut = 'aucune';
 
-    const date_e = new Date('2023-12-19');
+    const date_e = new Date('2024-12-19');
     const date_j = new Date();
 
     const [listeMedoc, setListeMedoc] = useState([]);
