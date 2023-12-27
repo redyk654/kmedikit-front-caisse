@@ -287,7 +287,7 @@ export default function GestionFactures(props) {
             });
     
 
-            // req.send(data);
+            req.send(data);
         }
     }
 
