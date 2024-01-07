@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { afficherSexe, extraireCode, filtrerListe, formaterNombre, mois, nomDns } from '../../../shared/Globals';
-import { CButton, CFormInput, CFormSwitch, CFormTextarea, CModal, CModalBody, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from '@coreui/react';
+import { CButton, CFormCheck, CFormInput, CFormSwitch, CFormTextarea, CModal, CModalBody, CModalHeader, CModalTitle, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from '@coreui/react';
 import ReactToPrint from 'react-to-print';
 import ImprimerResultats from './ImprimerResultats';
+import AfficherListeDesExamens from './AfficherListeDesExamens';
+import ModalResultats from './ModalResultats';
 
 export default function Resultats() {
 
@@ -13,7 +15,7 @@ export default function Resultats() {
   const [examenSelectionne, setExamenSelectionne] = useState({});
   const [detailsExamenSelectionne, setDetailsExamenSelectionne] = useState([]);
   const [valeurRecherche, setValeurRecherche] = useState('');
-  const [editerResultats, setEditerResultats] = useState(false);
+  const [editerResultats, setEditerResultats] = useState(true);
 
   const vueListeDesExamens = filtrerListe('nom', valeurRecherche, listeDesExamens);
 
@@ -67,7 +69,7 @@ export default function Resultats() {
     const details = [...detailsExamenSelectionne]
     details.forEach(item => {
       item.examens.forEach(examen => {
-        if (examen.id === id) {
+        if (parseInt(examen.id) === parseInt(id)) {
           examen.resultat = e.target.value;
         }
       })
@@ -81,7 +83,7 @@ export default function Resultats() {
     const details = [...detailsExamenSelectionne]
     details.forEach(item => {
       item.examens.forEach(examen => {
-        if (examen.id === id) {
+        if (parseInt(examen.id) === parseInt(id)) {
           examen.remarque = e.target.value;
         }
       })
@@ -136,115 +138,37 @@ export default function Resultats() {
         className='w-50 mx-auto'
         onChange={rechercherUnPatient}
       />
-      {vueListeDesExamens.length === 0 ? <p className='text-center h2'>Aucun examen enregistré</p> :
-      <CTable striped>
-        <CTableHead>
-          <CTableRow>
-          <CTableHeaderCell scope='col'>code labo</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>patient</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>service</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>prescripteur</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>date</CTableHeaderCell>
-            <CTableHeaderCell scope='col'>heure</CTableHeaderCell>
-          </CTableRow>
-        </CTableHead>
-        <CTableBody>
-          {vueListeDesExamens.map(item => (
-            <CTableRow key={item.id} id={item.id_fac_exam} onClick={(afficherExamens)} role='button'>
-              <CTableDataCell>{item.code_labo}</CTableDataCell>
-              <CTableDataCell>{item.nom}</CTableDataCell>
-              <CTableDataCell>{item.service_patient}</CTableDataCell>
-              <CTableDataCell>{item.prescripteur}</CTableDataCell>
-              <CTableDataCell>{mois(item.date_heure?.slice(0, 10))}</CTableDataCell>
-              <CTableDataCell>{item.date_heure?.slice(11, 19)}</CTableDataCell>
-            </CTableRow>
-          ))}
-        </CTableBody>
-      </CTable>
-      }
-      <CModal size='xl' backdrop='static' scrollable visible={modalResultats} onClose={fermerModalResultats}>
-        <CModalHeader>
-            <CModalTitle>Fiche des résultats</CModalTitle>          
-        </CModalHeader>
-        <CModalBody>
-          <p className=''>
-            <ReactToPrint
-              trigger={() => <button className='bootstrap-btn valider' style={{marginTop: '8px', color: '#f1f1f1', height: '6vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
-              content={() => componentRef.current}
-              onBeforePrint={enregistrerLesResultats}
-              onAfterPrint={fermerModalResultats}
-            />
-          </p>
-          <p>
-            Code labo <strong>{examenSelectionne?.code_labo}</strong>
-          </p>
-          <p>
-            Nom <strong>{examenSelectionne?.nom}</strong>
-          </p>
-          <p>
-            Service <strong>{examenSelectionne?.service_patient}</strong>
-          </p>
-          <p>
-            Age <strong>{examenSelectionne?.age + ' ans'}</strong>
-          </p>
-          <p>
-            Sexe <strong>{afficherSexe(examenSelectionne?.sexe)}</strong>
-          </p>
-          {/* <p>
-            Montant <strong>{formaterNombre(examenSelectionne?.montant)}</strong>
-          </p> */}
-          <p>
-            <CFormSwitch
-              id='editerResultats'
-              name='editerResultats'
-              label='Editer'
-              onChange={() => setEditerResultats(!editerResultats)}
-              defaultChecked={editerResultats}
-            />
-          </p>
-          {
-            detailsExamenSelectionne?.map(item => (
-              <CTable>
-                <CTableHead>
-                  <CTableRow color='dark'>
-                    <CTableHeaderCell scope='col'>{item?.specialite?.toUpperCase()}</CTableHeaderCell>
-                  </CTableRow>
-                  <CTableRow>
-                    <CTableHeaderCell scope='col'>examens</CTableHeaderCell>
-                    <CTableHeaderCell scope='col'>résultats</CTableHeaderCell>
-                    <CTableHeaderCell scope='col'>valeurs usuelles</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {item?.examens?.map(examen => (
-                    <CTableRow key={examen.id}>
-                      <CTableDataCell>{extraireCode(examen?.designation)}</CTableDataCell>
-                      <CTableDataCell>
-                        <CFormTextarea
-                          rows={4}
-                          id={examen?.id} 
-                          defaultValue={examen?.resultat}
-                          onChange={handleResultatChange}
-                          readOnly={editerResultats ? false : true}
-                        ></CFormTextarea>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <CFormTextarea
-                          rows={4}
-                          id={examen?.id} 
-                          defaultValue={examen?.remarque}
-                          onChange={handleRemarqueChange}
-                          readOnly={editerResultats ? false : true}
-                        ></CFormTextarea>
-                      </CTableDataCell>
-                    </CTableRow>
-                  ))}
-                </CTableBody>
-              </CTable>
-            ))
-          }
-        </CModalBody>
-      </CModal>
+      <p className='d-flex justify-content-center'>
+        <CFormCheck
+          type="radio"
+          id="radio1"
+          name="radios"
+          label="par nom"
+        />
+        <CFormCheck
+          type="radio"
+          id="radio2"
+          name="radios"
+          label="par code"
+        />
+      </p>
+      <AfficherListeDesExamens
+        listeDesExamens={listeDesExamens}
+        afficherExamens={afficherExamens}
+        valeurRecherche={valeurRecherche}
+      />
+      <ModalResultats
+        modalResultats={modalResultats}
+        fermerModalResultats={fermerModalResultats}
+        setModalResultats={setModalResultats}
+        examenSelectionne={examenSelectionne}
+        detailsExamenSelectionne={detailsExamenSelectionne}
+        handleResultatChange={handleResultatChange}
+        handleRemarqueChange={handleRemarqueChange}
+        enregistrerLesResultats={enregistrerLesResultats}
+        editerResultats={editerResultats}
+        componentRef={componentRef}
+      />
       <div style={{display: 'none'}}>
           <ImprimerResultats
             ref={componentRef}

@@ -38,7 +38,7 @@ export default function CardSpecalite(props) {
     const execAjouterExamen = (e) => {
         e.preventDefault();
         const id = e.target.id;
-        const examen = listeDesExamens.find(item => item.id === id);
+        const examen = listeDesExamens.find(item => parseInt(item.id) === parseInt(id));
         ajouterUnExamen(examen);
         reset();
         setListeDesExamens([]);
@@ -47,7 +47,7 @@ export default function CardSpecalite(props) {
     const execRetirerUnExamen = (e) => {
         e.preventDefault();
         const id = e.target.id;
-        const examen = examens.find(item => item.id === id);
+        const examen = examens.find(item => parseInt(item.id) === parseInt(id));
         retirerUnExamen(examen);
     }
 
@@ -74,7 +74,7 @@ export default function CardSpecalite(props) {
                         <CFormInput
                             {...field}
                             type='text'
-                            placeholder="saisissez l'examen"
+                            placeholder={`examen ${specalite}`}
                             className='p-2 w-75 fw-bold mt-4'
                             id='designation'
                             // required

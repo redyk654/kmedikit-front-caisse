@@ -78,7 +78,7 @@ export default function EnregExamens() {
 
     const ajouterUnExamen = (examen, idSpecialite) => {
         const specialites = listeSpecialites.map(item => {
-            if (item.id === idSpecialite) {
+            if (parseInt(item.id) === parseInt(idSpecialite)) {
                 item.examens.push(examen);
             }
             return item;
@@ -89,7 +89,7 @@ export default function EnregExamens() {
     const retirerUnExamen = (examen, idSpecialite) => {
         const specialites = listeSpecialites.map(item => {
             if (item.id === idSpecialite) {
-                item.examens = item.examens.filter(item => item.id !== examen.id);
+                item.examens = item.examens.filter(item => parseInt(item.id) !== parseInt(examen.id));
             }
             return item;
         });
@@ -156,7 +156,9 @@ export default function EnregExamens() {
     }
 
     const selectionnerService = (e) => {
-        const service = listeServices.filter(item => item.id === e.target.id)[0];
+        const service = listeServices.filter(item => parseInt(item.id) === parseInt(e.target.id))[0];
+        // console.log(service);
+        // console.log(e.target.id);
         setValue('service', service.designation);
         setListeServices([]);
     }
@@ -177,7 +179,7 @@ export default function EnregExamens() {
     }
 
     const selectionnerPrescripteur = (e) => {
-        const prescripteur = listePrescripteurs.filter(item => item.id === e.target.id)[0];
+        const prescripteur = listePrescripteurs.filter(item => parseInt(item.id) === parseInt(e.target.id))[0];
         setValue('prescripteur', prescripteur.designation);
         setListePrescripteurs([]);
     }
@@ -526,9 +528,9 @@ export default function EnregExamens() {
                             </CRow>
                         </CContainer>
                     </CCol>
-                    <CCol style={{ height: '70vh'}} className=''>
+                    <CCol style={{ height: 'auto'}} className=''>
                         <h4 className='fw-bold'>liste des examens</h4>
-                        <CContainer className='h-75 overflow-auto'>
+                        <CContainer className='h-100 overflow-auto'>
                             {listeSpecialites.map(item => (
                                 <CardSpecalite
                                     key={item.id}
