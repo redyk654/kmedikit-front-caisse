@@ -428,25 +428,6 @@ export default function Commande(props) {
 
     }
 
-    // const enregisterPatient = () => {
-    //     // On enregistre le patient dans la base de donnés s'il n'y est pas encore
-    //     if (nomPatient) {
-
-    //         const patient = listePatientSauvegarde.filter(item => (item.nom.toLowerCase().indexOf(nomPatient.toLowerCase()) !== -1));
-    //         if(patient.length === 0) {
-    //             const data = new FormData();
-    //             data.append('nom_patient', nomPatient);
-    //             data.append('assurance', assuranceDefaut);
-    //             data.append('type_assurance', 0);        
-                
-    //             const req = new XMLHttpRequest();
-    //             req.open('POST', `${nomDns}gestion_patients.php`);
-    
-    //             req.send(data);
-    //         }
-    //     }
-    // }
-
     const enregistrerAssurance = (data) => {
         data.append('quantite', qteDesire);
 
@@ -584,23 +565,6 @@ export default function Commande(props) {
         // Affiche la fenêtre des informations du patient
         setoption('patient');
         setModalPatient(true);
-
-        const req = new XMLHttpRequest();
-        req.open('GET', `${nomDns}gestion_patients.php`);
-
-        req.addEventListener('load', () => {
-            const result = JSON.parse(req.responseText);
-            setlistePatient(result);
-            setlistePatientSauvegarde(result);
-        });
-
-        req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('Erreur réseau');
-        });
-
-
-        req.send();
     }
 
     const autreService = () => {
@@ -672,26 +636,6 @@ export default function Commande(props) {
             )
         }
     }
-
-    // const filtrerPatient = (e) => {
-    //     setpatient(e.target.value);
-
-    //     const req = new XMLHttpRequest();
-
-    //     req.open('GET', `${nomDns}rechercher_patient.php?str=${(e.target.value).trim()}`);
-
-    //     req.addEventListener('load', () => {
-    //         if (req.status >= 200 && req.status < 400) {
-    //             const result = JSON.parse(req.responseText);
-
-    //             setlistePatient(result);
-    //             setlistePatientSauvegarde(result);
-    //         }
-            
-    //     });
-
-    //     req.send();
-    // }
     
     const fermerModalPatient = () => {
         setMessageErreur('');
@@ -724,12 +668,13 @@ export default function Commande(props) {
                 visible={modalPatient}
                 onClose={fermerModalPatient}
                 color="success"
-                size="lg"
+                size="xl"
                 backdrop="static"
                 scrollable={true}
             >
                 <ModalPatient
                     ajouterPatient={ajouterPatient}
+                    fermerModalPatient={fermerModalPatient}
                 />
             </CModal>
             <Modal
