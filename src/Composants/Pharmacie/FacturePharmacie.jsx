@@ -12,21 +12,21 @@ const styles = {
 const table_styles1 = {
     border: '1px solid #000',
     borderCollapse: 'collapse',
-    padding: 10,
+    padding: 5,
     textAlign: 'left'
 }
 
 const table_styles2 = {
     border: '1px solid #000',
     borderCollapse: 'collapse',
-    padding: 10,
+    padding: 5,
     textAlign: 'right'
 }
 
 const table_styles = {
     border: '1px solid #000',
     borderCollapse: 'collapse',
-    padding: 10,
+    padding: 5,
     width: '100%',
     marginTop: '15px',
     fontSize: 8,
@@ -66,7 +66,7 @@ export default class FacturePharmacie extends Component {
     
     render() {
         return (            
-            <div style={{display: 'flex', flexDirection: 'column', width: '95vw', overflow: 'hidden', paddingRight: '130px'}}>
+            <div style={{display: 'flex', flexDirection: 'column', width: '100vw', overflow: 'hidden', paddingRight: '130px'}}>
                 <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '280px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '15px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                         <div style={{ lineHeight: '20px'}}>
