@@ -4,7 +4,7 @@
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
   "name": "KMD-Caisse",
   "author": "Chrisppo Youmbissi Kamdem",
-  "version": "2.14.2",
+  "version": "2.14.3",
   "build": {
     "win": {
       "icon": "build/icon.ico"

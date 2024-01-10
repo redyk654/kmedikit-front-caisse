@@ -66,8 +66,8 @@ export default class FacturePharmacie extends Component {
     
     render() {
         return (            
-            <div style={{display: 'flex', flexDirection: 'column', width: '85%'}}>
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
+            <div style={{display: 'flex', flexDirection: 'column', width: '95vw', overflow: 'hidden', paddingRight: '130px'}}>
+                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '280px', transform: 'rotate(90deg)'}}>
                     <div style={{textTransform: 'uppercase', padding: '15px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                         <div style={{ lineHeight: '20px'}}>
                             <div style={{color: 'black', borderBottom: '1px dotted #000'}}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
@@ -139,7 +139,7 @@ export default class FacturePharmacie extends Component {
                         </div>
                     </div>
                 </div>
-                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '315px', transform: 'rotate(90deg)'}}>
+                <div style={{fontSize: 8, backgroundColor: '#fff', height: '50vh', marginLeft: '280px', transform: 'rotate(90deg)'}}>
                 <div style={{textTransform: 'uppercase', padding: '15px -200px', fontSize: 5, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={{color: 'black', borderBottom: '1px dotted #000'}}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
