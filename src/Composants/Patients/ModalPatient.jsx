@@ -3,7 +3,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import { useForm, Controller, set } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import { afficherAge, afficherSexe, calculerAge, dateEnLettre, filtrerListe } from '../../shared/Globals';
+import { afficherAge, afficherSexe, afficherStatusMatrimonial, calculerAge, dateEnLettre, filtrerListe } from '../../shared/Globals';
 import { ROLES, SEXES, nomDns } from "../../shared/Globals";
 import CustomLoader from '../../shared/CustomLoader';
 import { CBadge, CButton, CCol, CContainer, CForm, CFormInput, CFormSelect, CModalBody, CModalHeader, CModalTitle, CRow } from '@coreui/react';
@@ -365,7 +365,7 @@ export default function ModalPatient({ ajouterPatient }) {
                                 <CCol>
                                     <p >Age</p>
                                     <p className='fw-bold'>
-                                        {patientSelectionne.age}
+                                        {afficherAge(patientSelectionne.age)}
                                     </p>
                                 </CCol>
                             </CRow>
@@ -387,9 +387,9 @@ export default function ModalPatient({ ajouterPatient }) {
                             </CRow>
                             <CRow className='mt-1'>
                                 <CCol>
-                                    <p ></p>
+                                    <p>Situation matrimonial</p>
                                     <p className='fw-bold'>
-                                        {patientSelectionne.matrimoniale}
+                                        {afficherStatusMatrimonial(patientSelectionne.matrimoniale)}
                                     </p>
                                 </CCol>
                             </CRow>

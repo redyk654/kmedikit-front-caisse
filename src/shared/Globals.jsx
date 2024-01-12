@@ -168,7 +168,7 @@ export function afficherStatusMatrimonial (statu) {
             val = 'veuf(ve)';
             break;
         default:
-            val = 'non renseigné'
+            val = '';
     }
 
     return val.toUpperCase();
@@ -197,7 +197,7 @@ export function afficherAge (age) {
     if (parseInt(age) > 1) 
         return age + "ans"
     else
-        return "non renseigné".toUpperCase();
+        return "";
 }
 
 export function dateEnLettre (str) {
