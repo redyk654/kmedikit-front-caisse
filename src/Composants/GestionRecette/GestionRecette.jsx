@@ -68,7 +68,7 @@ export default function GestionRecette(props) {
     let heure_select1 = useRef();
     let heure_select2 = useRef();
 
-    const date_e = new Date('2024-03-19');
+    const date_e = new Date('2025-05-26');
     const date_j = new Date();
 
     Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';

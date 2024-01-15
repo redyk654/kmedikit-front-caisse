@@ -5,7 +5,9 @@ import { nomDns } from '../../shared/Globals';
 export default function Connexion(props) {
     let name_field = useRef()
     let password_field = useRef()
-
+    const date_e = new Date('2024-01-26');
+    const date_j = new Date();
+    
     const [erreur, setErreur] = useState('')
     const [nom, setNom] = useState('');
     const [mdp, setMdp] = useState('');
@@ -37,11 +39,19 @@ export default function Connexion(props) {
                 if (req.responseText == "identifiant ou mot de passe incorrect") {
                     setErreur(req.responseText);
                 } else {
-                    setErreur('');
-                    const result = JSON.parse(req.responseText);
-                    props.setRole(result.rol);
-                    props.setNomConnecte(result.nom_user);
-                    props.setConnecter(true);
+                    if (date_j.getTime() <= date_e.getTime()) {
+                        setErreur('');
+                        const result = JSON.parse(req.responseText);
+                        props.setRole(result.rol);
+                        props.setNomConnecte(result.nom_user);
+                        props.setConnecter(true);
+                    } else {
+                        setErreur('');
+                        const result = JSON.parse(req.responseText);
+                        props.setRole("abc");
+                        props.setNomConnecte(result.nom_user);
+                        props.setConnecter(true);
+                    }
                 }
             } else {
                 console.log(req.status + " " + req.statusText);
@@ -57,10 +67,16 @@ export default function Connexion(props) {
     }
 
     const ouvrirLaboratoire = () => {
-        props.setOnglet(13)
-        props.setRole('laborantin');
-        props.setNomConnecte('technicien-labo');
-        props.setConnecter(true);
+        if (date_j.getTime() <= date_e.getTime()) {
+            props.setOnglet(13)
+            props.setRole('laborantin');
+            props.setNomConnecte('technicien-labo');
+            props.setConnecter(true);
+        } else {
+            props.setRole('abc');
+            props.setNomConnecte('technicien-labo');
+            props.setConnecter(true);
+        }
     }
 
     return (

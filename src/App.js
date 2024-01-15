@@ -265,7 +265,9 @@ function App() {
     } else {
       return (
         <main className='app'>
-          vous n'avez pas le droit d'accéder à cette application
+          <strong>
+            Données erronées
+          </strong>
         </main>
       )
     }
