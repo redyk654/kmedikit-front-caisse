@@ -73,7 +73,9 @@ export default function Apercu(props) {
                 setMessageErreur('Erreur réseau');
             });
     
-            req.send(data);
+            setTimeout(() => {
+                req.send(data);
+            }, props.delay);
         }
 
     }, [dateDepart, dateFin, caissier, assurance]);

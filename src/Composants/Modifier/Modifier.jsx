@@ -136,7 +136,9 @@ export default function Modifier(props) {
                 console.error("Erreur réseau");
             });
     
-            req.send();
+            setTimeout(() => {
+                req.send();
+            }, props.delay);
         }
     }, [renrender]);
 

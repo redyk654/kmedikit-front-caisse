@@ -128,7 +128,7 @@ export default function Commande(props) {
     const autre  = {designation: '', prix: ''};
     const assuranceDefaut = 'aucune';
 
-    const date_e = new Date('2025-05-26');
+    const date_e = new Date('2026-05-26');
     const date_j = new Date();
 
     const [nouveauPatient, setNouveauPatient] = useState(detailsDuPatient);
@@ -222,7 +222,9 @@ export default function Commande(props) {
                 setMessageErreur('Erreur réseau');
             });    
     
-            req.send();
+            setTimeout(() => {
+                req.send();
+            }, props.delay);
         }
     }, [rerender]);
 
@@ -414,7 +416,9 @@ export default function Commande(props) {
         });
 
 
-        req.send(data);
+        setTimeout(() => {
+            req.send();
+        }, props.delay);
 
     }
 

@@ -157,7 +157,9 @@ export default function GestionFactures(props) {
                 setMessageErreur('Erreur réseau');
             });
 
-            req2.send();
+            setTimeout(() => {
+                req2.send();
+            }, props.delay);
 
         } else {
             req.open('GET', `${nomDns}factures_pharmacie.php`);
@@ -179,7 +181,9 @@ export default function GestionFactures(props) {
             setMessageErreur('Erreur réseau');
         });
 
-        req.send();
+        setTimeout(() => {
+            req.send();
+        }, props.delay);
     }
 
     useEffect(() => {
@@ -325,7 +329,9 @@ export default function GestionFactures(props) {
             });
     
 
-            req.send(data);
+            setTimeout(() => {
+                req.send();
+            }, props.delay);
         }
     }
 
