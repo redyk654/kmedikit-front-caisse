@@ -49,7 +49,7 @@ export const ROLES = {
     secretaire: "secretaire",
     regisseur: "regisseur",
     admin: "admin",
-    laborantin: "laborantin",
+    laboratoire: "laboratoire",
 }
 
 export const SEXES = {
@@ -250,7 +250,7 @@ const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = hdmbanga;
+export const nomDns = backendLocal;
 export const nomServeurNode = serveur;
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
