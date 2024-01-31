@@ -2,9 +2,9 @@
   "main": "public/electron.js",
   "homepage": "./",
   "copyright": "Copyright © 2022 Chrisppo Youmbissi",
-  "name": "KMD-Caisse",
+  "name": "philmedical-caisse",
   "author": "Chrisppo Youmbissi Kamdem",
-  "version": "3.20.6",
+  "version": "1.0.0",
   "build": {
     "win": {
       "icon": "build/icon.ico"

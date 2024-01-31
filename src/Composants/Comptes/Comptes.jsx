@@ -59,7 +59,7 @@ export default function Comptes(props) {
         req.addEventListener('load', () => {
             if(req.status >= 200 && req.status < 400) {
                 let result = JSON.parse(req.responseText);
-                result = result.filter(item => (item.nom_user.toUpperCase() !== props.nomConnecte.toUpperCase())).filter(item => (item.rol.toUpperCase() !== ROLES.admin.toUpperCase()));
+                // result = result.filter(item => (item.nom_user.toUpperCase() !== props.nomConnecte.toUpperCase())).filter(item => (item.rol.toUpperCase() !== ROLES.admin.toUpperCase()));
                 setListeComptes(result);
             }
         });
@@ -279,9 +279,9 @@ export default function Comptes(props) {
                             <div style={{width: '100%', fontWeight: '600'}}>{compteSelectionne.length > 0 && compteSelectionne[0].rol}</div>
                         </div>
                    </div>
-                   <div style={{width: '100%', textAlign: 'center',}}>   
+                   {/* <div style={{width: '100%', textAlign: 'center',}}>   
                         <button className='bootstrap-btn annuler' style={{width: '15%', marginTop: '30px',}} onClick={supprimerCompte}>Supprimer</button>
-                   </div>
+                   </div> */}
                 </div>
             </div>
         </section>
