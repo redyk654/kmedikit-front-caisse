@@ -250,6 +250,10 @@ const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
+export const liensPhilmedical = {
+    acceuil: 'http://localhost/philmedical/acceuil',
+}
+
 export const nomDns = backendLocal;
 export const nomServeurNode = serveur;
 

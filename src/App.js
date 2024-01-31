@@ -20,7 +20,7 @@ import { FiSettings } from "react-icons/fi";
 import { BsSpeedometer2 } from "react-icons/bs";
 
 import { ContextChargement } from './Context/Chargement';
-import { ROLES } from "./shared/Globals";
+import { ROLES, liensPhilmedical } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
 import Laboratoire from './Composants/Laboratoire/Laboratoire';
 
@@ -114,9 +114,14 @@ function App() {
       )
     } else {
       return (
-        <main className='app'>
-          <strong>
-            Données erronées
+        <main className='app text-center'>
+          <div className='float-start px-3'>
+                <a href={`${liensPhilmedical.acceuil}`} className='link-dark' role='button'>
+                    retour à l'accueil
+                </a>
+          </div>
+          <strong className='text-bg-danger text-light'>
+            Vous n'avez pas les droits pour accéder à cette page.
           </strong>
         </main>
       )
