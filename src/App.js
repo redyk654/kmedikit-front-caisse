@@ -20,7 +20,7 @@ import { FiSettings } from "react-icons/fi";
 import { BsSpeedometer2 } from "react-icons/bs";
 
 import { ContextChargement } from './Context/Chargement';
-import { ROLES } from "./shared/Globals";
+import { ROLES, liensPhilmedical } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
 import Laboratoire from './Composants/Laboratoire/Laboratoire';
 
@@ -153,123 +153,16 @@ function App() {
           </section>
         </main>
       );
-    } else if (role.toLowerCase() === ROLES.caissier) {
-      return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95vw', fontSize: '11px'}}>
-              <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
-                <FaStore size={22} />
-                &nbsp;
-                Services
-              </div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
-                <FiSettings size={20} />
-                &nbsp;
-                Modifier
-              </div>
-              <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
-                <FaPlusSquare size={24} />
-                &nbsp;
-                Pharmacie
-              </div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
-                <FaClipboardList size={22} />
-                &nbsp;
-                Listing
-              </div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                <FaReceipt size={22} />
-                &nbsp;
-                Factures-services
-              </div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
-      );
-    } else if (role.toLowerCase() === ROLES.regisseur) {
-      return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '98%', fontSize: '13px'}}>
-              {/* <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
-                <RiSurveyFill size={20} />
-                &nbsp;
-                Historique
-              </div> */}
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
-                <FaClipboardList size={19} />
-                &nbsp;
-                Listing
-              </div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
-                <FaCoins size={18} />
-                &nbsp;
-                Recettes
-              </div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
-                <FiSettings size={20} />
-                &nbsp;
-                Modifier
-              </div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
-                <FaUsers size={20} />
-                &nbsp;
-                Comptes
-              </div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                <FaReceipt size={19} />
-                &nbsp;
-                Factures-services
-              </div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
-      );
-    } else if(role.toLowerCase() === ROLES.secretaire) {
-      return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '35%'}}>
-            <div className={`tab ${onglet === 9 ? 'active' : ''}`} onClick={ () => {setOnglet(9)}}>Etats assurances</div>
-            <div className={`tab ${onglet === 10 ? 'active' : ''}`} onClick={ () => {setOnglet(10)}}>Factures</div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
-      )
-    } else if (role.toLowerCase() === ROLES.laborantin) {
-      return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '35%'}}>
-              <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
-                Laboratoire
-              </div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
-      )
     } else {
       return (
-        <main className='app'>
-          <strong>
-            Données erronées
+        <main className='app text-center'>
+          <div className='float-start px-3'>
+                <a href={`${liensPhilmedical.acceuil}`} className='link-dark' role='button'>
+                    retour à l'accueil
+                </a>
+          </div>
+          <strong className='text-bg-danger text-light'>
+            Vous n'avez pas les droits pour accéder à cette page.
           </strong>
         </main>
       )

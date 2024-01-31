@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './Connexion.css';
-import { nomDns } from '../../shared/Globals';
+import { liensPhilmedical, nomDns } from '../../shared/Globals';
 
 export default function Connexion(props) {
     let name_field = useRef()
@@ -68,13 +68,13 @@ export default function Connexion(props) {
     return (
         <div className='form'>
             <div style={{fontWeight: '600', opacity: '.1', position: 'absolute', top: 0}}>Chrisppo Youmbissi Kamdem</div>\
-            <div className='float-end px-3'>
-                <a onClick={ouvrirLaboratoire} className='link-light' role='button'>
-                    laboratoire
+            <div className='float-start px-3'>
+                <a href={`${liensPhilmedical.acceuil}`} className='link-light' role='button'>
+                    retour à l'accueil
                 </a>
             </div>
             <form action="">
-                <h1 className='title'>Caisse</h1>
+                <h1 className='title'>Administration</h1>
                 <p className='text-field'>
                     <label htmlFor="nom" ref={name_field}>Identifiant</label>
                     <input
