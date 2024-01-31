@@ -310,8 +310,8 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='code'
-                                            placeholder="code"
+                                            label='code patient'
+                                            placeholder="code patient"
                                             className='p-2 w-75 fw-bold'
                                             id='code-patient-examen'
                                             required

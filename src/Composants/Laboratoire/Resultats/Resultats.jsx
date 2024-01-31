@@ -15,9 +15,10 @@ export default function Resultats() {
   const [examenSelectionne, setExamenSelectionne] = useState({});
   const [detailsExamenSelectionne, setDetailsExamenSelectionne] = useState([]);
   const [valeurRecherche, setValeurRecherche] = useState('');
+  const [critereRecherche, setCritereRecherche] = useState('nom');
   const [editerResultats, setEditerResultats] = useState(true);
 
-  const vueListeDesExamens = filtrerListe('nom', valeurRecherche, listeDesExamens);
+  const vueListeDesExamens = filtrerListe(critereRecherche, valeurRecherche, listeDesExamens);
 
   useEffect(() => {
     recuperLesExamens();
@@ -129,6 +130,10 @@ export default function Resultats() {
     setEditerResultats(false);
   }
 
+  const changerCritereRecherche = (e) => {
+    setCritereRecherche(e.target.id);
+  }
+  
   return (
     <div>
       <h2 className='text-center bg-dark text-light'>Résultats des examens</h2>
@@ -141,19 +146,23 @@ export default function Resultats() {
       <p className='d-flex justify-content-center'>
         <CFormCheck
           type="radio"
-          id="radio1"
+          id="nom"
           name="radios"
           label="par nom"
+          onChange={changerCritereRecherche}
+          checked={critereRecherche === 'nom'}
         />
         <CFormCheck
           type="radio"
-          id="radio2"
+          id="code_labo"
           name="radios"
-          label="par code"
+          label="par code labo"
+          onChange={changerCritereRecherche}
+          checked={critereRecherche === 'code_labo'}
         />
       </p>
       <AfficherListeDesExamens
-        listeDesExamens={listeDesExamens}
+        vueListeDesExamens={vueListeDesExamens}
         afficherExamens={afficherExamens}
         valeurRecherche={valeurRecherche}
       />
