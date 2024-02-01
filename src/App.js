@@ -33,9 +33,9 @@ function App() {
   const [onglet, setOnglet] = useState(1);
   const [connecter, setConnecter] = useState(false);
   const [nomConnecte, setNomConnecte] = useState('');
-  const [delay, setDelay] = useState(0);
+  const [delayLoad, setDelay] = useState(0);
 
-  const date_e = new Date('2024-02-05');
+  const date_e = new Date('2024-02-10');
   const date_j = new Date();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function App() {
   let contenu;
   switch(onglet) {
     case 1:
-      contenu = <Commande delay={delay} nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />
+      contenu = <Commande delayLoad={delayLoad} nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />
       break;
     case 2:
       contenu = <GestionFactures nomConnecte={nomConnecte} role={role} />;
@@ -74,10 +74,10 @@ function App() {
       contenu = <VueRecettes nomConnecte={nomConnecte} role={role} />
       break;
     case 7:
-      contenu = <Pharmacie delay={delay} nomConnecte={nomConnecte} />
+      contenu = <Pharmacie delayLoad={delayLoad} nomConnecte={nomConnecte} />
       break;
     case 8:
-      contenu = <Apercu delay={delay} nomConnecte={nomConnecte} role={role} />
+      contenu = <Apercu delayLoad={delayLoad} nomConnecte={nomConnecte} role={role} />
       break;
     case 9:
       contenu = <Assurance nomConnecte={nomConnecte} />
@@ -86,7 +86,7 @@ function App() {
       contenu = <FacturesAssurances nomConnecte={nomConnecte} />
       break;
     case 11:
-      contenu = <Modifier delay={delay} nomConnecte={nomConnecte} />
+      contenu = <Modifier delayLoad={delayLoad} nomConnecte={nomConnecte} />
       break;
     case 12:
       contenu = <TableauDeBord nomConnecte={nomConnecte} />

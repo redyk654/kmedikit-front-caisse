@@ -75,7 +75,7 @@ export default function Apercu(props) {
     
             setTimeout(() => {
                 req.send(data);
-            }, props.delay);
+            }, props.delayLoad);
         }
 
     }, [dateDepart, dateFin, caissier, assurance]);
@@ -240,7 +240,7 @@ export default function Apercu(props) {
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
                         {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
-                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal + ' Fcfa'}</span></div>
                     </div>
                     <table>
                         <thead>
