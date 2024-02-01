@@ -250,12 +250,12 @@ const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const liensPhilmedical = {
-    acceuil: 'http://localhost/philmedical/acceuil',
-}
-
-export const nomDns = backendLocal;
+export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
+
+export const liensPhilmedical = {
+    acceuil: 'http://serveur/philmedical/acceuil',
+}
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE"]
