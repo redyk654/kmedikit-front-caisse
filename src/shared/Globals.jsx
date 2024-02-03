@@ -245,12 +245,35 @@ export const convertirFormatDateJMA = (date) => {
     return formattedDate;
 }
 
+export function fusionnerStatsExamens(tableauObjets) {
+    const resultatFinal = {};
+
+    // Parcourir le tableau d'objets
+    tableauObjets.forEach(objet => {
+      const { designation, nbre_examens, resultat, nbre_resultats } = objet;
+  
+      // Si la designation n'existe pas dans le résultat final, l'ajouter avec ses propriétés
+      if (!resultatFinal[designation]) {
+        resultatFinal[designation] = { designation, nbre_examens, resultats: [{ resultat, nbre_resultats }] };
+      } else {
+        // Si la designation existe, fusionner les valeurs de nbre_examens et ajouter le résultat au tableau
+        resultatFinal[designation].nbre_examens += nbre_examens;
+        resultatFinal[designation].resultats.push({ resultat, nbre_resultats });
+      }
+    });
+  
+    // Convertir le résultat final en un tableau d'objets
+    const tableauFinal = Object.values(resultatFinal);
+  
+    return tableauFinal;    
+}
+
 const backendLocal = 'http://localhost/backend-cmab/';
 const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = hdmbanga;
+export const nomDns = backendLocal;
 export const nomServeurNode = serveur;
 
 export const liensPhilmedical = {

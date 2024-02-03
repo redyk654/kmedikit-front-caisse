@@ -3,6 +3,7 @@ import EnregExamens from './EnregExamens/EnregExamens';
 import Resultats from './Resultats/Resultats';
 import { cilArrowBottom, cilArrowTop, cilFolderOpen, cilZoom } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
+import StatsLabo from './StatsLabo/StatsLabo';
 
 export default function Laboratoire(props) {
 
@@ -16,6 +17,9 @@ export default function Laboratoire(props) {
             break;
         case 2:
             contenu = <Resultats nomConnecte={props.nomConnecte} />
+            break;
+        case 3:
+            contenu = <StatsLabo nomConnecte={props.nomConnecte} />
             break;
         default:
             break;
@@ -33,6 +37,11 @@ export default function Laboratoire(props) {
                 <CIcon icon={cilFolderOpen} size={'sm'} />
                 &nbsp;
                 Résultats
+            </div>
+            <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
+                {/* <CIcon icon={cilFolderOpen} size={'sm'} /> */}
+                &nbsp;
+                Statistiques
             </div>
         </div>
         <div className="onglets-contenu">

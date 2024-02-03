@@ -14,11 +14,11 @@ const schema = yup.object({
     'noms-patient-examen': yup.string().required(),
     'age-patient-examen': yup.number().min(0).required(),
     'sexe-patient-examen': yup.string().required(),
-    'quartier-patient-examen': yup.string().required(),
-    'profession-patient-examen': yup.string().required(),
+    'quartier-patient-examen': yup.string(),
+    'profession-patient-examen': yup.string(),
     'telephone-patient-examen': yup.string().required(),
     'service': yup.string().required(),
-    'prescripteur': yup.string().required(),
+    'prescripteur': yup.string(),
     'num-recu': yup.string().required(),
     'montant': yup.number().min(0).required(),
 }).required();
@@ -268,7 +268,7 @@ export default function EnregExamens() {
                 <CFormInput
                     {...field}
                     type='text'
-                    label='Téléphone'
+                    label='Téléphone **'
                     placeholder='Téléphone'
                     id='telephone-patient-examen'
                     className='p-2 w-75 fw-bold'
@@ -310,7 +310,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='code patient'
+                                            label='code patient **'
                                             placeholder="code patient"
                                             className='p-2 w-75 fw-bold'
                                             id='code-patient-examen'
@@ -333,7 +333,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='noms prénoms'
+                                            label='noms prénoms **'
                                             placeholder="noms prénoms"
                                             className='p-2 w-75 fw-bold'
                                             id='noms-patient-examen'
@@ -350,7 +350,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='number'
-                                            label='age'
+                                            label='age **'
                                             placeholder="age"
                                             className='p-2 w-75 fw-bold'
                                             id='age-patient-examen'
@@ -367,7 +367,7 @@ export default function EnregExamens() {
                                     render={({ field }) => (
                                         <CFormSelect
                                             {...field}
-                                            label='sexe'
+                                            label='sexe **'
                                             className='p-2 w-75 fw-bold'
                                             options={[
                                                 "choisir le sexe",
@@ -391,7 +391,6 @@ export default function EnregExamens() {
                                             placeholder="quartier"
                                             className='p-2 w-75 fw-bold'
                                             id='quartier-patient-examen'
-                                            required
                                         />
                                     )}
                                 />
@@ -408,7 +407,6 @@ export default function EnregExamens() {
                                             placeholder="profession"
                                             className='p-2 w-75 fw-bold'
                                             id='profession-patient-examen'
-                                            required
                                         />
                                     )}
                                 />
@@ -431,7 +429,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='code labo'
+                                            label='code labo **'
                                             placeholder="code labo"
                                             className='p-2 w-75 fw-bold'
                                             id='code-labo'
@@ -448,7 +446,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='service'
+                                            label='service **'
                                             placeholder="service"
                                             className='p-2 w-75 fw-bold'
                                             id='service'
@@ -475,7 +473,6 @@ export default function EnregExamens() {
                                             placeholder="prescripteur"
                                             className='p-2 w-75 fw-bold'
                                             id='prescripteur'
-                                            required
                                         />
                                     )}
                                 />
@@ -494,7 +491,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='text'
-                                            label='numéro facture'
+                                            label='numéro facture **'
                                             placeholder="numéro facture"
                                             className='p-2 w-75 fw-bold'
                                             id='num-recu'
@@ -517,7 +514,7 @@ export default function EnregExamens() {
                                         <CFormInput
                                             {...field}
                                             type='number'
-                                            label='montant'
+                                            label='montant **'
                                             placeholder="montant"
                                             className='p-2 w-75 fw-bold'
                                             id='montant'
