@@ -6,7 +6,7 @@ import ReactToPrint from 'react-to-print';
 
 export default function ModalResultats({ modalResultats, setModalResultats, examenSelectionne, detailsExamenSelectionne, handleRemarqueChange, handleResultatChange, enregistrerLesResultats, fermerModalResultats, componentRef }) {
   return (
-    <CModal size='xl' backdrop='static' scrollable visible={modalResultats} onClose={() => setModalResultats(false)}>
+    <CModal size='xl' backdrop='static' scrollable visible={modalResultats} onClose={() => {setModalResultats(false); enregistrerLesResultats();}}>
         <CModalHeader>
             <CModalTitle>Fiche des résultats</CModalTitle>          
         </CModalHeader>

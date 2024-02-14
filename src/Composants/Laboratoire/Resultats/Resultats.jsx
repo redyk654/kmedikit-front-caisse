@@ -71,7 +71,7 @@ export default function Resultats() {
     details.forEach(item => {
       item.examens.forEach(examen => {
         if (parseInt(examen.id) === parseInt(id)) {
-          examen.resultat = e.target.value;
+          examen.resultat = e.target.value.trim().toLowerCase();
         }
       })
     })
@@ -85,7 +85,7 @@ export default function Resultats() {
     details.forEach(item => {
       item.examens.forEach(examen => {
         if (parseInt(examen.id) === parseInt(id)) {
-          examen.remarque = e.target.value;
+          examen.remarque = e.target.value.trim().toLowerCase();
         }
       })
     });

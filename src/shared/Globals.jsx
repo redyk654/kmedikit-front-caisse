@@ -273,7 +273,7 @@ const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = backendLocal;
+export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
 
 export const liensPhilmedical = {
