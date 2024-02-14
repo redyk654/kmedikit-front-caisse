@@ -147,9 +147,11 @@ export default function GestionFactures(props) {
             const req2 = new XMLHttpRequest();
             req2.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
-                setMessageErreur('');
-                const result = JSON.parse(req2.responseText);
-                setManquantTotal(result[0].manquant);
+                setTimeout(() => {
+                    setMessageErreur('');
+                    const result = JSON.parse(req2.responseText);
+                    setManquantTotal(result[0].manquant);
+                }, props.delayLoad);
             })
 
             req2.addEventListener("error", function () {
@@ -157,18 +159,19 @@ export default function GestionFactures(props) {
                 setMessageErreur('Erreur réseau');
             });
 
-            req2.send();
+            req2.send();               
 
         } else {
             req.open('GET', `${nomDns}factures_pharmacie.php`);
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                setMessageErreur('');
-                const result = JSON.parse(req.responseText);
-                setFactures(result);
-                setfactureSauvegarde(result);
-
+                setTimeout(() => {
+                    setMessageErreur('');
+                    const result = JSON.parse(req.responseText);
+                    setFactures(result);
+                    setfactureSauvegarde(result);
+                }, props.delayLoad);
             } else {
                 // Affichage des informations sur l'échec du traitement de la requête
                 console.error(req.status + " " + req.statusText);
@@ -227,9 +230,11 @@ export default function GestionFactures(props) {
             req.open('GET', `${nomDns}factures_pharmacie.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
-                setMessageErreur('');
-                const result = JSON.parse(req.responseText);
-                setdetailsFacture(result);
+                setTimeout(() => {
+                    setMessageErreur('');
+                    const result = JSON.parse(req.responseText);
+                    setdetailsFacture(result);
+                }, props.delayLoad);
             });
 
             req.addEventListener("error", function () {
@@ -286,37 +291,39 @@ export default function GestionFactures(props) {
 
             req.addEventListener('load', () => {
                 // Mise à jour des stocks des médicaments vendus
-                let i = 0;
-                setMessageErreur('');
-                detailsFacture.map(item => {
-                    const data1 = new FormData();
-                    data1.append('produit', JSON.stringify(item));
-                    data1.append('caissier', props.nomConnecte);
-
-                    const req1 = new XMLHttpRequest();
-                    req1.open('POST', `${nomDns}maj_medocs.php`);
-
-                    req1.addEventListener("load", function () {
-                        if (req1.status >= 200 && req1.status < 400) {
-                            setMessageErreur('');
-                            socket.emit('actualiser_facture_pharmacie');
-                            i++;
-                            if (i === detailsFacture.length) {
-                                enregistrerAssurance()
-                                setSupp(false);
-                                setModalReussi(true);
+                setTimeout(() => {
+                    let i = 0;
+                    setMessageErreur('');
+                    detailsFacture.map(item => {
+                        const data1 = new FormData();
+                        data1.append('produit', JSON.stringify(item));
+                        data1.append('caissier', props.nomConnecte);
+    
+                        const req1 = new XMLHttpRequest();
+                        req1.open('POST', `${nomDns}maj_medocs.php`);
+    
+                        req1.addEventListener("load", function () {
+                            if (req1.status >= 200 && req1.status < 400) {
+                                setMessageErreur('');
+                                socket.emit('actualiser_facture_pharmacie');
+                                i++;
+                                if (i === detailsFacture.length) {
+                                    enregistrerAssurance()
+                                    setSupp(false);
+                                    setModalReussi(true);
+                                }
                             }
-                        }
+                        });
+    
+                        req1.addEventListener("error", function () {
+                            // La requête n'a pas réussi à atteindre le serveur
+                            setMessageErreur('Erreur réseau');
+                        });
+                
+    
+                        req1.send(data1);
                     });
-
-                    req1.addEventListener("error", function () {
-                        // La requête n'a pas réussi à atteindre le serveur
-                        setMessageErreur('Erreur réseau');
-                    });
-            
-
-                    req1.send(data1);
-                });
+                }, props.delayLoad);
             });
 
             req.addEventListener("error", function () {

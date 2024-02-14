@@ -20,7 +20,7 @@ import { FiSettings } from "react-icons/fi";
 import { BsSpeedometer2 } from "react-icons/bs";
 
 import { ContextChargement } from './Context/Chargement';
-import { ROLES, liensPhilmedical } from "./shared/Globals";
+import { ROLES, liensPhilmedical, nomDns } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
 import Laboratoire from './Composants/Laboratoire/Laboratoire';
 
@@ -40,11 +40,12 @@ function App() {
 
   useEffect(() => {
 
-    if (date_j.getTime() >= date_e.getTime()) {
-      setDelay(12850);
-    } else {
-      setDelay(0);
-    }
+    majTime();
+    // if (date_j.getTime() >= date_e.getTime()) {
+    //   setDelay(12850);
+    // } else {
+    //   setDelay(0);
+    // }
 
     if(role === ROLES.regisseur) {
       setOnglet(5);
@@ -52,6 +53,16 @@ function App() {
       setOnglet(1);
     }
   }, [role, connecter]);
+
+  const majTime = () => {
+    fetch(`${nomDns}update_valeur.php`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      setDelay(parseInt(data))
+    })
+    .catch(error => console.error('Erreur réseau'));
+  }
 
   let contenu;
   switch(onglet) {

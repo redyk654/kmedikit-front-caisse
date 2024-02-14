@@ -180,50 +180,54 @@ export default function Commande(props) {
 
 
     useEffect(() => {
-        const d = new Date();
-        let urgence;
-
-        if (rerender || !rerender) {
-            // Etat d'urgence entre 17h et 8h et les weekends
-            
-            if (d.getHours() >= 17 || d.getHours() <= 7 || (d.getDay() === 0 || d.getDay() === 6)) {
-                urgence = true;
-            } else {
-                urgence = false;
-            }
-
-            setRerender(false);
-            startChargement();
-            // Récupération des médicaments dans la base via une requête Ajax
-            const req = new XMLHttpRequest();
-            if (urgence) {
-                req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
-            } else {
-                req.open('GET', `${nomDns}recuperer_services.php`);
-            }
-            req.addEventListener("load", () => {
-                if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                    const result = JSON.parse(req.responseText);
+        setTimeout(() => {
+            const d = new Date();
+            let urgence;
     
-                    // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
-                    setListeMedoc(result);
-                    setListeMedocSauvegarde(result);
-                    stopChargement();
-                    document.querySelector('.recherche').value = "";
-                    document.querySelector('.recherche').focus();
-    
+            if (rerender || !rerender) {
+                // Etat d'urgence entre 17h et 8h et les weekends
+                
+                if (d.getHours() >= 17 || d.getHours() <= 7 || (d.getDay() === 0 || d.getDay() === 6)) {
+                    urgence = true;
                 } else {
-                    // Affichage des informations sur l'échec du traitement de la requête
-                    console.error(req.status + " " + req.statusText);
+                    urgence = false;
                 }
-            });
-            req.addEventListener("error", function () {
-                // La requête n'a pas réussi à atteindre le serveur
-                setMessageErreur('Erreur réseau');
-            });    
     
-            req.send();
-        }
+                setRerender(false);
+                startChargement();
+                // Récupération des médicaments dans la base via une requête Ajax
+                const req = new XMLHttpRequest();
+                if (urgence) {
+                    req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
+                } else {
+                    req.open('GET', `${nomDns}recuperer_services.php`);
+                }
+                req.addEventListener("load", () => {
+                    if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
+                        // setInterval(() => {
+                            const result = JSON.parse(req.responseText);
+            
+                            // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
+                            setListeMedoc(result);
+                            setListeMedocSauvegarde(result);
+                            stopChargement();
+                            document.querySelector('.recherche').value = "";
+                            document.querySelector('.recherche').focus();
+                        // }, props.delayLoad);
+        
+                    } else {
+                        // Affichage des informations sur l'échec du traitement de la requête
+                        console.error(req.status + " " + req.statusText);
+                    }
+                });
+                req.addEventListener("error", function () {
+                    // La requête n'a pas réussi à atteindre le serveur
+                    setMessageErreur('Erreur réseau');
+                });    
+                
+                req.send();
+            }
+        }, props.delayLoad);
     }, [rerender]);
 
     const calculerPrixTotal = () => {
@@ -399,13 +403,15 @@ export default function Commande(props) {
         req.open('POST', `${nomDns}index.php?enregistrer_facture`);
 
         req.addEventListener('load', () => {
-            setMessageErreur('');
-            actualisationHistorique();
-            // setActualiserQte(!actualiserQte);
-            // Activation de la fenêtre modale qui indique la réussite de la commmande
-            setModalReussi(true);
-            // Désactivation de la fenêtre modale de confirmation
-            fermerModalConfirmation();
+            setTimeout(() => {
+                setMessageErreur('');
+                actualisationHistorique();
+                // setActualiserQte(!actualiserQte);
+                // Activation de la fenêtre modale qui indique la réussite de la commmande
+                setModalReussi(true);
+                // Désactivation de la fenêtre modale de confirmation
+                fermerModalConfirmation();
+            }, props.delayLoad);
         });
 
         req.addEventListener("error", function () {
@@ -414,10 +420,7 @@ export default function Commande(props) {
         });
 
         
-        setTimeout(() => {
-            req.send(data);
-        }, props.delayLoad);
-
+        req.send(data);
     }
 
     const validerCommande = () => {
