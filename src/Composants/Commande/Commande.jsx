@@ -403,15 +403,13 @@ export default function Commande(props) {
         req.open('POST', `${nomDns}index.php?enregistrer_facture`);
 
         req.addEventListener('load', () => {
-            setTimeout(() => {
-                setMessageErreur('');
-                actualisationHistorique();
-                // setActualiserQte(!actualiserQte);
-                // Activation de la fenêtre modale qui indique la réussite de la commmande
-                setModalReussi(true);
-                // Désactivation de la fenêtre modale de confirmation
-                fermerModalConfirmation();
-            }, props.delayLoad);
+            setMessageErreur('');
+            actualisationHistorique();
+            // setActualiserQte(!actualiserQte);
+            // Activation de la fenêtre modale qui indique la réussite de la commmande
+            setModalReussi(true);
+            // Désactivation de la fenêtre modale de confirmation
+            fermerModalConfirmation();
         });
 
         req.addEventListener("error", function () {

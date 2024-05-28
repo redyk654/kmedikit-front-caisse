@@ -52,22 +52,20 @@ export default function Apercu(props) {
             req.open('POST', `${nomDns}apercu.php`);
     
             req.addEventListener('load', () => {
-                setTimeout(() => {
-                    setMessageErreur('');
-                    // console.log(JSON.parse(req.responseText));
-                    recupererRecetteTotal(data);
-                    const result = JSON.parse(req.responseText);
-                    sethistorique(result);
-                    
-                    let t = 0;
-                    result.forEach(item => {
-                        t += parseInt(item.prix_total);
-                    })
-    
-                    setTotal(t);
-    
-                    stopChargement();
-                }, props.delayLoad);
+                setMessageErreur('');
+                // console.log(JSON.parse(req.responseText));
+                recupererRecetteTotal(data);
+                const result = JSON.parse(req.responseText);
+                sethistorique(result);
+                
+                let t = 0;
+                result.forEach(item => {
+                    t += parseInt(item.prix_total);
+                })
+
+                setTotal(t);
+
+                stopChargement();
             });
     
             req.addEventListener("error", function () {
