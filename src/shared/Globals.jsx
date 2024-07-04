@@ -245,13 +245,24 @@ export const convertirFormatDateJMA = (date) => {
     return formattedDate;
 }
 
+
 const backendLocal = 'http://localhost/backend-cmab/';
 const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = hdmbanga;
+export const nomDns = backendLocal;
 export const nomServeurNode = serveur;
+
+export const getDateTime = async () => {
+    try {
+        const response = await fetch(`${backendLocal}get_time.php`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching date:', error);
+    }
+}
 
 export const liensPhilmedical = {
     acceuil: 'http://serveur/philmedical/acceuil',

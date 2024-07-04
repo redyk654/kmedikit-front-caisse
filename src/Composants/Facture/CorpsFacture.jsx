@@ -1,5 +1,5 @@
-import React from 'react';
-import { extraireCode, mois } from '../../shared/Globals';
+import React, { useEffect, useState } from 'react';
+import { extraireCode, getDateTime, mois } from '../../shared/Globals';
 
 
 const table_styles1 = {
@@ -28,6 +28,25 @@ const table_styles = {
 }
 
 export default function CorpsFacture(props) {
+
+    const [currentDate, setCurrentDate] = useState('');
+    const[isEmpty, setIsEmpty] = useState(true);
+
+    useEffect(() => {
+        execGetDateTime();
+    }, []);
+
+    const execGetDateTime = async () => {
+        const dateTime = await getDateTime();
+        console.log(dateTime.date);
+        setCurrentDate(dateTime.date);
+        setIsEmpty(false);
+    }
+
+    if(isEmpty) {
+        return <div>Chargement</div>
+    }
+
   return (
     <div className='' style={{height: '35vh', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px',}}>
         <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
@@ -39,10 +58,8 @@ export default function CorpsFacture(props) {
                 </span>
             </div>
             <div style={{marginTop: '3px'}}>
-                Le <strong>{props.date ? mois(props.date.substring(0, 10)) : 
-                mois((new Date().toLocaleDateString()))}
-                </strong> à <strong>{props.date ? props.date.substring(11, 19) : 
-                (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
+                Le <strong>{mois(currentDate.substring(0, 10))}
+                </strong> à <strong>{currentDate.substring(11, 19)}</strong>
             </div>
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 patient :

@@ -466,22 +466,22 @@ export default function GestionFactures(props) {
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
                                 <FactureEnreg
-                                ref={componentRef}
-                                detailsFacture={detailsFacture}
-                                idFacture={factureSelectionne[0].id}
-                                patient={factureSelectionne[0].patient}
-                                codePatient={factureSelectionne[0].code_patient}
-                                prixTotal={factureSelectionne[0].prix_total}
-                                reduction={factureSelectionne[0].reduction}
-                                aPayer={factureSelectionne[0].a_payer}
-                                montantVerse={0}
-                                relicat={factureSelectionne[0].relicat}
-                                assurance={factureSelectionne[0].assurance}
-                                type_assurance={factureSelectionne[0].type_assurance}
-                                resteaPayer={factureSelectionne[0].reste_a_payer}
-                                date={factureSelectionne[0].date_heure}
-                                nomConnecte={factureSelectionne[0].caissier}
-                                montantFrais={factureSelectionne[0].frais}
+                                    ref={componentRef}
+                                    detailsFacture={detailsFacture}
+                                    idFacture={factureSelectionne[0].id}
+                                    patient={factureSelectionne[0].patient}
+                                    codePatient={factureSelectionne[0].code_patient}
+                                    prixTotal={factureSelectionne[0].prix_total}
+                                    reduction={factureSelectionne[0].reduction}
+                                    aPayer={factureSelectionne[0].a_payer}
+                                    montantVerse={0}
+                                    relicat={factureSelectionne[0].relicat}
+                                    assurance={factureSelectionne[0].assurance}
+                                    type_assurance={factureSelectionne[0].type_assurance}
+                                    resteaPayer={factureSelectionne[0].reste_a_payer}
+                                    date={factureSelectionne[0].date_heure}
+                                    nomConnecte={factureSelectionne[0].caissier}
+                                    montantFrais={factureSelectionne[0].frais}
                                 />
                             </div>
                         )}

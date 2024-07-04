@@ -56,7 +56,6 @@ function App() {
     fetch(`${nomDns}update_valeur.php`)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       setDelay(parseInt(data))
     })
     .catch(error => console.error('Erreur réseau'));

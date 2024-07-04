@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode, getDateTime } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -177,7 +177,6 @@ export default function Commande(props) {
             }, 8000);
         }
     }, []);
-
 
     useEffect(() => {
         setTimeout(() => {
