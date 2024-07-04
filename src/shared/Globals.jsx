@@ -246,15 +246,15 @@ export const convertirFormatDateJMA = (date) => {
 }
 
 const backendLocal = 'http://localhost/backend-cmab/';
-const hdmbanga = 'http://serveur/hdmbanga/';
+const hdmbanga = 'http://192.168.0.2/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
-const serveur = 'http://serveur:3010';
+const serveur = 'http://192.168.0.2:3010';
 
 export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
 
 export const liensPhilmedical = {
-    acceuil: 'http://localhost/philmedical/acceuil',
+    acceuil: 'http://192.168.0.2/philmedical/acceuil',
 }
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
