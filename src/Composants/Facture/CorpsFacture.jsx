@@ -38,7 +38,6 @@ export default function CorpsFacture(props) {
 
     const execGetDateTime = async () => {
         const dateTime = await getDateTime();
-        console.log(dateTime.date);
         setCurrentDate(dateTime.date);
         setIsEmpty(false);
     }

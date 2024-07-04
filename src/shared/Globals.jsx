@@ -127,18 +127,6 @@ export const styleEntete = {
     fontSize: 5
 }
 
-export const recupererDateJour = (idElement) => {
-    var today = new Date();
-
-    document.querySelector(`#${idElement}`).value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-}
-
-export const recupererHeureJour = (idElement) => {
-    let today = new Date();
-
-    document.querySelector(`#${idElement}`).value = ('0' + (today.getHours())).slice(-2) +  ":" + ('0' + (today.getMinutes())).slice(-2);
-}
-
 export const formaterNombre = (nombre) => {
     return nombre.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
@@ -247,16 +235,16 @@ export const convertirFormatDateJMA = (date) => {
 
 
 const backendLocal = 'http://localhost/backend-cmab/';
-const hdmbanga = 'http://serveur/hdmbanga/';
+const hdmbanga = 'http://192.168.0.2/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
-const serveur = 'http://serveur:3010';
+const serveur = 'http://192.168.0.2:3010';
 
-export const nomDns = backendLocal;
+export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
 
 export const getDateTime = async () => {
     try {
-        const response = await fetch(`${backendLocal}get_time.php`);
+        const response = await fetch(`${hdmbanga}get_time.php`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -264,8 +252,24 @@ export const getDateTime = async () => {
     }
 }
 
+export const convertirDateAvecTiret = (date) => {
+    const [jour, mois, annee] = date.split('/');
+    return `${annee}-${mois}-${jour}`;
+}
+
+export const recupererDateJour = async (idElement) => {
+    let today = await getDateTime();
+    today = convertirDateAvecTiret(today.date.substring(0, 10));
+    document.querySelector(`#${idElement}`).value = today;
+}
+
+export const recupererHeureJour = async (idElement) => {
+    const today = await getDateTime();
+    document.querySelector(`#${idElement}`).value = today.date.substring(11, 16);
+}
+
 export const liensPhilmedical = {
-    acceuil: 'http://serveur/philmedical/acceuil',
+    acceuil: 'http://192.168.0.2/philmedical/acceuil',
 }
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
