@@ -145,10 +145,10 @@ export default function GestionRecette(props) {
                 sethistorique(result);
                 // recupererRecetteGeneralites(data, result);
 
-                let t = 0;
-                t = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
+                // let t = 0;
+                // t = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
 
-                setTotal(t);
+                // setTotal(t);
             });
     
             req.send(data);
@@ -169,13 +169,13 @@ export default function GestionRecette(props) {
                 let result = JSON.parse(req.responseText);
                 result = result.filter(item => (item.caissier.toLowerCase() === caissier.toLowerCase()));
                 
-                let recette = 0, f = 0;
+                let recette = 0, pTotal = 0;
                 result.forEach(item => {
                     recette += parseInt(item.a_payer);
-                    f += parseInt(item.frais);
+                    pTotal += parseInt(item.prix_total);
                 });
                 setRecetteTotal(recette);
-                setFrais(f);
+                setTotal(pTotal);
             }
         });
         req.send(data);

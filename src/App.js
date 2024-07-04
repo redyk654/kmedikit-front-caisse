@@ -22,7 +22,6 @@ import { BsSpeedometer2 } from "react-icons/bs";
 import { ContextChargement } from './Context/Chargement';
 import { ROLES, liensPhilmedical } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
-import Laboratoire from './Composants/Laboratoire/Laboratoire';
 
 
 
@@ -98,7 +97,6 @@ function App() {
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
       break;
     case 13:
-      contenu = <Laboratoire nomConnecte={nomConnecte} />
       break;
     default:
       break;
