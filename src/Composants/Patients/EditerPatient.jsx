@@ -5,7 +5,7 @@ import './EditerPatient.css'
 import { ROLES, SEXES, nomDns } from "../../shared/Globals";
 import CustomLoader from '../../shared/CustomLoader';
 
-export default function EditerPatient({ ajouterNouveauPatient, resetInfosDuPatient, handleChange, fermerEditerPatient, ouvrirModalPatient, nom, age, sexe, quartier, assurance, type_assurance }) {
+export default function EditerPatient({ ajouterNouveauPatient, resetInfosDuPatient, handleChange, fermerEditerPatient, ouvrirModalPatient, nom, age, sexe, quartier, assurance, type_assurance, msgPatient }) {
 
     const {role} = useContext(ContextChargement);
 
@@ -78,6 +78,7 @@ export default function EditerPatient({ ajouterNouveauPatient, resetInfosDuPatie
         </div>
         <div style={{textAlign: 'center', margin: '10px', color: '#df322d'}}>
             {messageErreur}
+            {msgPatient}
         </div>
         {enCours ? 
             <CustomLoader

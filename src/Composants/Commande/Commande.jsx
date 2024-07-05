@@ -785,6 +785,7 @@ export default function Commande(props) {
                     quartier={quartier}
                     assurance={assurance}
                     type_assurance={type_assurance}
+                    msgPatient={msgPatient}
                 />
             </Modal>
             <Modal
