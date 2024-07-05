@@ -9,7 +9,7 @@ import CIcon from '@coreui/icons-react'
 import { cilReload, cilXCircle } from '@coreui/icons';
 import { io } from 'socket.io-client';
 
-const socket = io.connect('http://serveur:3010');
+// const socket = io.connect('http://serveur:3010');
 
 const customStyles2 = {
     content: {
@@ -133,12 +133,12 @@ export default function GestionFactures(props) {
 
     }, [effet2])
 
-    useEffect(() => {
-        socket.on('acte_supprime', () => {
-            seteffet(!effet);
-            setdetailsFacture([]);
-        })
-    }, [socket])
+    // useEffect(() => {
+    //     socket.on('acte_supprime', () => {
+    //         seteffet(!effet);
+    //         setdetailsFacture([]);
+    //     })
+    // }, [socket])
 
     const afficherInfos = (e) => {
         // Affichage des informations de la facture selectionnée
@@ -281,7 +281,7 @@ export default function GestionFactures(props) {
             if (req.status >= 200 && req.status < 400) {
                 setfactureSelectionne([{...factureSelectionne[0], a_payer: nouveauNetAPayer}]);
                 seteffet(!effet);
-                socket.emit('suppression_acte');
+                // socket.emit('suppression_acte');
             }
         });
 

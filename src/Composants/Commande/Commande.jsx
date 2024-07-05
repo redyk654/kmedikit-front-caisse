@@ -16,7 +16,7 @@ import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`${nomServeurNode}`);
+// const socket = io.connect(`${nomServeurNode}`);
 
 // Styles pour les fenêtres modales
 const customStyles1 = {
@@ -155,6 +155,7 @@ export default function Commande(props) {
     const [modalPatient, setModalPatient] = useState(false);
     const [modalReussi, setModalReussi] = useState(false);
     const [rerender, setRerender] = useState(true);
+    const [msgPatient, setMsgPatient] = useState('');
 
     const {designation, prix} = autreState;
 
@@ -179,7 +180,7 @@ export default function Commande(props) {
     }, []);
 
     useEffect(() => {
-        setTimeout(() => {
+        // setTimeout(() => {
             const d = new Date();
             let urgence;
     
@@ -226,7 +227,7 @@ export default function Commande(props) {
                 
                 req.send();
             }
-        }, props.delayLoad);
+        // }, props.delayLoad);
     }, [rerender]);
 
     const calculerPrixTotal = () => {
@@ -370,11 +371,11 @@ export default function Commande(props) {
                .substring(1).toUpperCase();
     }
 
-    const actualisationHistorique = () => {
-        setTimeout(() => {
-            socket.emit('actualisation_historique');
-        }, 5000);
-    }
+    // const actualisationHistorique = () => {
+    //     setTimeout(() => {
+    //         socket.emit('actualisation_historique');
+    //     }, 5000);
+    // }
 
     const enregisterFacture = (id) => {
 
@@ -403,7 +404,7 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             setMessageErreur('');
-            actualisationHistorique();
+            // actualisationHistorique();
             // setActualiserQte(!actualiserQte);
             // Activation de la fenêtre modale qui indique la réussite de la commmande
             setModalReussi(true);
@@ -750,9 +751,15 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
-                setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
-                fermerEditerPatient();
-                resetInfosDuPatient();
+                const result = JSON.parse(req.responseText);
+                if (result.message.toLowerCase() !== 'existe') {
+                    setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
+                    fermerEditerPatient();
+                    resetInfosDuPatient();
+                    setMsgPatient('');
+                } else {
+                    setMsgPatient('Ce patient existe déjà');
+                }
             }
         });
 

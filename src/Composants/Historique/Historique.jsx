@@ -8,7 +8,7 @@ import { extraireCode, mois, nomDns, nomServeurNode, recupererDateJour, recupere
 import { CBadge } from '@coreui/react';
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`${nomServeurNode}`);
+// const socket = io.connect(`${nomServeurNode}`);
 
 
 export default function Historique(props) {
@@ -50,15 +50,15 @@ export default function Historique(props) {
         }
     }, []);
 
-    useEffect(() => {
-        socket.on('actualiser_historique', () => {
-            recupererHeureJour('heure-f-listing');
-            setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
-            setSearch(!search);
-            execRechercherHistorique();
-        });
+    // useEffect(() => {
+    //     socket.on('actualiser_historique', () => {
+    //         recupererHeureJour('heure-f-listing');
+    //         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
+    //         setSearch(!search);
+    //         execRechercherHistorique();
+    //     });
   
-      }, [socket])
+    //   }, [socket])
 
     useEffect(() => {
         execRechercherHistorique();

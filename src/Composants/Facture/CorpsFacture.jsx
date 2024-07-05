@@ -58,7 +58,7 @@ export default function CorpsFacture(props) {
             </div>
             <div style={{marginTop: '3px'}}>
                 Le <strong>{mois(currentDate.substring(0, 10))}
-                </strong> à <strong>{currentDate.substring(11, 19)}</strong>
+                </strong> à <strong>{currentDate.substring(11, 16)}</strong>
             </div>
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 patient :

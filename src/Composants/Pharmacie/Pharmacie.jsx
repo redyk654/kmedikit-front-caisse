@@ -8,7 +8,7 @@ import { FaCheck } from 'react-icons/fa';
 import { mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`${nomServeurNode}`);
+// const socket = io.connect(`${nomServeurNode}`);
 
 const customStyles1 = {
     content: {
@@ -116,18 +116,18 @@ export default function GestionFactures(props) {
         req.send();
     }
 
-    useEffect(() => {
-        socket.on('maj_produits', (data) => {
-            setFiltrer(true);
-            rechercherListePatients();
-        });
+    // useEffect(() => {
+    //     socket.on('maj_produits', (data) => {
+    //         setFiltrer(true);
+    //         rechercherListePatients();
+    //     });
 
-        socket.on('maj_facture_pharmacie', () => {
-            setFiltrer(true);
-            rechercherListePatients();
-        });
+    //     socket.on('maj_facture_pharmacie', () => {
+    //         setFiltrer(true);
+    //         rechercherListePatients();
+    //     });
   
-      }, [socket])
+    //   }, [socket])
 
     useEffect(() => {
         rechercherListePatients();
@@ -147,11 +147,11 @@ export default function GestionFactures(props) {
             const req2 = new XMLHttpRequest();
             req2.open('GET', `${nomDns}factures_pharmacie.php?filtrer=oui&manquant`);
             req2.addEventListener('load', () => {
-                setTimeout(() => {
+                // setTimeout(() => {
                     setMessageErreur('');
                     const result = JSON.parse(req2.responseText);
                     setManquantTotal(result[0].manquant);
-                }, props.delayLoad);
+                // }, props.delayLoad);
             })
 
             req2.addEventListener("error", function () {
@@ -166,12 +166,12 @@ export default function GestionFactures(props) {
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                setTimeout(() => {
+                // setTimeout(() => {
                     setMessageErreur('');
                     const result = JSON.parse(req.responseText);
                     setFactures(result);
                     setfactureSauvegarde(result);
-                }, props.delayLoad);
+                // }, props.delayLoad);
             } else {
                 // Affichage des informations sur l'échec du traitement de la requête
                 console.error(req.status + " " + req.statusText);
@@ -230,11 +230,11 @@ export default function GestionFactures(props) {
             req.open('GET', `${nomDns}factures_pharmacie.php?id=${factureSelectionne[0].id}`);
     
             req.addEventListener('load', () => {
-                setTimeout(() => {
+                // setTimeout(() => {
                     setMessageErreur('');
                     const result = JSON.parse(req.responseText);
                     setdetailsFacture(result);
-                }, props.delayLoad);
+                // }, props.delayLoad);
             });
 
             req.addEventListener("error", function () {
@@ -305,7 +305,7 @@ export default function GestionFactures(props) {
                         req1.addEventListener("load", function () {
                             if (req1.status >= 200 && req1.status < 400) {
                                 setMessageErreur('');
-                                socket.emit('actualiser_facture_pharmacie');
+                                // socket.emit('actualiser_facture_pharmacie');
                                 i++;
                                 if (i === detailsFacture.length) {
                                     enregistrerAssurance()
@@ -608,6 +608,7 @@ export default function GestionFactures(props) {
                                     resteaPayer={0}
                                     date={factureSelectionne[0].date_heure}
                                     caissier={props.nomConnecte}
+                                    commis={factureSelectionne[0].vendeur}
                                     assurance={factureSelectionne[0].assurance}
                                     type_assurance={factureSelectionne[0].type_assurance}
                                 />

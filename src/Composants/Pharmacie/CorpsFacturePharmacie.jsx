@@ -42,9 +42,9 @@ export default function CorpsFacturePharmacie(props) {
             </div>
             <div style={{marginTop: '3px'}}>
                 Le <strong>{props.date ? mois(props.date.substring(0, 10)) : 
-                mois((new Date().toLocaleDateString()))}
+                null}
                 </strong> à <strong>{props.date ? props.date.substring(11, 19) : 
-                (new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</strong>
+                (null)}</strong>
             </div>
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 patient :
@@ -105,6 +105,7 @@ export default function CorpsFacturePharmacie(props) {
                 </div>
             </div>
             <div style={{marginTop: '15px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{props.nomConnecte.toUpperCase()}</span></div>
+            <div style={{marginTop: '4px', textAlign: 'right', paddingRight: '30px'}}>Commis pharmacie : <span style={{fontWeight: '600', marginTop: '4px', textTransform: 'capitalize'}}>{props.commis.toUpperCase()}</span></div>
             <div style={{fontStyle: 'italic', marginTop: '9px'}}> Bonne Guérison !!!</div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { extraireCode, mois, mois2, styleEntete } from '../../shared/Globals';
+import { extraireCode, getDateTime, mois, mois2, styleEntete } from '../../shared/Globals';
 import logo from '../../images/logo-minsante.png';
 
 const styles = {
@@ -36,26 +36,40 @@ const table_styles = {
 
 export default class ImprimerHistorique extends Component {
 
+    // state
+    state = {
+        currentDate: ''
+    }
+
+    componentDidMount() {
+        this.execGetDateTime();
+    }
+
+     execGetDateTime = async () => {
+        const dateTime = await getDateTime();
+        this.setState({currentDate: dateTime.date});
+    }
+
     render() {
         return (
             <div style={{backgroundColor: '#f1f1f1', height: '100vh', marginTop: '70px'}}>
                 <div className='logo-minsante'>
-                    <img src={logo} alt="" width={80} height={80} />
+                    {/* <img src={logo} alt="" width={80} height={80} /> */}
                 </div>
                 <div style={{textTransform: 'uppercase', color: 'black', padding: '15px 135px', fontSize: 7, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
                         <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
                         <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
-                        <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-                        <div style={styleEntete}><strong>Hôpital de district de Mbanga</strong></div>
+                        <div style={styleEntete}><strong>District sante de Japoma</strong></div>
+                        <div style={styleEntete}><strong>Hôpital de district de Japoma</strong></div>
                     </div>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
                         <div style={styleEntete}><strong>Ministry of Public Health</strong></div>
                         <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
-                        <div style={styleEntete}><strong>Mbanga Health District</strong></div>
-                        <div style={styleEntete}><strong>District Hospital of Mbanga</strong></div>
+                        <div style={styleEntete}><strong>Japoma Health District</strong></div>
+                        <div style={styleEntete}><strong>District Hospital of Japoma</strong></div>
                     </div>
                 </div>
                 <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
@@ -63,7 +77,7 @@ export default class ImprimerHistorique extends Component {
                         <div style={{marginTop: 5, fontSize: 14}}>Fiche de recette de la caisse pour les patients <strong>{this.props.listing === 'non' ? 'non assurés' : 'assurés'}</strong> </div>
                         <div style={{marginTop: 5}}>
                             tiré le &nbsp;
-                            <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.infoRecette ? mois(this.props.infoRecette[0].date_heure.substring(0, 11)) : (mois(new Date().toLocaleDateString()) + ' ')} à {this.props.infoRecette ? this.props.infoRecette[0].date_heure.substring(11,) : (' ' + new Date().getHours() + 'h' + new Date().getMinutes() + 'min')}</span>
+                            <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.infoRecette ? mois(this.props.infoRecette[0].date_heure.substring(0, 11)) : (mois(this.state.currentDate.substring(0, 10)) + ' ')} à {this.props.infoRecette ? this.props.infoRecette[0].date_heure.substring(11,) : (' ' + this.state.currentDate.substring(11, 16))}</span>
                         </div>
                         <div style={{marginTop: 5}}>Caissier <span style={{fontWeight: '600', marginTop: '15px'}}>{this.props.nomConnecte.toUpperCase()}</span></div>
                         <div style={{marginTop: 5}}>Du <span style={{fontWeight: '600', marginTop: '15px'}}>{mois2(this.props.dateDepart)} à {this.props.dateDepart.substring(10, 13)}h{this.props.dateDepart.substring(14, 16)}min</span> Au <strong>{mois2(this.props.dateFin)} à {this.props.dateFin.substring(10, 13)}h{this.props.dateFin.substring(14, 16)}min</strong></div>
