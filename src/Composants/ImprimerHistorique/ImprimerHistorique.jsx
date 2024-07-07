@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { extraireCode, getDateTime, mois, mois2, styleEntete } from '../../shared/Globals';
-import logo from '../../images/logo-minsante.png';
+import logo from '../../images/logo_hdj.png';
 
 const styles = {
     // display: 'flex',
@@ -54,7 +54,7 @@ export default class ImprimerHistorique extends Component {
         return (
             <div style={{backgroundColor: '#f1f1f1', height: '100vh', marginTop: '70px'}}>
                 <div className='logo-minsante'>
-                    {/* <img src={logo} alt="" width={80} height={80} /> */}
+                    <img src={logo} alt="" width={80} height={80} />
                 </div>
                 <div style={{textTransform: 'uppercase', color: 'black', padding: '15px 135px', fontSize: 7, marginBottom: '12px', width: '100%', display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{ lineHeight: '20px'}}>
@@ -63,6 +63,12 @@ export default class ImprimerHistorique extends Component {
                         <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
                         <div style={styleEntete}><strong>District sante de Japoma</strong></div>
                         <div style={styleEntete}><strong>Hôpital de district de Japoma</strong></div>
+                        <div style={{...styleEntete, lineHeight: '12px'}}>
+                            <strong>
+                                B.P 7051 <br />
+                                Tel: 695 19 38 35
+                            </strong>
+                        </div>
                     </div>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
@@ -70,6 +76,12 @@ export default class ImprimerHistorique extends Component {
                         <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
                         <div style={styleEntete}><strong>Japoma Health District</strong></div>
                         <div style={styleEntete}><strong>District Hospital of Japoma</strong></div>
+                        <div style={{...styleEntete, lineHeight: '12px'}}>
+                            <strong>
+                                B.P 7051 <br />
+                                Tel: 695 19 38 35
+                            </strong>
+                        </div>
                     </div>
                 </div>
                 <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>

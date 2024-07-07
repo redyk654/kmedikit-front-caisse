@@ -1,6 +1,6 @@
 import React from 'react';
 import { styleEntete } from './Globals';
-import logo from '../images/logo-minsante.png';
+import logo from '../images/logo_hdj.png';
 
 export default function EnteteHopital() {
   return (
@@ -13,14 +13,13 @@ export default function EnteteHopital() {
             <div style={styleEntete}><strong>Hôpital de District de Japoma</strong></div>
             <div style={{...styleEntete, lineHeight: '12px'}}>
                 <strong>
-                    B.P. 29 Mbanga <br />
-                    Tel: 243 53 62 60 / 243 53 62 61 <br />
-                    hdmbanga@yahoo.com
+                    B.P 7051 <br />
+                    Tel: 695 19 38 35
                 </strong>
             </div>
         </div>
         <div style={{paddingTop: '80px'}}>
-            {/* <img src={logo} alt="" width={60} height={60} /> */}
+            <img src={logo} alt="" width={60} height={60} />
         </div>
         <div style={{ lineHeight: '20px'}}>
             <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
@@ -30,9 +29,8 @@ export default function EnteteHopital() {
             <div style={styleEntete}><strong>District Hospital of Japoma</strong></div>
             <div style={{...styleEntete, lineHeight: '12px'}}>
                 <strong>
-                    P.O BOX 29 Mbanga <br />
-                    Tel: 243 53 62 60 / 243 53 62 61 <br />
-                    hdmbanga@yahoo.com
+                    B.P 7051 <br />
+                    Tel: 695 19 38 35
                 </strong>
             </div>
         </div>

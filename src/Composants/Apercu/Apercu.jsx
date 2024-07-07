@@ -11,7 +11,6 @@ export default function Apercu(props) {
 
     const componentRef = useRef();
 
-
     let date_select1 = useRef();
     let date_select2 = useRef();
     let heure_select1 = useRef();
