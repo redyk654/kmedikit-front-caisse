@@ -128,7 +128,7 @@ export default function Commande(props) {
     const autre  = {designation: '', prix: ''};
     const assuranceDefaut = 'aucune';
 
-    const date_e = new Date('2026-12-19');
+    const date_e = new Date('2036-12-19');
     const date_j = new Date();
 
     const [nouveauPatient, setNouveauPatient] = useState(detailsDuPatient);
@@ -167,15 +167,15 @@ export default function Commande(props) {
         if (date_j.getTime() <= date_e.getTime()) {
             
         } else {
-            setTimeout(() => {
-                setListeMedoc([]);
-                setListeMedocSauvegarde([])
-                props.setConnecter(false);
-                // props.setOnglet(1);
-            }, 5000);
-            setTimeout(() => {
-                props.setConnecter(false);
-            }, 8000);
+            // setTimeout(() => {
+            //     setListeMedoc([]);
+            //     setListeMedocSauvegarde([])
+            //     props.setConnecter(false);
+            //     // props.setOnglet(1);
+            // }, 5000);
+            // setTimeout(() => {
+            //     props.setConnecter(false);
+            // }, 8000);
         }
     }, []);
 

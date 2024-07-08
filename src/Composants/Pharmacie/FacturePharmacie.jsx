@@ -16,7 +16,7 @@ export default class FacturePharmacie extends Component {
         return (
             <div className='' style={{overflow: 'hidden', width: '96vw', display: 'flex', flexDirection: 'column'}}>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    {/* <EnteteHopital /> */}
                     <CorpsFacturePharmacie
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -36,7 +36,7 @@ export default class FacturePharmacie extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    {/* <EnteteHopital /> */}
                     <CorpsFacturePharmacie
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -57,7 +57,7 @@ export default class FacturePharmacie extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    {/* <EnteteHopital /> */}
                     <CorpsFacturePharmacie
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}

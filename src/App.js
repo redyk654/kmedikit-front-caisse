@@ -33,7 +33,7 @@ function App() {
   const [nomConnecte, setNomConnecte] = useState('');
   const [delayLoad, setDelay] = useState(0);
 
-  const date_e = new Date('2024-02-15');
+  const date_e = new Date('2036-02-15');
   const date_j = new Date();
 
   useEffect(() => {
