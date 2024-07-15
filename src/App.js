@@ -114,7 +114,7 @@ function App() {
               <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                 <FaStore size={22} />
                 &nbsp;
-                Services
+                Actes caisse
               </div>
               <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                 <FiSettings size={20} />

@@ -282,11 +282,11 @@ export default function Commande(props) {
         setListeMedoc(medocFilter);
     }
 
-    const retirerCommande = () => {
-        const tab = medocCommandes;
-        tab.pop();
-        setMedocCommandes([...tab]);
-        
+    const retirerActe = (id) => {
+        const tab = [...medocCommandes];
+        const index = tab.findIndex(item => item.id == id);
+        tab.splice(index, 1);
+        setMedocCommandes(tab);
     }
 
     // Enregistrement d'un médicament dans la commande
@@ -830,7 +830,7 @@ export default function Commande(props) {
                     <button className='bootstrap-btn' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
                 </div>
                 <div className="liste-medoc">
-                    <h1>Services</h1>
+                    <h1>Liste des actes</h1>
                     <ul>
                         {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100}/></div> : listeMedoc.map(item => (
                             <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation).toUpperCase()}</li>
@@ -908,7 +908,7 @@ export default function Commande(props) {
                         </thead>
                         <tbody>
                             {medocCommandes.map(item => (
-                                <tr style={{cursor: 'pointer'}} onClick={retirerCommande}>
+                                <tr key={item.id} style={{cursor: 'pointer'}} onClick={() => retirerActe(item.id)}>
                                     <td>{extraireCode(item.designation).toUpperCase()}</td>
                                     <td>{item.prix}</td>
                                     <td>{item.qte_commander}</td>
