@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { extraireCode, mois, mois2, styleEntete } from '../../shared/Globals';
-import logo from '../../images/logo-minsante.png';
+import logo from '../../images/logo_hdj.png';
 
 const styles = {
     // display: 'flex',
@@ -47,15 +47,15 @@ export default class ImprimerHistorique extends Component {
                         <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
                         <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
                         <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
-                        <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-                        <div style={styleEntete}><strong>Hôpital de district de Mbanga</strong></div>
+                        <div style={styleEntete}><strong>District sante de Japoma</strong></div>
+                        <div style={styleEntete}><strong>Hôpital de district de Japoma</strong></div>
                     </div>
                     <div style={{ lineHeight: '20px'}}>
                         <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
                         <div style={styleEntete}><strong>Ministry of Public Health</strong></div>
                         <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
-                        <div style={styleEntete}><strong>Mbanga Health District</strong></div>
-                        <div style={styleEntete}><strong>District Hospital of Mbanga</strong></div>
+                        <div style={styleEntete}><strong>Japoma Health District</strong></div>
+                        <div style={styleEntete}><strong>District Hospital of Japoma</strong></div>
                     </div>
                 </div>
                 <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>

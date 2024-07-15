@@ -282,6 +282,7 @@ export default function Commande(props) {
 
     const retirerCommande = () => {
         const tab = medocCommandes;
+        console.log(tab);
         tab.pop();
         setMedocCommandes([...tab]);
         
