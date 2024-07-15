@@ -562,6 +562,12 @@ export default function GestionFactures(props) {
                     <div>
                         <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
                     </div>
+                    <div>
+                        <div>Caisser <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].caissier}</span></div>
+                    </div>
+                    <div>
+                        <div>Commis pharmacie <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].vendeur}</span></div>
+                    </div>
                     <div style={{display: `${filtrer ? 'none' : 'block'}`}}>
                         <ReactToPrint
                             trigger={() => <button className='bootstrap-btn valider' style={{height: '5vh', width: '20%'}}>Imprimer</button>}

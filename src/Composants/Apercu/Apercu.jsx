@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
 import './Apercu.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
 import { extraireCode, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { CFormSwitch } from '@coreui/react';
 
 
 export default function Apercu(props) {
@@ -29,6 +30,7 @@ export default function Apercu(props) {
     const [caissier, setCaissier] = useState('');
     const [assurance, setAssurance] = useState('non');
     const [messageErreur, setMessageErreur] = useState('');
+    const [filtre, setFiltre] = useState(false);
 
 
     useEffect(() => {
@@ -215,6 +217,21 @@ export default function Apercu(props) {
                                 <label htmlFor="">Au : </label>
                                 <input id='date-f-listing' type="date" ref={date_select2} />
                                 <input id='heure-f-listing' type="time" ref={heure_select2} />
+                            </p>
+
+                            <p>
+                                {
+                                props.role === admin && 
+                                <Fragment>
+                                    <CFormSwitch
+                                        label="Filtrer"
+                                        id="formSwitchCheckDefault"
+                                        checked={filtre}
+                                        reverse={true}
+                                        onChange={(e) => setFiltre(!filtre)}
+                                    />
+                                </Fragment>
+                                }
                             </p>
                             <p>
                                 <label htmlFor="assure">Categorie : </label>
