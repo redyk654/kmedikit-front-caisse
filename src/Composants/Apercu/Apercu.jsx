@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
 import './Apercu.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
 import { extraireCode, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { CFormSwitch } from '@coreui/react';
 
 
 export default function Apercu(props) {
@@ -30,6 +31,7 @@ export default function Apercu(props) {
     const [caissier, setCaissier] = useState('');
     const [assurance, setAssurance] = useState('non');
     const [messageErreur, setMessageErreur] = useState('');
+    const [filtre, setFiltre] = useState(false);
 
 
     useEffect(() => {
@@ -72,17 +74,14 @@ export default function Apercu(props) {
                 // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
             });
-    
-            setTimeout(() => {
-                req.send(data);
-            }, props.delay);
+
+            req.send(data);
         }
 
     }, [dateDepart, dateFin, caissier, assurance]);
 
     useEffect(() => {
         // Récupération des comptes
-
         recupererHeureDernierService();
         recupererDateJour('date-f-listing');
         recupererHeureJour('heure-f-listing');
@@ -119,7 +118,9 @@ export default function Apercu(props) {
                 if (props.role.toLowerCase() === "caissier") {
                     result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
                 } else {
-                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                    if (filtre) {
+                        result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                    }
                 }
                 
                 let recette = 0, resteAPayer = 0;
@@ -155,7 +156,11 @@ export default function Apercu(props) {
     const rechercherHistorique = () => {
         setdateDepart(date_select1.current.value + ' ' + heure_select1.current.value + ':00');
         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
-        setCaissier(document.getElementById('caissier').value.toLowerCase());
+        if (filtre) {
+            setCaissier(document.getElementById('caissier').value.toLowerCase());
+        } else {
+            setCaissier('tout');
+        }
     }
 
     const enregistrerHeureFin = () => {
@@ -219,14 +224,23 @@ export default function Apercu(props) {
                                 <input id='date-f-listing' type="date" ref={date_select2} />
                                 <input id='heure-f-listing' type="time" ref={heure_select2} />
                             </p>
-                            <p>
+                            {/* <p>
                                 <label htmlFor="assure">Categorie : </label>
                                 <select name="" id="assure" onChange={(e) => setAssurance(e.target.value)}>
                                     <option value="non">non assuré</option>
                                     <option value="oui">assuré</option>
                                 </select>
+                            </p> */}
+                            <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                <CFormSwitch
+                                    label="Filtrer"
+                                    id="formSwitchCheckDefault"
+                                    checked={filtre}
+                                    reverse={true}
+                                    onChange={(e) => setFiltre(!filtre)}
+                                />
                             </p>
-                            <p>
+                            <p style={{display: `${filtre ? 'block' : 'none'}`}}>
                                 <label htmlFor="">Caissier : </label>
                                 <select name="caissier" id="caissier">
                                     {props.role === "caissier" ? 
