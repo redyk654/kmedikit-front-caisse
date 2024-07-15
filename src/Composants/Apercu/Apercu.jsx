@@ -30,7 +30,7 @@ export default function Apercu(props) {
     const [caissier, setCaissier] = useState('');
     const [assurance, setAssurance] = useState('non');
     const [messageErreur, setMessageErreur] = useState('');
-    const [filtre, setFiltre] = useState(false);
+    const [filtre, setFiltre] = useState(true);
 
 
     useEffect(() => {
@@ -118,7 +118,9 @@ export default function Apercu(props) {
                 if (props.role.toLowerCase() === "caissier") {
                     result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
                 } else {
-                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                    if (filtre) {
+                        result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                    }
                 }
                 
                 let recette = 0, resteAPayer = 0;
@@ -154,7 +156,11 @@ export default function Apercu(props) {
     const rechercherHistorique = () => {
         setdateDepart(date_select1.current.value + ' ' + heure_select1.current.value + ':00');
         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
-        setCaissier(document.getElementById('caissier').value.toLowerCase());
+        if (filtre) {
+            setCaissier(document.getElementById('caissier').value.toLowerCase());
+        } else {
+            setCaissier('tout');
+        }
     }
 
     const enregistrerHeureFin = () => {
@@ -221,7 +227,7 @@ export default function Apercu(props) {
 
                             <p>
                                 {
-                                props.role === admin && 
+                                props.role === "admin" && 
                                 <Fragment>
                                     <CFormSwitch
                                         label="Filtrer"
