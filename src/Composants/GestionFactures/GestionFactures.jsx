@@ -147,48 +147,6 @@ export default function GestionFactures(props) {
         seteffet2(!effet2);
     }
 
-    const mettreAjourData = () => {
-        if (montantVerse.length > 0 && factureSelectionne[0].reste_a_payer) {
-            setverse(montantVerse);
-
-            if (parseInt(factureSelectionne[0].a_payer) < parseInt(montantVerse)) {
-                setrelicat(parseInt(montantVerse) - parseInt(factureSelectionne[0].a_payer));
-                setresteaPayer(0)
-            } else {
-                setresteaPayer(parseInt(factureSelectionne[0].a_payer - parseInt(montantVerse)));
-                setrelicat(0)
-            }
-
-            setmontantVerse('')
-        }
-     }
-
-     const reglerFacture = () => {
-         if (factureSelectionne.length > 0) {
-             if (verse >= factureSelectionne[0].a_payer) {
-                 // Règlement de la facture
-    
-                const data = new FormData();
-                let newMontantVerse = parseInt(factureSelectionne[0].montant_verse) + parseInt(verse);
-    
-                data.append('id', factureSelectionne[0].id);
-                data.append('montant_verse', newMontantVerse);
-                data.append('reste_a_payer', resteaPayer);
-                data.append('relicat', relicat);
-    
-                const req = new XMLHttpRequest();
-                req.open('POST', `${nomDns}gestion_factures.php`)
-    
-                req.addEventListener('load', () => {
-                    setSupp(false);
-                    setModalReussi(true);
-                });
-    
-                req.send(data);
-            }
-         }
-     }
-
      const reinitialsation = () => {
          setverse(0);
          setrelicat(0);
@@ -196,18 +154,13 @@ export default function GestionFactures(props) {
      }
 
     const filtrerListe = (e) => {
-        const req = new XMLHttpRequest();
-
-        req.open('GET', `${nomDns}rechercher_facture_caisse.php?str=${e.target.value}`);
-
-        req.addEventListener('load', () => {
-            if (req.status >= 200 && req.status < 400) {
-                const result = JSON.parse(req.responseText);
-                setFactures(result);
-            }
-        });
-
-        req.send();
+        // filter la liste des factures selon le nom du patient ou l'identifiant de la facture
+        const val = e.target.value.toUpperCase().trim();
+        if (val.length > 0) {
+            setFactures(factureSauvegarde.filter(item => (item.patient.toUpperCase().includes(val) || item.id.toString().toUpperCase().includes(val))));
+        } else {
+            setFactures(factureSauvegarde);
+        }
     }
 
     const supprimerFacture = () => {
