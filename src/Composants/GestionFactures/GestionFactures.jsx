@@ -195,19 +195,14 @@ export default function GestionFactures(props) {
          setresteaPayer(0);
      }
 
-    const filtrerListe = (e) => {
-        const req = new XMLHttpRequest();
-
-        req.open('GET', `${nomDns}rechercher_facture_caisse.php?str=${e.target.value}`);
-
-        req.addEventListener('load', () => {
-            if (req.status >= 200 && req.status < 400) {
-                const result = JSON.parse(req.responseText);
-                setFactures(result);
-            }
-        });
-
-        req.send();
+     const filtrerListe = (e) => {
+        // filter la liste des factures selon le nom du patient ou l'identifiant de la facture
+        const val = e.target.value.toUpperCase().trim();
+        if (val.length > 0) {
+            setFactures(factureSauvegarde.filter(item => (item.patient.toUpperCase().includes(val) || item.id.toString().toUpperCase().includes(val))));
+        } else {
+            setFactures(factureSauvegarde);
+        }
     }
 
     const supprimerFacture = () => {
