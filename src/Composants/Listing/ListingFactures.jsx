@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
-import './Apercu.css';
+// import '..Apercu/Apercu.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
-import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
 import { extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CFormSwitch } from '@coreui/react';
+import ImprimerListingFactures from './ImprimerListingFactures';
 
 
-export default function Apercu(props) {
+export default function ListingFactures(props) {
 
     const componentRef = useRef();
 
@@ -55,16 +55,18 @@ export default function Apercu(props) {
     
             const req = new XMLHttpRequest();
     
-            req.open('POST', `${nomDns}apercu.php`);
+            req.open('POST', `${nomDns}listing_factures.php`);
     
             req.addEventListener('load', () => {
                 execGetDateTime();
                 setMessageErreur('');
+                let result = JSON.parse(req.responseText);
+                if (filtre) {
+                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                }
                 // console.log(JSON.parse(req.responseText));
-                recupererRecetteTotal(data);
-                const result = JSON.parse(req.responseText);
                 sethistorique(result);
-                
+                recupererRecetteTotal(result);
                 let t = 0;
                 result.forEach(item => {
                     t += parseInt(item.prix_total);
@@ -112,51 +114,34 @@ export default function Apercu(props) {
         req.send();
     }, []);
 
-    const recupererRecetteTotal = (data) => {
-        const req = new XMLHttpRequest();
-        req.open('POST', `${nomDns}recuperer_recette.php`);
-
-        req.addEventListener('load', () => {
-            if(req.status >= 200 && req.status < 400) {
-                setMessageErreur('');
-                let result = JSON.parse(req.responseText);
-
-                if (props.role.toLowerCase() === "caissier") {
-                    result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
-                } else {
-                    if (filtre) {
-                        result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
-                    }
+    const recupererRecetteTotal = (result) => {
+            if (props.role.toLowerCase() === "caissier") {
+                result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
+            } else {
+                if (filtre) {
+                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
                 }
-                
-                let recette = 0, resteAPayer = 0;
-                if (assurance === "non") {
-                    result.forEach(item => {
-                        if (item.assurance.toUpperCase() === "aucune".toUpperCase()) {
-                            recette += parseInt(item.a_payer);
-                            resteAPayer += parseInt(item.reste_a_payer)
-                        }
-                    });
-                } else {
-                    result.forEach(item => {
-                        if (item.assurance.toUpperCase() !== "aucune".toUpperCase()) {
-                            recette += parseInt(item.a_payer);
-                            resteAPayer += parseInt(item.reste_a_payer)
-                        }
-                    });
-                }
-                recette -= resteAPayer
-                setRecetteTotal(recette);
-                setDette(resteAPayer);
             }
-        });
-
-        req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('Erreur réseau');
-        });
-
-        req.send(data);
+            
+            let recette = 0, resteAPayer = 0;
+            if (assurance === "non") {
+                result.forEach(item => {
+                    if (item.assurance.toUpperCase() === "aucune".toUpperCase()) {
+                        recette += parseInt(item.a_payer);
+                        resteAPayer += parseInt(item.reste_a_payer)
+                    }
+                });
+            } else {
+                result.forEach(item => {
+                    if (item.assurance.toUpperCase() !== "aucune".toUpperCase()) {
+                        recette += parseInt(item.a_payer);
+                        resteAPayer += parseInt(item.reste_a_payer)
+                    }
+                });
+            }
+            recette -= resteAPayer
+            setRecetteTotal(recette);
+            setDette(resteAPayer);
     }
 
     const rechercherHistorique = () => {
@@ -271,15 +256,19 @@ export default function Apercu(props) {
                     <table>
                         <thead>
                             <tr>
-                                <td>Désignation</td>
-                                <td>Total</td>
+                                <td>N° facture</td>
+                                <td>Patient</td>
+                                <td>Montant</td>
+                                <td>heure</td>
                             </tr>
                         </thead>
                         <tbody>
                             {historique.length > 0 && historique.map(item => (
-                                <tr key={item.id}>
-                                    <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
-                                    <td>{item.prix_total + ' Fcfa'}</td>
+                                <tr key={item.id_fac} style={{margin: '8px'}}>
+                                    <td>{item.id}</td>
+                                    <td>{item.patient}</td>
+                                    <td>{item.a_payer + ' Fcfa'}</td>
+                                    <td>{item.date_heure?.substring(11, 16)}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -296,7 +285,7 @@ export default function Apercu(props) {
                 )}
             </div>
             <div style={{display: 'none'}}>
-                <ImprimerHistorique
+                <ImprimerListingFactures
                     ref={componentRef}
                     historique={historique}
                     recetteTotal={reccetteTotal}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { extraireCode, getDateTime, mois, mois2, styleEntete } from '../../shared/Globals';
+import { extraireCode, mois, mois2, styleEntete } from '../../shared/Globals';
 import logo from '../../images/logo_hdj.png';
 
 const styles = {
@@ -34,7 +34,7 @@ const table_styles = {
     fontSize: 8
 }
 
-export default class ImprimerHistorique extends Component {
+export default class ImprimerListingFactures extends Component {
 
     render() {
         return (
@@ -82,14 +82,18 @@ export default class ImprimerHistorique extends Component {
                         <div style={{textAlign: 'center', marginBottom: 15}}>
                             <table style={table_styles}>
                                 <thead>
-                                    <th style={table_styles1}>Actes</th>
-                                    <th style={table_styles2}>Recettes</th>
+                                    <th style={table_styles1}>N° facture</th>
+                                    <th style={table_styles2}>Patient</th>
+                                    <th style={table_styles2}>Montant</th>
+                                    <th style={table_styles2}>Heure</th>
                                 </thead>
                                 <tbody>
                                     {this.props.historique.length > 0  ? this.props.historique.map(item => (
                                         <tr>
-                                            <td style={table_styles1}>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
+                                            <td style={table_styles1}>{item.id}</td>
+                                            <td style={table_styles2}>{item.patient}</td>
                                             <td style={table_styles2}>{item.prix_total}</td>
+                                            <td style={table_styles2}>{item.date_heure?.substring(11, 16)}</td>
                                         </tr>
                                     )) : null
                                     }

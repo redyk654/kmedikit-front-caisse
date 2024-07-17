@@ -5,7 +5,7 @@ import ReactToPrint from 'react-to-print';
 import Modal from 'react-modal';
 import RecettePharmcie from './RecettePharmacie';
 import { FaCheck } from 'react-icons/fa';
-import { mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from "../../shared/Globals";
+import { getDateTime, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
 // const socket = io.connect(`${nomServeurNode}`);
@@ -88,7 +88,12 @@ export default function GestionFactures(props) {
     const [caissier, setCaissier] = useState('');
     const [reccetteTotal, setRecetteTotal] = useState(0);
     const [messageErreur, setMessageErreur] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
 
+    const execGetDateTime = async () => {
+        const dateTime = await getDateTime();
+        setCurrentDate(dateTime.date);
+    }
 
     useEffect(() => {
         recupererDateJour('date-d-recette-phar');
@@ -308,6 +313,7 @@ export default function GestionFactures(props) {
                                 // socket.emit('actualiser_facture_pharmacie');
                                 i++;
                                 if (i === detailsFacture.length) {
+                                    execGetDateTime();
                                     enregistrerAssurance()
                                     setSupp(false);
                                     setModalReussi(true);
@@ -617,6 +623,7 @@ export default function GestionFactures(props) {
                                     commis={factureSelectionne[0].vendeur}
                                     assurance={factureSelectionne[0].assurance}
                                     type_assurance={factureSelectionne[0].type_assurance}
+                                    dateJour={currentDate}
                                 />
                             </div>
                         )}

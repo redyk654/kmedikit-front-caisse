@@ -156,10 +156,16 @@ export default function Commande(props) {
     const [modalReussi, setModalReussi] = useState(false);
     const [rerender, setRerender] = useState(true);
     const [msgPatient, setMsgPatient] = useState('');
+    const [currentDate, setCurrentDate] = useState('');
 
     const {designation, prix} = autreState;
 
     const { code, nom, age, sexe, quartier, assurance, type_assurance } = nouveauPatient;
+
+    const execGetDateTime = async () => {
+        const dateTime = await getDateTime();
+        setCurrentDate(dateTime.date);
+    }
 
     useEffect(() => {
         startChargement();
@@ -404,6 +410,7 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             setMessageErreur('');
+            execGetDateTime();
             // actualisationHistorique();
             // setActualiserQte(!actualiserQte);
             // Activation de la fenêtre modale qui indique la réussite de la commmande
@@ -977,6 +984,7 @@ export default function Commande(props) {
                                 resteaPayer={0}
                                 nomConnecte={props.nomConnecte}
                                 montantFrais={montantMateriel}
+                                dateJour={currentDate}
                             />
                         </div>
                     </div>

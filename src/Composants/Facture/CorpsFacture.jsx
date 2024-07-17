@@ -29,23 +29,6 @@ const table_styles = {
 
 export default function CorpsFacture(props) {
 
-    const [currentDate, setCurrentDate] = useState('');
-    const[isEmpty, setIsEmpty] = useState(true);
-
-    useEffect(() => {
-        execGetDateTime();
-    }, []);
-
-    const execGetDateTime = async () => {
-        const dateTime = await getDateTime();
-        setCurrentDate(dateTime.date);
-        setIsEmpty(false);
-    }
-
-    if(isEmpty) {
-        return <div>Chargement</div>
-    }
-
   return (
     <div className='' style={{height: '35vh', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '8px',}}>
         <div style={{textAlign: 'center', width: '250px', height: '30vh'}}>
@@ -57,8 +40,8 @@ export default function CorpsFacture(props) {
                 </span>
             </div>
             <div style={{marginTop: '3px'}}>
-                Le <strong>{mois(currentDate.substring(0, 10))}
-                </strong> à <strong>{currentDate.substring(11, 16)}</strong>
+                Le <strong>{mois(props.dateJour.substring(0, 10))}
+                </strong> à <strong>{props.dateJour.substring(11, 16)}</strong>
             </div>
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 patient :

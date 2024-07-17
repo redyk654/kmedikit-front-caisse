@@ -32,6 +32,7 @@ export default class Facture extends Component {
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -51,6 +52,7 @@ export default class Facture extends Component {
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -70,6 +72,7 @@ export default class Facture extends Component {
                         resteaPayer={this.props.resteaPayer}
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
             </div>

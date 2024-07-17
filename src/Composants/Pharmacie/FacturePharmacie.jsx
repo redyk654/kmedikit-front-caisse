@@ -33,6 +33,7 @@ export default class FacturePharmacie extends Component {
                         nomConnecte={this.props.caissier}
                         commis={this.props.commis}
                         date={this.props.date}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -54,6 +55,7 @@ export default class FacturePharmacie extends Component {
                         commis={this.props.commis}
                         montantFrais={this.props.montantFrais}
                         date={this.props.date}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -74,6 +76,7 @@ export default class FacturePharmacie extends Component {
                         nomConnecte={this.props.caissier}
                         commis={this.props.commis}
                         date={this.props.date}
+                        dateJour={this.props.dateJour}
                     />
                 </div>
             </div>

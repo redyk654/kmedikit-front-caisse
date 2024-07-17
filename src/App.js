@@ -22,6 +22,7 @@ import { BsSpeedometer2 } from "react-icons/bs";
 import { ContextChargement } from './Context/Chargement';
 import { ROLES, liensPhilmedical, nomDns } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
+import ListingFactures from './Composants/Listing/ListingFactures';
 
 
 function App() {
@@ -99,7 +100,9 @@ function App() {
     case 12:
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
       break;
-    case 13:      break;
+    case 13:
+      contenu = <ListingFactures delayLoad={delayLoad} nomConnecte={nomConnecte} role={role} />
+      break;
     default:
       break;
   }
@@ -129,12 +132,17 @@ function App() {
               <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
                 <FaClipboardList size={22} />
                 &nbsp;
-                Listing
+                Listing Actes
               </div>
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
                 <FaReceipt size={22} />
                 &nbsp;
-                Factures-services
+                Factures-Actes
+              </div>
+              <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
+                <FaReceipt size={22} />
+                &nbsp;
+                Listing Factures
               </div>
             </div>
             <div className="onglets-contenu">
