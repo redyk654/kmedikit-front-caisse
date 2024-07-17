@@ -60,11 +60,11 @@ export default function ListingFactures(props) {
             req.addEventListener('load', () => {
                 execGetDateTime();
                 setMessageErreur('');
+                // console.log(req.responseText);
                 let result = JSON.parse(req.responseText);
                 if (filtre) {
                     result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
                 }
-                // console.log(JSON.parse(req.responseText));
                 sethistorique(result);
                 recupererRecetteTotal(result);
                 let t = 0;
@@ -237,7 +237,7 @@ export default function ListingFactures(props) {
                                     <option value="oui">assuré</option>
                                 </select> */}
                             </p>
-                            <p>
+                            <p style={{display: `${filtre ? 'block' : 'none'}`}}>
                                 <label htmlFor="">Caissier : </label>
                                 <select name="caissier" id="caissier">
                                     {props.role === "caissier" ? 

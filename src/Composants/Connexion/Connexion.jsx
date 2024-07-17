@@ -5,7 +5,7 @@ import { liensPhilmedical, nomDns } from '../../shared/Globals';
 export default function Connexion(props) {
     let name_field = useRef()
     let password_field = useRef()
-    const date_e = new Date('2026-01-26');
+    const date_e = new Date('2036-01-20');
     const date_j = new Date();
     
     const [erreur, setErreur] = useState('')
