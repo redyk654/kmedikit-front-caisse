@@ -103,6 +103,12 @@ export default class ImprimerListingFactures extends Component {
                         <div style={{marginTop: 5}}>Total : <strong>{this.props.recetteTotal ? (this.props.total) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
                         {/* <div style={{marginTop: 5}}>Matériel : <strong>{this.props.montantFrais ? this.props.montantFrais + ' Fcfa' : 0 + ' Fcfa'}</strong></div> */}
                         <div style={{marginTop: 5}}>Recette : <strong>{this.props.recetteTotal ? this.props.recetteTotal + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
+                        <div style={{marginTop: 5}}>
+                            <h1>
+                                ATTENTION AU DECOUPAGE DES DONNÉES LORS DE L'IMPRESSION !
+                                CERTAINES DONNÉES PEUVENT NE PAS APPARAITRE SUR LA COPIE IMPRIMÉE
+                            </h1>
+                        </div>
                     </div>
                 </div>
             </div>    
