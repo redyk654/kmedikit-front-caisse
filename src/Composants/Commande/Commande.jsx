@@ -123,7 +123,7 @@ export default function Commande(props) {
     const annuler = useRef();
     const btnAjout = useRef();
     const btnMateriel = useRef();
-    const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
+    const {chargement, stopChargement, startChargement, medocCommandes, setMedocCommandes} = useContext(ContextChargement);
 
     const autre  = {designation: '', prix: ''};
     const assuranceDefaut = 'aucune';
@@ -139,7 +139,7 @@ export default function Commande(props) {
     const [patient, setPatient] = useState('');
     const [autreState, setAutreState] = useState(autre);
     const [medocSelect, setMedoSelect] = useState(false);
-    const [medocCommandes, setMedocCommandes] = useState([]);
+    // const [medocCommandes, setMedocCommandes] = useState([]);
     const [montantMateriel, setMontantMateriel] = useState(0);
     const [option, setoption] = useState('');
     const [reduction, setreduction] = useState(false);
@@ -168,7 +168,7 @@ export default function Commande(props) {
     }
 
     useEffect(() => {
-        startChargement();
+        // startChargement();
         // Récupération des médicaments dans la base via une requête Ajax
         if (date_j.getTime() <= date_e.getTime()) {
             
