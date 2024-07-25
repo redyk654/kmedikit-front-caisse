@@ -96,22 +96,16 @@ export default function Modifier(props) {
 
     useEffect(() => {
         const d = new Date();
-        let urgence;
+        let urgence = false;
 
         if (renrender) {
             // Etat d'urgence entre 17h et 8h et les weekends
             
-            if (d.getHours() >= 17 || d.getHours() <= 7 || (d.getDay() === 0 || d.getDay() === 6)) {
-                urgence = true;
-            } else {
-                urgence = false;
-            }
-
             setRerender(false);
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             if (urgence) {
-                req.open('GET', `${nomDns}recuperer_services.php?urgence=oui`);
+                req.open('GET', `${nomDns}recuperer_services.php`);
             } else {
                 req.open('GET', `${nomDns}recuperer_services.php`);
             }
