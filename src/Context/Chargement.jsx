@@ -8,7 +8,6 @@ export const ContextChargement = createContext();
 
 const ContextChargementProvider = (props) => {
     const [chargement, setChargement] = useState(true)
-    const [medocCommandes, setMedocCommandes] = useState([]);
     const [role, setRole] = useState('');
 
     const stopChargement = () => {
@@ -20,7 +19,7 @@ const ContextChargementProvider = (props) => {
     }
     
     return (
-        <ContextChargement.Provider value={{chargement, stopChargement, startChargement, role, setRole, medocCommandes, setMedocCommandes}}>
+        <ContextChargement.Provider value={{chargement, stopChargement, startChargement, role, setRole }}>
             {props.children}
         </ContextChargement.Provider>
     )
