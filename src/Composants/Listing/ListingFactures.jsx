@@ -10,7 +10,7 @@ import ImprimerListingFactures from './ImprimerListingFactures';
 
 export default function ListingFactures(props) {
 
-    const date_e = new Date('2024-02-15');
+    const date_e = new Date('2025-02-15');
     const date_j = new Date();
 
     const componentRef = useRef();
