@@ -81,7 +81,7 @@ function App() {
       contenu = <Pharmacie delay={delay} nomConnecte={nomConnecte} />
       break;
     case 8:
-      contenu = <Apercu delay={delay} nomConnecte={nomConnecte} role={role} />
+      contenu = <Apercu delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
       break;
     case 9:
       contenu = <Assurance nomConnecte={nomConnecte} />
@@ -96,7 +96,7 @@ function App() {
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
       break;
     case 13:
-      contenu = <ListingFactures delay={delay} nomConnecte={nomConnecte} role={role} />
+      contenu = <ListingFactures delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
       break;
     default:
       break;
