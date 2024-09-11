@@ -256,6 +256,7 @@ export default function ListingFactures(props) {
                     <table>
                         <thead>
                             <tr>
+                                <td>Nombre facture</td>
                                 <td>N° facture</td>
                                 <td>Patient</td>
                                 <td>Montant</td>
@@ -263,8 +264,9 @@ export default function ListingFactures(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {historique.length > 0 && historique.map(item => (
+                            {historique.length > 0 && historique.map((item, index) => (
                                 <tr key={item.id_fac} style={{margin: '8px'}}>
+                                    <td>{index + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.patient}</td>
                                     <td>{item.a_payer + ' Fcfa'}</td>
