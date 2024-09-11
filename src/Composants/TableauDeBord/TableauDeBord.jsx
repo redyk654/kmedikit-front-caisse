@@ -241,19 +241,19 @@ export default function TableauDeBord(props) {
                         />
                     </CRow>
                     <CRow>
-                        {historique.length > 0 && historique.map(item => (                            
+                        {/* {historique.length > 0 && historique.map(item => (                            
                             <CCol xs={3} className='pt-3'>
                                 <AfficherCategorie 
                                     categorie={item?.categorie} 
                                     total={item?.total_reel} />
                             </CCol>
-                        ))}
+                        ))} */}
                     </CRow>
                 </CContainer>
                 <div className="px-5 text-center">
-                    <a role='button' className='' onClick={() => {setModalConfirmation(true);}}>
+                    {/* <a role='button' className='' onClick={() => {setModalConfirmation(true);}}>
                         Voir les détails
-                    </a>
+                    </a> */}
                 </div>
                 <AfficherTotaux
                     total={total}
