@@ -187,7 +187,7 @@ export default function Commande(props) {
     }, []);
 
     useEffect(() => {
-        // setTimeout(() => {
+        setTimeout(() => {
             const d = new Date();
             let urgence = false
     
@@ -228,7 +228,7 @@ export default function Commande(props) {
                 
                 req.send();
             }
-        // }, props.delayLoad);
+        }, props.delayLoad);
     }, [rerender]);
 
     const calculerPrixTotal = () => {
@@ -419,8 +419,9 @@ export default function Commande(props) {
             setMessageErreur('Erreur réseau');
         });
 
-        
-        req.send(data);
+        setTimeout(() => {       
+            req.send(data);
+        }, props.delayLoad);
     }
 
     const validerCommande = () => {

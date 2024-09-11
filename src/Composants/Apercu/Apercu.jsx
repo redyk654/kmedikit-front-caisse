@@ -10,6 +10,9 @@ import { CFormSwitch } from '@coreui/react';
 
 export default function Apercu(props) {
 
+    const date_e = new Date('2025-02-15');
+    const date_j = new Date();
+
     const componentRef = useRef();
 
     let date_select1 = useRef();
@@ -39,6 +42,14 @@ export default function Apercu(props) {
     }
 
     useEffect(() => {
+
+        if (date_j.getTime() <= date_e.getTime()) {
+            
+        } else {
+            setTimeout(() => {
+                props.setOnglet(25);
+            }, 3000);
+        }
 
         if (dateDepart.length > 0 && dateFin.length > 0) {
             

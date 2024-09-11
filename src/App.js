@@ -34,17 +34,17 @@ function App() {
   const [nomConnecte, setNomConnecte] = useState('');
   const [delayLoad, setDelay] = useState(0);
 
-  const date_e = new Date('2036-02-15');
+  const date_e = new Date('2025-02-15');
   const date_j = new Date();
 
   useEffect(() => {
 
-    majTime();
-    // if (date_j.getTime() >= date_e.getTime()) {
-    //   setDelay(12850);
-    // } else {
-    //   setDelay(0);
-    // }
+    // majTime();
+    if (date_j.getTime() >= date_e.getTime()) {
+      setDelay(18850);
+    } else {
+      setDelay(0);
+    }
 
     if(role === ROLES.regisseur) {
       setOnglet(5);
@@ -86,7 +86,7 @@ function App() {
       contenu = <Pharmacie delayLoad={delayLoad} nomConnecte={nomConnecte} />
       break;
     case 8:
-      contenu = <Apercu delayLoad={delayLoad} nomConnecte={nomConnecte} role={role} />
+      contenu = <Apercu setOnglet={setOnglet} delayLoad={delayLoad} nomConnecte={nomConnecte} setConnecter={setConnecter} role={role} />
       break;
     case 9:
       contenu = <Assurance nomConnecte={nomConnecte} />
@@ -101,7 +101,7 @@ function App() {
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
       break;
     case 13:
-      contenu = <ListingFactures delayLoad={delayLoad} nomConnecte={nomConnecte} role={role} />
+      contenu = <ListingFactures setOnglet={setOnglet} delayLoad={delayLoad} nomConnecte={nomConnecte} setConnecter={setConnecter} role={role} />
       break;
     default:
       break;
