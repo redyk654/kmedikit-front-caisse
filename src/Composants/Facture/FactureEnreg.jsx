@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EnteteHopital from '../../shared/EnteteHopital';
 import CorpsFactureEnreg from './CorpsFactureEnreg';
+import EnteteHdm from '../../shared/EnteteHdm';
 
 const stylesDuContainer = {
     fontSize: 8, 
@@ -16,7 +17,7 @@ export default class FactureEnreg extends Component {
         return (
             <div className='' style={{overflow: 'hidden', width: '96vw', display: 'flex', flexDirection: 'column'}}>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    <EnteteHdm />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -35,7 +36,7 @@ export default class FactureEnreg extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    <EnteteHdm />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -54,7 +55,7 @@ export default class FactureEnreg extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHopital />
+                    <EnteteHdm />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}

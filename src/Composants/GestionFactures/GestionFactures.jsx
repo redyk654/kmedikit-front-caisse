@@ -7,9 +7,8 @@ import { mois, extraireCode, nomDns, ROLES } from "../../shared/Globals";
 import { CBadge } from '@coreui/react';
 import CIcon from '@coreui/icons-react'
 import { cilReload, cilXCircle } from '@coreui/icons';
-import { io } from 'socket.io-client';
 
-const socket = io.connect('http://serveur:3010');
+// const socket = io.connect('http://serveur:3010');
 
 const customStyles2 = {
     content: {
@@ -125,6 +124,8 @@ export default function GestionFactures(props) {
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
                 setdetailsFacture(result);
+                console.log(detailsFacture);
+                
                 fermerModalConfirmation();
             });
 
@@ -133,12 +134,12 @@ export default function GestionFactures(props) {
 
     }, [effet2])
 
-    useEffect(() => {
-        socket.on('acte_supprime', () => {
-            seteffet(!effet);
-            setdetailsFacture([]);
-        })
-    }, [socket])
+    // useEffect(() => {
+    //     socket.on('acte_supprime', () => {
+    //         seteffet(!effet);
+    //         setdetailsFacture([]);
+    //     })
+    // }, [socket])
 
     const afficherInfos = (e) => {
         // Affichage des informations de la facture selectionnée
@@ -276,7 +277,7 @@ export default function GestionFactures(props) {
             if (req.status >= 200 && req.status < 400) {
                 setfactureSelectionne([{...factureSelectionne[0], a_payer: nouveauNetAPayer}]);
                 seteffet(!effet);
-                socket.emit('suppression_acte');
+                // socket.emit('suppression_acte');
             }
         });
 
@@ -380,7 +381,7 @@ export default function GestionFactures(props) {
                             </thead>
                             <tbody>
                                 {detailsFacture.map(item => (
-                                    <tr>
+                                    <tr key={item.id}>
                                         <td style={table_styles1} role="button" onClick={() => setVisible(true)}>
                                             {extraireCode(item.designation)}
                                             {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
