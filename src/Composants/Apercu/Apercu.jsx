@@ -317,6 +317,7 @@ export default function Apercu(props) {
                     dateDepart={dateDepart}
                     dateFin={dateFin}
                     dateDuJour={currentDate}
+                    filtre={filtre}
                 />
             </div>
         </section>
