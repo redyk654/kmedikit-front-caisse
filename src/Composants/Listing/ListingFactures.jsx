@@ -271,6 +271,7 @@ export default function ListingFactures(props) {
                                 <td>Nombre facture</td>
                                 <td>N° facture</td>
                                 <td>Patient</td>
+                                <td>Caissier</td>
                                 <td>Montant</td>
                                 <td>heure</td>
                             </tr>
@@ -281,6 +282,7 @@ export default function ListingFactures(props) {
                                     <td>{index + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.patient}</td>
+                                    <td>{item.caissier}</td>
                                     <td>{item.a_payer + ' Fcfa'}</td>
                                     <td>{item.date_heure?.substring(11, 16)}</td>
                                 </tr>
@@ -309,6 +311,7 @@ export default function ListingFactures(props) {
                     dateDepart={dateDepart}
                     dateFin={dateFin}
                     dateDuJour={currentDate}
+                    filtre={filtre}
                 />
             </div>
         </section>

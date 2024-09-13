@@ -129,11 +129,11 @@ function App() {
                 &nbsp;
                 Listing Factures-actes
               </div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
+              {/* <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
                 <FaCoins size={18} />
                 &nbsp;
                 Recettes
-              </div>
+              </div> */}
               <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                 <FiSettings size={20} />
                 &nbsp;

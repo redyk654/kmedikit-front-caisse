@@ -304,6 +304,7 @@ export default function Apercu(props) {
                     nomConnecte={caissier}
                     dateDepart={dateDepart}
                     dateFin={dateFin}
+                    filtre={filtre}
                 />
             </div>
         </section>
