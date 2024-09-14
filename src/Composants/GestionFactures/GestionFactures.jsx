@@ -64,12 +64,6 @@ export default function GestionFactures(props) {
 
     const [factures, setFactures] = useState([]);
     const [factureSauvegarde, setfactureSauvegarde] = useState([]);
-    const [montantVerse, setmontantVerse] = useState('');
-    const [verse, setverse] = useState(0);
-    const [relicat, setrelicat] = useState(0);
-    const [resteaPayer, setresteaPayer] = useState(0);
-    const [filtrer, setFiltrer] = useState(false);
-    const [manquantTotal, setManquantTotal] = useState(0);
     const [factureSelectionne, setfactureSelectionne] = useState([]);
     const [detailsFacture, setdetailsFacture] = useState([]);
     const [effet, seteffet] = useState(false);
@@ -78,30 +72,22 @@ export default function GestionFactures(props) {
     const [modalReussi, setModalReussi] = useState(false);
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [visible, setVisible] = useState(false)
+    const [isLoadingData, setIsLoadingData] = useState(true);
 
     useEffect(() => {
+        // Récupération des factures
+        setIsLoadingData(true);
         setFactures([])
         setfactureSauvegarde([]);
         const req = new XMLHttpRequest();
-        if (filtrer) {
-            req.open('GET', `${nomDns}gestion_factures.php?filtrer=oui`);
-            const req2 = new XMLHttpRequest();
-            req2.open('GET', `${nomDns}gestion_factures.php?filtrer=oui&manquant`);
-            req2.addEventListener('load', () => {
-                const result = JSON.parse(req2.responseText);
-                setManquantTotal(result[0].manquant);
-            })
-            req2.send();
+        req.open('GET', `${nomDns}gestion_factures.php`);
 
-        } else {
-            req.open('GET', `${nomDns}gestion_factures.php`);
-        }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                 const result = JSON.parse(req.responseText);
                 setFactures(result);
                 setfactureSauvegarde(result);
-
+                setIsLoadingData(false);
             } else {
                 // Affichage des informations sur l'échec du traitement de la requête
                 console.error(req.status + " " + req.statusText);
@@ -113,10 +99,11 @@ export default function GestionFactures(props) {
         });
 
         req.send();
-    }, [filtrer, effet])
+    }, [effet])
 
     useEffect(() => {
         if (factureSelectionne.length > 0) {
+            // Récupération des détails de la facture selectionnée
             const req = new XMLHttpRequest();
     
             req.open('GET', `${nomDns}gestion_factures.php?id=${factureSelectionne[0].id}`);
@@ -143,58 +130,9 @@ export default function GestionFactures(props) {
 
     const afficherInfos = (e) => {
         // Affichage des informations de la facture selectionnée
-        reinitialsation();
         setfactureSelectionne(factures.filter(item => (item.id == e.target.id)))
         seteffet2(!effet2);
     }
-
-    const mettreAjourData = () => {
-        if (montantVerse.length > 0 && factureSelectionne[0].reste_a_payer) {
-            setverse(montantVerse);
-
-            if (parseInt(factureSelectionne[0].a_payer) < parseInt(montantVerse)) {
-                setrelicat(parseInt(montantVerse) - parseInt(factureSelectionne[0].a_payer));
-                setresteaPayer(0)
-            } else {
-                setresteaPayer(parseInt(factureSelectionne[0].a_payer - parseInt(montantVerse)));
-                setrelicat(0)
-            }
-
-            setmontantVerse('')
-        }
-     }
-
-     const reglerFacture = () => {
-         if (factureSelectionne.length > 0) {
-             if (verse >= factureSelectionne[0].a_payer) {
-                 // Règlement de la facture
-    
-                const data = new FormData();
-                let newMontantVerse = parseInt(factureSelectionne[0].montant_verse) + parseInt(verse);
-    
-                data.append('id', factureSelectionne[0].id);
-                data.append('montant_verse', newMontantVerse);
-                data.append('reste_a_payer', resteaPayer);
-                data.append('relicat', relicat);
-    
-                const req = new XMLHttpRequest();
-                req.open('POST', `${nomDns}gestion_factures.php`)
-    
-                req.addEventListener('load', () => {
-                    setSupp(false);
-                    setModalReussi(true);
-                });
-    
-                req.send(data);
-            }
-         }
-     }
-
-     const reinitialsation = () => {
-         setverse(0);
-         setrelicat(0);
-         setresteaPayer(0);
-     }
 
      const filtrerListe = (e) => {
         // filter la liste des factures selon le nom du patient ou l'identifiant de la facture
@@ -230,7 +168,6 @@ export default function GestionFactures(props) {
     const fermerModalReussi = () => {
         setModalReussi(false);
         seteffet(!effet);
-        reinitialsation();
         setfactureSelectionne([]);
         setdetailsFacture([]);
     }
@@ -313,50 +250,18 @@ export default function GestionFactures(props) {
 
     return (
         <div className="container-facture">
-            <Modal
-                isOpen={modalConfirmation}
-                style={customStyles1}
-                contentLabel="validation commande"
-                onRequestClose={fermerModalConfirmation}
-            >
-                <h5 style={{color: '#fff'}}>Annuler une facture entraine sa suppression de la base de données. Voulez-vous continuer ?</h5>
-                <div style={{textAlign: 'center'}} className='modal-button'>
-                    <button className="supp" style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px'}} onClick={fermerModalConfirmation}>NON</button>
-                    <button className="valider" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={supprimerFacture}>OUI</button>
-                </div>
-            </Modal>
-            <Modal
-                isOpen={modalReussi}
-                style={customStyles2}
-                contentLabel="Commande réussie"
-                onRequestClose={fermerModalReussi}
-            >
-                {
-                    supp ? 
-                    (<h2 style={{color: '#fff'}}>Facture supprimé ✔ !</h2>) :
-                    (<h2 style={{color: '#fff'}}>Service effectué !</h2>)
-                }
-                <button style={{width: '30%', height: '5vh', cursor: 'pointer', marginRight: '15px', fontSize: 'large'}} onClick={fermerModalReussi}>Fermer</button>
-            </Modal>
             <div className="liste-medoc">
 
                 <p className="search-zone">
                     <input type="text" placeholder="Nom patient" onChange={filtrerListe} />
                 </p>
-                {/* <p>
-                    <label htmlFor="" style={{marginRight: 5, fontWeight: 700}}>Non réglés</label>
-                    <input type="checkbox" name="non_regle" id="non_regle" checked={filtrer} onChange={() => setFiltrer(!filtrer)} />
-                </p> */}
-                {/* <div>
-                    {filtrer ? (
-                        <div>Total non réglés: <span style={{fontWeight: 700}}>{manquantTotal == null ? '0 Fcfa' : manquantTotal + ' Fcfa'}</span></div>
-                        ) : null}
-                </div> */}
-                <h3>{filtrer ? 'Factures non réglés' : 'Factures'}</h3>
+                <h3>{'Factures'}</h3>
                 <ul>
-                    {factures.length > 0 ? factures.map(item => (
+                    {!isLoadingData ? factures.length > 0 ? factures.map(item => (
                         <li id={item.id} key={item.id} onClick={afficherInfos}>{item.patient}</li>
-                    )) : null}
+                    )) : 
+                    <div className='text-center'>Aucune donnée disponible</div>
+                    : <div className='text-center fw-bold'>Chargement...</div>}
                 </ul>
             </div>
             <div className="details">
@@ -434,50 +339,27 @@ export default function GestionFactures(props) {
                                 content={() => componentRef.current}
                             />
                         </div>
-                        {/* <div style={{display: `${props.role.toUpperCase() !== ROLES.admin.toUpperCase() && 'none' }`}}>
-                            <button className='bootstrap-btn annuler' style={{width: '15vw', height: '5vh', marginLeft: '30px'}} onClick={() => {if(detailsFacture.length > 0) setModalConfirmation(true)}}>Annuler</button>
-                        </div> */}
                     </div>
-                    {/* <h3 style={{marginTop: 5}}>Régler la facture</h3>
-                    {factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer > 0 ? (
-                        <div style={{marginTop: 13}}>
-                            <p>
-                                <label htmlFor="">Montant versé: </label>
-                                <input style={{height: '4vh', width: '15%'}} type="text" value={montantVerse} onChange={(e) => !isNaN(e.target.value) && setmontantVerse(e.target.value)} />
-                                <button style={{width: '5%', marginLeft: 5}} onClick={mettreAjourData}>ok</button>
-                            </p>
-                            <p>
-                                Montant versé: <span style={{fontWeight: 'bold'}}>{verse + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Relicat: <span style={{fontWeight: 'bold'}}>{relicat + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Restant à payer: <span style={{fontWeight: 'bold'}}>{resteaPayer + ' Fcfa'}</span>
-                            </p>
-                        </div>
-                    ) : null}
-                    <button onClick={reglerFacture}>Régler</button> */}
                     <div>
                         {factureSelectionne.length > 0 && (
                             <div style={{display: 'none'}}>
                                 <FactureEnreg
-                                ref={componentRef}
-                                detailsFacture={detailsFacture}
-                                idFacture={factureSelectionne[0].id}
-                                patient={factureSelectionne[0].patient}
-                                codePatient={factureSelectionne[0].code_patient}
-                                prixTotal={factureSelectionne[0].prix_total}
-                                reduction={factureSelectionne[0].reduction}
-                                aPayer={factureSelectionne[0].a_payer}
-                                montantVerse={0}
-                                relicat={factureSelectionne[0].relicat}
-                                assurance={factureSelectionne[0].assurance}
-                                type_assurance={factureSelectionne[0].type_assurance}
-                                resteaPayer={factureSelectionne[0].reste_a_payer}
-                                date={factureSelectionne[0].date_heure}
-                                nomConnecte={factureSelectionne[0].caissier}
-                                montantFrais={factureSelectionne[0].frais}
+                                    ref={componentRef}
+                                    detailsFacture={detailsFacture}
+                                    idFacture={factureSelectionne[0].id}
+                                    patient={factureSelectionne[0].patient}
+                                    codePatient={factureSelectionne[0].code_patient}
+                                    prixTotal={factureSelectionne[0].prix_total}
+                                    reduction={factureSelectionne[0].reduction}
+                                    aPayer={factureSelectionne[0].a_payer}
+                                    montantVerse={0}
+                                    relicat={factureSelectionne[0].relicat}
+                                    assurance={factureSelectionne[0].assurance}
+                                    type_assurance={factureSelectionne[0].type_assurance}
+                                    resteaPayer={factureSelectionne[0].reste_a_payer}
+                                    date={factureSelectionne[0].date_heure}
+                                    nomConnecte={factureSelectionne[0].caissier}
+                                    montantFrais={factureSelectionne[0].frais}
                                 />
                             </div>
                         )}
