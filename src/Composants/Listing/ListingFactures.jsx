@@ -229,8 +229,6 @@ export default function ListingFactures(props) {
                             </p>
 
                             <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                {
-                                props.role === "admin" && 
                                 <Fragment>
                                     <CFormSwitch
                                         label="Filtrer"
@@ -240,7 +238,6 @@ export default function ListingFactures(props) {
                                         onChange={(e) => setFiltre(!filtre)}
                                     />
                                 </Fragment>
-                                }
                             </p>
                             <p>
                                 {/* <label htmlFor="assure">Categorie : </label>

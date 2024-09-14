@@ -103,7 +103,7 @@ function App() {
   }
 
   if (connecter) {
-    if(role.toLowerCase() === ROLES.admin) {
+    if(role.toLowerCase() === ROLES.admin || role.toLowerCase() === ROLES.regisseur) {
       return (
         <main className='app'>
           <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
