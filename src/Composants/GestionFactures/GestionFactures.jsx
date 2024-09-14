@@ -294,7 +294,7 @@ export default function GestionFactures(props) {
                                         <td style={table_styles2}>{item.prix}</td>
                                         <td style={table_styles2}>{item.qte}</td>
                                         <td style={table_styles2}>{item.prix_total}</td>
-                                        {(props.role.toUpperCase() === ROLES.regisseur.toUpperCase() || props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (                                            
+                                        {(props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (                                            
                                             <td>
                                                 {parseInt(item.statu_acte) ? 
                                                 (<CIcon

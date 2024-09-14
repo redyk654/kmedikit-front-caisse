@@ -47,7 +47,7 @@ function App() {
     }
 
     if(role === ROLES.regisseur) {
-      setOnglet(5);
+      setOnglet(12);
     } else if (role === ROLES.admin) {
       setOnglet(12);
     } else if (role === ROLES.secretaire) {
