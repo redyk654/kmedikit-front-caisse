@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Modal from "react-modal";
-import { extraireCode, nomDns, CATEGORIES, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi, formaterNombre, regrouperParDate } from '../../shared/Globals';
+import { extraireCode, nomDns, CATEGORIES, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi, formaterNombre, regrouperParDate, mergeAndSortDates } from '../../shared/Globals';
 import { CCard, CCardBody, CCardText, CCardTitle, CCol, CContainer, CFormCheck, CRow } from '@coreui/react';
 import { CChart } from '@coreui/react-chartjs';
 import AfficherCategorie from './AfficherCategorie';
@@ -26,15 +26,17 @@ export default function TableauDeBord(props) {
 
     const [historique, sethistorique] = useState([]);
     const [recetteTotal, setRecetteTotal] = useState(0);
+    const [recettePharmacie, setRecettePharmacie] = useState(0);
     const [total, setTotal] = useState('');
     const [services, setServices] = useState([]);
     const [servicesSauvegarde, setServicesSauvegarde] = useState([]);
     const [categorieSelectionne, setCategorieSelectionne] = useState('');
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [idRadio, setIdRadio] = useState('1');
-    const [labelsChart, setLabelsChart] = useState([]);
-    const [data1ChartTotal, setData1ChartTotal] = useState([]);
-    const [data2ChartRecette, setData2ChartRecette] = useState([]);
+    const [DatesChart, setDatesChart] = useState([]);
+    const [data1ChartTotalCaisse, setData1ChartTotalCaisse] = useState([]);
+    const [data2ChartRecetteCaisse, setData2ChartRecetteCaisse] = useState([]);
+    const [data2ChartRecettePharmacie, setData2ChartRecettePharmacie] = useState([]);
 
     const changerCategorie = (e) => {
         setServices(servicesSauvegarde.filter(item => item.categorie.toLowerCase().includes(e.target.value.toLowerCase())));
@@ -187,33 +189,48 @@ export default function TableauDeBord(props) {
     const majDonneesFinales = (responseCaisse, responsePharmacie, date1, date2) => {
 
         let totalPharmacie = responsePharmacie.reduce((acc, item) => acc + parseInt(item.recette), 0);
+        setRecettePharmacie(totalPharmacie);
 
         let total = responseCaisse.reduce((acc, item) => {
             return acc + parseInt(item.total);
         }, 0);
-        setTotal(total + totalPharmacie);
+        setTotal(total);
 
         let recette = responseCaisse.reduce((acc, item) => acc + parseInt(item.recette), 0);
-        setRecetteTotal(recette + totalPharmacie);
+        setRecetteTotal(recette);
 
-        const donneesRegroupees = regrouperParDate(responseCaisse, responsePharmacie);
+        const donneesCaisseRegroupees = regrouperParDate(responseCaisse, responsePharmacie);
+        const donneesPharmacieRegroupees = regrouperParDate(responsePharmacie, responsePharmacie);
         
-        let labelsC= donneesRegroupees.map(item => {
+        let labelDateCaisse = donneesCaisseRegroupees.map(item => {
             return item.date_vente;
         });
 
-        let data1C = donneesRegroupees.map(item => {
+        let labelDatePharmacie = donneesPharmacieRegroupees.map(item => {
+            return item.date_vente;
+        });
+
+        const labelDate = mergeAndSortDates(labelDateCaisse, labelDatePharmacie);
+
+        let data1C = donneesCaisseRegroupees.map(item => {
             return parseInt(item.total);
         });
 
-        let data2C = donneesRegroupees.map(item => {
+        let data2C = donneesCaisseRegroupees.map(item => {
             return parseInt(item.recette);
         });
 
-        setData1ChartTotal(data1C);
-        setData2ChartRecette(data2C);
-        setLabelsChart(labelsC);
+        let data3C = donneesPharmacieRegroupees.map(item => parseInt(item.recette))
+
+        setData2ChartRecettePharmacie(data3C)
+        setData1ChartTotalCaisse(data1C);
+        setData2ChartRecetteCaisse(data2C);
+        setDatesChart(labelDate);
         recupererRecetteParCategories({categorie: "pharmacie", total_reel: totalPharmacie}, date1, date2);
+    }
+
+    const calculerRecetteGlobal = () => {
+        return parseInt(recetteTotal) + parseInt(recettePharmacie)
     }
 
     return (
@@ -258,6 +275,8 @@ export default function TableauDeBord(props) {
                 <AfficherTotaux
                     total={total}
                     recetteTotal={recetteTotal}
+                    recettePharmacie={recettePharmacie}
+                    calculerRecetteGlobal={calculerRecetteGlobal}
                 />
                 <CContainer>                    
                     <CRow className='pb-4'>
@@ -265,24 +284,32 @@ export default function TableauDeBord(props) {
                             <CChart
                                 type="line"
                                 data={{
-                                    labels: labelsChart,
+                                    labels: DatesChart,
                                     datasets: [
-                                    {
-                                        label: "Total",
-                                        backgroundColor: "rgba(220, 220, 220, 0.2)",
-                                        borderColor: "rgba(220, 220, 220, 1)",
-                                        pointBackgroundColor: "#BFC0C0",
-                                        pointBorderColor: "#BFC0C0",
-                                        data: data1ChartTotal
-                                    },
-                                    {
-                                        label: "Recette",
-                                        backgroundColor: "rgba(151, 187, 205, 0.2)",
-                                        borderColor: "rgba(151, 187, 205, 1)",
-                                        pointBackgroundColor: "#5A7684",
-                                        pointBorderColor: "#5A7684",
-                                        data: data2ChartRecette
-                                    },
+                                        {
+                                            label: "Total Caisse",
+                                            backgroundColor: "rgba(220, 220, 220, 0.2)",
+                                            borderColor: "rgba(220, 220, 220, 1)",
+                                            pointBackgroundColor: "#BFC0C0",
+                                            pointBorderColor: "#BFC0C0",
+                                            data: data1ChartTotalCaisse
+                                        },
+                                        {
+                                            label: "Recette Caisse",
+                                            backgroundColor: "rgba(151, 187, 205, 0.2)",
+                                            borderColor: "rgba(151, 187, 205, 1)",
+                                            pointBackgroundColor: "#5A7684",
+                                            pointBorderColor: "#5A7684",
+                                            data: data2ChartRecetteCaisse
+                                        },
+                                        {
+                                            label: "Recette Pharmacie",
+                                            backgroundColor: "#f5e3a6",
+                                            borderColor: "#fac002",
+                                            pointBackgroundColor: "#fac002",
+                                            pointBorderColor: "#f5e3a6",
+                                            data: data2ChartRecettePharmacie
+                                        },
                                     ],
                                 }}
                             />

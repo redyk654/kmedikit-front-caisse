@@ -5,7 +5,7 @@ export default function AfficherOptions(props) {
     const { handleChangeRadio, idRadio } = props;
   return (
     <Fragment>
-        <CCol>
+        <CCol className='cursor-pointer'>
             <CFormCheck onChange={handleChangeRadio} checked={idRadio === "1" ? true : false} type="radio" name="radioRecette" id="1" label="aujourd'hui" />
         </CCol>
         <CCol>

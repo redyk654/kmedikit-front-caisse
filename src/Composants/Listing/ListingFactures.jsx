@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext, useRef, Fragment } from 'react'
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
-import { extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { convertDate, extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CFormSwitch } from '@coreui/react';
 import ImprimerListingFactures from './ImprimerListingFactures';
 
@@ -277,7 +277,7 @@ export default function ListingFactures(props) {
                                     <td>{item.patient}</td>
                                     <td>{item.caissier}</td>
                                     <td>{item.a_payer + ' Fcfa'}</td>
-                                    <td>{item.date_heure?.substring(11, 16)}</td>
+                                    <td>{convertDate(item.date_heure?.substring(0, 10)) + ' ' + item.date_heure?.substring(11, 16)}</td>
                                 </tr>
                             )) :
                                 <div className='text-center fw-bold'>

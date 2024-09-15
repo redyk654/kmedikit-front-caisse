@@ -173,22 +173,22 @@ export const regrouperParDate = (tableau1, tableau2) => {
     }
     
     // Parcourir les objets du deuxième tableau
-    for (const objet of tableau2) {
-        const { date_vente, total, recette } = objet;
+    // for (const objet of tableau2) {
+    //     const { date_vente, total, recette } = objet;
         
-        // Vérifier si la date existe déjà dans le Map
-        if (mapParDate.has(date_vente)) {
-            // Récupérer l'objet existant pour cette date
-            const objetExistant = mapParDate.get(date_vente);
+    //     // Vérifier si la date existe déjà dans le Map
+    //     if (mapParDate.has(date_vente)) {
+    //         // Récupérer l'objet existant pour cette date
+    //         const objetExistant = mapParDate.get(date_vente);
             
-            // Additionner les propriétés total et recette avec l'objet existant
-            objetExistant.total = parseInt(objetExistant.total) + parseInt(total);
-            objetExistant.recette = parseInt(objetExistant.recette) + parseInt(recette);
-        } else {
-            // Créer un nouvel objet avec les propriétés total et recette pour cette date
-            mapParDate.set(date_vente, { date_vente, total, recette });
-        }
-    }
+    //         // Additionner les propriétés total et recette avec l'objet existant
+    //         objetExistant.total = parseInt(objetExistant.total) + parseInt(total);
+    //         objetExistant.recette = parseInt(objetExistant.recette) + parseInt(recette);
+    //     } else {
+    //         // Créer un nouvel objet avec les propriétés total et recette pour cette date
+    //         mapParDate.set(date_vente, { date_vente, total, recette });
+    //     }
+    // }
     
     // Créer un tableau final regroupé par date
     let tableauRegroupe = Array.from(mapParDate.values());
@@ -213,6 +213,23 @@ export const regrouperParDate = (tableau1, tableau2) => {
     })
     
     return tableauRegroupe;
+}
+
+export function mergeAndSortDates(arr1, arr2) {
+    // Fusionner les deux tableaux
+    const mergedArray = [...arr1, ...arr2];
+
+    // Supprimer les doublons en créant un Set
+    const uniqueDates = [...new Set(mergedArray)];
+
+    // Convertir les dates en objets Date et les trier
+    const sortedDates = uniqueDates.sort((a, b) => {
+        const [dayA, monthA, yearA] = a.split('/').map(Number);
+        const [dayB, monthB, yearB] = b.split('/').map(Number);
+        return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+    });
+
+    return sortedDates;
 }
 
 export const convertirFormatDateMJA = (date) => {
@@ -274,4 +291,8 @@ export const recupererHeureJour = async (idElement) => {
     const today = await getDateTime();
     document.querySelector(`#${idElement}`).value = today.date.substring(11, 16);
 }
-                            
+
+export const convertDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(date).toLocaleDateString('fr-FR', options);
+};
