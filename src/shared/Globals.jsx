@@ -268,6 +268,11 @@ export const recupererHeureJour = async (idElement) => {
     document.querySelector(`#${idElement}`).value = today.date.substring(11, 16);
 }
 
+export const convertDate = (date) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(date).toLocaleDateString('fr-FR', options);
+};
+
 export const liensPhilmedical = {
     acceuil: 'http://serveur/philmedical/acceuil',
 }
