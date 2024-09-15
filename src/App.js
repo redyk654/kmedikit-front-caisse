@@ -112,7 +112,7 @@ function App() {
               <div className={`tab ${onglet === 12 ? 'active' : ''}`} onClick={ () => {setOnglet(12)}}>
                 <BsSpeedometer2 size={20} />
                 &nbsp;
-                Tableau de bord
+                Graphe
               </div>
               <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
                 <RiSurveyFill size={20} />
