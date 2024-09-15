@@ -35,6 +35,7 @@ export default function Apercu(props) {
     const [messageErreur, setMessageErreur] = useState('');
     const [filtre, setFiltre] = useState(true);
     const [currentDate, setCurrentDate] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const execGetDateTime = async () => {
         const dateTime = await getDateTime();
@@ -53,7 +54,7 @@ export default function Apercu(props) {
 
         if (dateDepart.length > 0 && dateFin.length > 0) {
             
-            startChargement();
+            setIsLoading(true)
     
             let dateD = dateDepart;
             let dateF = dateFin;
@@ -159,6 +160,7 @@ export default function Apercu(props) {
                 recette -= resteAPayer
                 setRecetteTotal(recette);
                 setDette(resteAPayer);
+                setIsLoading(false)
             }
         });
 
@@ -287,12 +289,20 @@ export default function Apercu(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {historique.length > 0 && historique.map(item => (
+                            {!isLoading ? historique.length > 0 ? historique.map(item => (
                                 <tr key={item.id}>
                                     <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
                                     <td>{item.prix_total + ' Fcfa'}</td>
                                 </tr>
-                            ))}
+                            )) :
+                                <div className='fw-bold text-center w-100'>
+                                    {'Aucune donnée correspondante'}
+                                </div>
+                                :
+                                <div className='fw-bold text-center w-100'>
+                                    {'Chargement... '}
+                                </div>
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -35,6 +35,7 @@ export default function ListingFactures(props) {
     const [messageErreur, setMessageErreur] = useState('');
     const [filtre, setFiltre] = useState(true);
     const [currentDate, setCurrentDate] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
 
     const execGetDateTime = async () => {
         const dateTime = await getDateTime();
@@ -53,7 +54,7 @@ export default function ListingFactures(props) {
 
         if (dateDepart.length > 0 && dateFin.length > 0) {
             
-            startChargement();
+            setIsLoading(true)
     
             let dateD = dateDepart;
             let dateF = dateFin;
@@ -153,6 +154,7 @@ export default function ListingFactures(props) {
             recette -= resteAPayer
             setRecetteTotal(recette);
             setDette(resteAPayer);
+            setIsLoading(false)
     }
 
     const rechercherHistorique = () => {
@@ -226,7 +228,6 @@ export default function ListingFactures(props) {
                                 <input id='date-f-listing' type="date" ref={date_select2} />
                                 <input id='heure-f-listing' type="time" ref={heure_select2} />
                             </p>
-
                             <p>
                                 {
                                 props.role === "admin" && 
@@ -242,11 +243,6 @@ export default function ListingFactures(props) {
                                 }
                             </p>
                             <p>
-                                {/* <label htmlFor="assure">Categorie : </label>
-                                <select name="" id="assure" onChange={(e) => setAssurance(e.target.value)}>
-                                    <option value="non">non assuré</option>
-                                    <option value="oui">assuré</option>
-                                </select> */}
                             </p>
                             <p style={{display: `${filtre ? 'block' : 'none'}`}}>
                                 <label htmlFor="">Caissier : </label>
@@ -276,7 +272,7 @@ export default function ListingFactures(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {historique.length > 0 && historique.map((item, index) => (
+                            {!isLoading ? historique.length > 0 ? historique.map((item, index) => (
                                 <tr key={item.id_fac} style={{margin: '8px'}}>
                                     <td>{index + 1}</td>
                                     <td>{item.id}</td>
@@ -285,7 +281,15 @@ export default function ListingFactures(props) {
                                     <td>{item.a_payer + ' Fcfa'}</td>
                                     <td>{item.date_heure?.substring(11, 16)}</td>
                                 </tr>
-                            ))}
+                            )) : 
+                                <div className='fw-bold text-center w-100'>
+                                    {'Aucune donnée correspondante'}
+                                </div>
+                                :
+                                <div className='fw-bold text-center w-100'>
+                                    {'Chargement... '}
+                                </div>
+                            }
                         </tbody>
                     </table>
                 </div>
