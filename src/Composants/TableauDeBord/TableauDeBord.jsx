@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useEffect, useState, useRef, useCallback } from 'react';
 import Modal from "react-modal";
 import { extraireCode, nomDns, CATEGORIES, soustraireUnNombreAUneDate, leMoisDernier, ceMoisCi, formaterNombre, regrouperParDate, mergeAndSortDates } from '../../shared/Globals';
 import { CCard, CCardBody, CCardText, CCardTitle, CCol, CContainer, CFormCheck, CRow } from '@coreui/react';
@@ -7,6 +7,7 @@ import AfficherCategorie from './AfficherCategorie';
 import AfficherOptions from './AfficherOptions';
 import AfficherTotaux from './AfficherTotaux';
 import AfficherLesDetails from './AfficherLesDetails';
+import FullPageLoader from '../../shared/FullPageLoader';
 
 const customStyles1 = {
     content: {
@@ -37,10 +38,21 @@ export default function TableauDeBord(props) {
     const [data1ChartTotalCaisse, setData1ChartTotalCaisse] = useState([]);
     const [data2ChartRecetteCaisse, setData2ChartRecetteCaisse] = useState([]);
     const [data2ChartRecettePharmacie, setData2ChartRecettePharmacie] = useState([]);
+    const [dateDebut, setDateDebut] = useState('');
+    const [dateFin, setDateFin] = useState('');
+    const [isLoadingData, setIsLoadingData] = useState(false);
 
     const changerCategorie = (e) => {
         setServices(servicesSauvegarde.filter(item => item.categorie.toLowerCase().includes(e.target.value.toLowerCase())));
         setCategorieSelectionne(e.target.value.toUpperCase());
+    }
+
+    const handleChangeDateDebut = (e) => {
+        setDateDebut(e.target.value)
+    }
+
+    const handleChangeDateFin = (e) => {
+        setDateFin(e.target.value)
     }
 
     const fermerModalConfirmation = () => {
@@ -49,47 +61,80 @@ export default function TableauDeBord(props) {
         setCategorieSelectionne('');
     }
 
-    const handleChangeRadio = (e) => {
-        setIdRadio(e.target.id);
-        const id = e.target.id;
-        let date1;
-        let date2;
+    // const handleChangeRadio = (e) => {
+    //     setIdRadio(e.target.id);
+    //     const id = e.target.id;
+    //     let date1;
+    //     let date2;
 
-        switch(id) {
-            case "1":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(0) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "4":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(3) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "7":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(6) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "10":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = soustraireUnNombreAUneDate(9) + ' 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "0":
-                date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
-                date2 = ceMoisCi() + '-' + '01 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            case "30":
-                date1 = leMoisDernier() + '-' + '31 23:59:59';
-                date2 = leMoisDernier() + '-' + '01 00:00:00';
-                rechercheParPeriode(date2, date1);
-                break;
-            default:
-                break;
+    //     switch(id) {
+    //         case "1":
+    //             date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+    //             date2 = soustraireUnNombreAUneDate(0) + ' 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         case "4":
+    //             date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+    //             date2 = soustraireUnNombreAUneDate(3) + ' 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         case "7":
+    //             date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+    //             date2 = soustraireUnNombreAUneDate(6) + ' 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         case "10":
+    //             date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+    //             date2 = soustraireUnNombreAUneDate(9) + ' 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         case "0":
+    //             date1 = soustraireUnNombreAUneDate(0) + ' 23:59:59';
+    //             date2 = ceMoisCi() + '-' + '01 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         case "30":
+    //             date1 = leMoisDernier() + '-' + '31 23:59:59';
+    //             date2 = leMoisDernier() + '-' + '01 00:00:00';
+    //             rechercheParPeriode(date2, date1);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
+
+    const rechercheParPeriode = useCallback(async () => {
+        // Recherche des recettes caisse par période
+        if (dateDebut && dateFin) {
+            setIsLoadingData(true)
+            const date1 = dateDebut + ' 00:00:00'
+            const date2 = dateFin + ' 23:59:59'
+
+            const data = new FormData();
+            data.append('date1', date1);
+            data.append('date2', date2);
+
+            const req = new XMLHttpRequest();
+            req.open('POST', `${nomDns}recette_par_periode.php?recette`);
+
+            req.addEventListener('load', () => {
+                if(req.status >= 200 && req.status < 400) {
+                    const res = JSON.parse(req.responseText);
+                    recettePharmacieParPeriode(res, date1, date2);
+                    // recupDetailsParPeriode(date1, date2);
+                }
+            });
+
+            req.send(data);
         }
-    }
+    }, [dateDebut, dateFin])
+
+    useEffect(() => {
+        
+        if (dateDebut && dateFin)
+            rechercheParPeriode();
+
+    }, [dateDebut, dateFin, rechercheParPeriode])
 
     const recupDetailsParPeriode = (date1, date2) => {
         setServices([]);
@@ -135,28 +180,6 @@ export default function TableauDeBord(props) {
                         }
                     })
                     sethistorique([...result, pharmacie]);
-                }
-            });
-
-            req.send(data);
-        }
-    }
-
-    const rechercheParPeriode = (date1, date2) => {
-        // Recherche des recettes par période
-        if (date1 !== '' && date2 !== '') {
-            const data = new FormData();
-            data.append('date1', date1);
-            data.append('date2', date2);
-
-            const req = new XMLHttpRequest();
-            req.open('POST', `${nomDns}recette_par_periode.php?recette`);
-
-            req.addEventListener('load', () => {
-                if(req.status >= 200 && req.status < 400) {
-                    const res = JSON.parse(req.responseText);
-                    recettePharmacieParPeriode(res, date1, date2);
-                    recupDetailsParPeriode(date1, date2);
                 }
             });
 
@@ -226,7 +249,8 @@ export default function TableauDeBord(props) {
         setData1ChartTotalCaisse(data1C);
         setData2ChartRecetteCaisse(data2C);
         setDatesChart(labelDate);
-        recupererRecetteParCategories({categorie: "pharmacie", total_reel: totalPharmacie}, date1, date2);
+        setIsLoadingData(false)
+        // recupererRecetteParCategories({categorie: "pharmacie", total_reel: totalPharmacie}, date1, date2);
     }
 
     const calculerRecetteGlobal = () => {
@@ -235,6 +259,7 @@ export default function TableauDeBord(props) {
 
     return (
         <div className="">
+            {isLoadingData && <FullPageLoader />}
             <Modal
                 isOpen={modalConfirmation}
                 onRequestClose={fermerModalConfirmation}
@@ -254,7 +279,10 @@ export default function TableauDeBord(props) {
                     <CRow>
                         <AfficherOptions
                             idRadio={idRadio}
-                            handleChangeRadio={handleChangeRadio}
+                            dateDebut={dateDebut}
+                            dateFin={dateFin}
+                            handleChangeDateDebut={handleChangeDateDebut}
+                            handleChangeDateFin={handleChangeDateFin}
                         />
                     </CRow>
                     <CRow>
@@ -306,7 +334,7 @@ export default function TableauDeBord(props) {
                                             label: "Recette Pharmacie",
                                             backgroundColor: "#f5e3a6",
                                             borderColor: "#fac002",
-                                            pointBackgroundColor: "#fac002",
+                                            pointBackgroundColor: "#f5e3a6",
                                             pointBorderColor: "#f5e3a6",
                                             data: data2ChartRecettePharmacie
                                         },

@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import { convertDate, extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
-import { CFormSwitch } from '@coreui/react';
+import { CBadge, CFormSwitch } from '@coreui/react';
 import ImprimerListingFactures from './ImprimerListingFactures';
 
 
@@ -276,7 +276,12 @@ export default function ListingFactures(props) {
                                     <td>{item.id}</td>
                                     <td>{item.patient}</td>
                                     <td>{item.caissier}</td>
-                                    <td>{item.a_payer + ' Fcfa'}</td>
+                                    <td>
+                                        {item.a_payer == 0 ?
+                                        <CBadge color='danger'>Annulé</CBadge> :
+                                        item.a_payer + ' Fcfa'
+                                        }
+                                    </td>
                                     <td>{convertDate(item.date_heure?.substring(0, 10)) + ' ' + item.date_heure?.substring(11, 16)}</td>
                                 </tr>
                             )) :
