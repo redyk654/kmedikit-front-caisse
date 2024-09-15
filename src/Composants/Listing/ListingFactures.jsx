@@ -10,7 +10,7 @@ import ImprimerListingFactures from './ImprimerListingFactures';
 
 export default function ListingFactures(props) {
 
-    const date_e = new Date('2025-02-17');
+    const date_e = new Date('2025-04-17');
     const date_j = new Date();
 
     const componentRef = useRef();
@@ -35,6 +35,8 @@ export default function ListingFactures(props) {
     const [messageErreur, setMessageErreur] = useState('');
     const [filtre, setFiltre] = useState(true);
     const [currentDate, setCurrentDate] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
+    
 
     const execGetDateTime = async () => {
         const dateTime = await getDateTime();
@@ -47,14 +49,14 @@ export default function ListingFactures(props) {
             
         } else {
             setTimeout(() => {
-                props.setConnecter(false);
+                props.setOnglet(false);
                 // props.setOnglet(1);
             }, 5000);
         }
 
         if (dateDepart.length > 0 && dateFin.length > 0) {
             
-            startChargement();
+            setIsLoading(true)
     
             let dateD = dateDepart;
             let dateF = dateFin;
@@ -154,6 +156,7 @@ export default function ListingFactures(props) {
             recette -= resteAPayer
             setRecetteTotal(recette);
             setDette(resteAPayer);
+            setIsLoading(false)
     }
 
     const rechercherHistorique = () => {
@@ -239,13 +242,6 @@ export default function ListingFactures(props) {
                                     />
                                 </Fragment>
                             </p>
-                            <p>
-                                {/* <label htmlFor="assure">Categorie : </label>
-                                <select name="" id="assure" onChange={(e) => setAssurance(e.target.value)}>
-                                    <option value="non">non assuré</option>
-                                    <option value="oui">assuré</option>
-                                </select> */}
-                            </p>
                             <p style={{display: `${filtre ? 'block' : 'none'}`}}>
                                 <label htmlFor="">Caissier : </label>
                                 <select name="caissier" id="caissier">
@@ -274,7 +270,7 @@ export default function ListingFactures(props) {
                             </tr>
                         </thead>
                         <tbody>
-                            {historique.length > 0 && historique.map((item, index) => (
+                            {!isLoading ? historique.length > 0 ? historique.map((item, index) => (
                                 <tr key={item.id_fac} style={{margin: '8px'}}>
                                     <td>{index + 1}</td>
                                     <td>{item.id}</td>
@@ -283,7 +279,15 @@ export default function ListingFactures(props) {
                                     <td>{item.a_payer + ' Fcfa'}</td>
                                     <td>{item.date_heure?.substring(11, 16)}</td>
                                 </tr>
-                            ))}
+                            )) :
+                                <div className='text-center fw-bold'>
+                                    {'Aucune donnée correspondante'}
+                                </div>
+                                :
+                                <div className='text-center fw-bold'>
+                                    {'Chargement...'}
+                                </div>
+                            }
                         </tbody>
                     </table>
                 </div>

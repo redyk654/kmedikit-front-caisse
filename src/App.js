@@ -35,7 +35,7 @@ function App() {
   const [nomConnecte, setNomConnecte] = useState('');
   const [delay, setDelay] = useState(0);
 
-  const date_e = new Date('2025-02-05');
+  const date_e = new Date('2025-04-05');
   const date_j = new Date();
 
   useEffect(() => {
@@ -81,7 +81,7 @@ function App() {
       contenu = <Pharmacie delay={delay} nomConnecte={nomConnecte} />
       break;
     case 8:
-      contenu = <Apercu delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
+      contenu = <Apercu setOnglet={setOnglet} delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
       break;
     case 9:
       contenu = <Assurance nomConnecte={nomConnecte} />
@@ -96,7 +96,7 @@ function App() {
       contenu = <TableauDeBord nomConnecte={nomConnecte} />
       break;
     case 13:
-      contenu = <ListingFactures delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
+      contenu = <ListingFactures setOnglet={setOnglet} delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
       break;
     default:
       break;
