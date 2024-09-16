@@ -43,10 +43,10 @@ export default function Historique(props) {
         if (date_j.getTime() <= date_e.getTime()) {
             
         } else {
-            setTimeout(() => {
-                props.setConnecter(false);
-                props.setOnglet(1);
-            }, 6000);
+            // setTimeout(() => {
+            //     props.setConnecter(false);
+            //     props.setOnglet(1);
+            // }, 6000);
         }
     }, []);
 

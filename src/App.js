@@ -142,7 +142,7 @@ function App() {
               <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
                 <FaUsers size={20} />
                 &nbsp;
-                Comptes
+                Utilisateurs
               </div>
               <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
                 <FaReceipt size={19} />
