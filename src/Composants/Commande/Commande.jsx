@@ -158,6 +158,7 @@ export default function Commande(props) {
     const [rerender, setRerender] = useState(true);
     const [msgPatient, setMsgPatient] = useState('');
     const [currentDate, setCurrentDate] = useState('');
+    const [actesMorgue, setActesMorgue] = useState([]);
 
     const {designation, prix} = autreState;
 
@@ -189,7 +190,6 @@ export default function Commande(props) {
     useEffect(() => {
         setTimeout(() => {
             const d = new Date();
-            let urgence = false
     
             if (rerender || !rerender) {
                 // Etat d'urgence entre 17h et 8h et les weekends
@@ -198,16 +198,18 @@ export default function Commande(props) {
                 startChargement();
                 // Récupération des médicaments dans la base via une requête Ajax
                 const req = new XMLHttpRequest();
-                if (urgence) {
-                    req.open('GET', `${nomDns}recuperer_services.php`);
-                } else {
-                    req.open('GET', `${nomDns}recuperer_services.php`);
-                }
+                req.open('GET', `${nomDns}recuperer_services.php`);
+                
                 req.addEventListener("load", () => {
                     if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                         // setInterval(() => {
                             const result = JSON.parse(req.responseText);
-            
+                            const temp = result
+                                .filter(item => item.designation.toLowerCase().includes("mortuaire"))
+                            
+                            ajouterQteActesMorgue(temp);                            
+                            setActesMorgue(temp);
+                            
                             // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
                             setListeMedoc(result);
                             setListeMedocSauvegarde(result);
@@ -230,6 +232,41 @@ export default function Commande(props) {
             }
         }, props.delayLoad);
     }, [rerender]);
+
+    const modifierPrixActeMorgue = (item) => {
+        if (item.designation.toLowerCase() == "toilette mortuaire") {
+            Object.defineProperty(item, 'prix', {
+                value: 20000,
+                configurable: true,
+                enumerable: true
+            });
+        } else if (item.designation.toLowerCase() == "traitement mortuaire") {
+            Object.defineProperty(item, 'prix', {
+                value: 10000,
+                configurable: true,
+                enumerable: true
+            });
+        }
+    }
+
+    const ajouterQteActesMorgue = (data) => {
+        if (data.length > 0) {
+            data.forEach(item => {
+                modifierPrixActeMorgue(item)
+                Object.defineProperty(item, 'qte_commander', {
+                    value: 1,
+                    configurable: true,
+                    enumerable: true
+                });
+                
+                Object.defineProperty(item, 'prix_total', {
+                    value: parseInt(item.prix) * parseInt(item.qte_commander),
+                    configurable: true,
+                    enumerable: true
+                });
+            })
+        }
+    }
 
     const calculerPrixTotal = () => {
         let prixTotalT = 0;
@@ -285,6 +322,13 @@ export default function Commande(props) {
 
     const retirerActe = (id) => {
         const tab = [...medocCommandes];
+        const acteM = tab.filter(item => item.designation.toLowerCase().includes('morgue'));
+
+        if (acteM) {
+            annulerCommande();
+            return
+        }
+
         const index = tab.findIndex(item => item.id == id);
         tab.splice(index, 1);
         setMedocCommandes(tab);
@@ -301,6 +345,7 @@ export default function Commande(props) {
 
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
             setMessageErreur('');
+
             Object.defineProperty(medocSelect[0], 'qte_commander', {
                 value: qteDesire,
                 configurable: true,
@@ -314,6 +359,10 @@ export default function Commande(props) {
             });
             
             medocSelect[0].reduction = false;
+            if (medocSelect[0].designation.toLowerCase().includes('morgue')) {
+                setMedocCommandes([...medocCommandes, ...actesMorgue, medocSelect[0]]);
+                return
+            }
             setMessageErreur('');
             setMedocCommandes([...medocCommandes, medocSelect[0]]);
 
