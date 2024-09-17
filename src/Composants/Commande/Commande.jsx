@@ -324,7 +324,7 @@ export default function Commande(props) {
         const tab = [...medocCommandes];
         const acteM = tab.filter(item => item.designation.toLowerCase().includes('morgue'));
 
-        if (acteM) {
+        if (acteM.length > 0) {
             annulerCommande();
             return
         }
@@ -421,11 +421,11 @@ export default function Commande(props) {
                .substring(1).toUpperCase();
     }
 
-    // const actualisationHistorique = () => {
-    //     setTimeout(() => {
-    //         socket.emit('actualisation_historique');
-    //     }, 5000);
-    // }
+    const actualisationHistorique = () => {
+        setTimeout(() => {
+            socket.emit('actualisation_historique');
+        }, 5000);
+    }
 
     const enregisterFacture = (id) => {
 
@@ -455,7 +455,7 @@ export default function Commande(props) {
         req.addEventListener('load', () => {
             setMessageErreur('');
             execGetDateTime();
-            // actualisationHistorique();
+            actualisationHistorique();
             // setActualiserQte(!actualiserQte);
             // Activation de la fenêtre modale qui indique la réussite de la commmande
             setModalReussi(true);
