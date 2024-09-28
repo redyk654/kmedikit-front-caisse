@@ -16,7 +16,7 @@ import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
 import { io } from 'socket.io-client';
 
-// const socket = io.connect(`${nomServeurNode}`);
+const socket = io.connect(`${nomServeurNode}`);
 
 // Styles pour les fenêtres modales
 const customStyles1 = {
