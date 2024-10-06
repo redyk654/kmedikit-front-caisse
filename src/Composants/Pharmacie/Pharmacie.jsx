@@ -8,7 +8,7 @@ import { FaCheck } from 'react-icons/fa';
 import { getDateTime, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from "../../shared/Globals";
 import { io } from 'socket.io-client';
 
-const socket = io.connect(`${nomServeurNode}`);
+// const socket = io.connect(`${nomServeurNode}`);
 
 const customStyles1 = {
     content: {
@@ -121,18 +121,18 @@ export default function GestionFactures(props) {
         req.send();
     }
 
-    useEffect(() => {
-        socket.on('maj_produits', (data) => {
-            setFiltrer(true);
-            rechercherListePatients();
-        });
+    // useEffect(() => {
+    //     socket.on('maj_produits', (data) => {
+    //         setFiltrer(true);
+    //         rechercherListePatients();
+    //     });
 
-        socket.on('maj_facture_pharmacie', () => {
-            setFiltrer(true);
-            rechercherListePatients();
-        });
+    //     socket.on('maj_facture_pharmacie', () => {
+    //         setFiltrer(true);
+    //         rechercherListePatients();
+    //     });
   
-      }, [socket])
+    //   }, [socket])
 
     useEffect(() => {
         rechercherListePatients();
@@ -310,7 +310,7 @@ export default function GestionFactures(props) {
                         req1.addEventListener("load", function () {
                             if (req1.status >= 200 && req1.status < 400) {
                                 setMessageErreur('');
-                                socket.emit('actualiser_facture_pharmacie');
+                                // socket.emit('actualiser_facture_pharmacie');
                                 i++;
                                 if (i === detailsFacture.length) {
                                     execGetDateTime();
