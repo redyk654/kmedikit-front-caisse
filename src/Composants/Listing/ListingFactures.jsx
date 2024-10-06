@@ -78,7 +78,7 @@ export default function ListingFactures(props) {
                     result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
                 }
                 sethistorique(result);
-                recupererRecetteTotal(result);
+                recupererRecetteTotal(data);
                 let t = 0;
                 result.forEach(item => {
                     t += parseInt(item.prix_total);
@@ -126,35 +126,52 @@ export default function ListingFactures(props) {
         req.send();
     }, []);
 
-    const recupererRecetteTotal = (result) => {
-            if (props.role.toLowerCase() === "caissier") {
-                result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
-            } else {
-                if (filtre) {
-                    result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+    const recupererRecetteTotal = (data) => {
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}recuperer_recette.php`);
+
+        req.addEventListener('load', () => {
+            if(req.status >= 200 && req.status < 400) {
+                setMessageErreur('');
+                let result = JSON.parse(req.responseText);
+
+                if (props.role.toLowerCase() === "caissier") {
+                    result = result.filter(item => (item.caissier.toLowerCase() == props.nomConnecte.toLowerCase()));
+                } else {
+                    if (filtre) {
+                        result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
+                    }
                 }
+                
+                let recette = 0, resteAPayer = 0;
+                if (assurance === "non") {
+                    result.forEach(item => {
+                        if (item.assurance.toUpperCase() === "aucune".toUpperCase()) {
+                            recette += parseInt(item.a_payer);
+                            resteAPayer += parseInt(item.reste_a_payer)
+                        }
+                    });
+                } else {
+                    result.forEach(item => {
+                        if (item.assurance.toUpperCase() !== "aucune".toUpperCase()) {
+                            recette += parseInt(item.a_payer);
+                            resteAPayer += parseInt(item.reste_a_payer)
+                        }
+                    });
+                }
+                recette -= resteAPayer
+                setRecetteTotal(recette);
+                setDette(resteAPayer);
+                setIsLoading(false)
             }
-            
-            let recette = 0, resteAPayer = 0;
-            if (assurance === "non") {
-                result.forEach(item => {
-                    if (item.assurance.toUpperCase() === "aucune".toUpperCase()) {
-                        recette += parseInt(item.a_payer);
-                        resteAPayer += parseInt(item.reste_a_payer)
-                    }
-                });
-            } else {
-                result.forEach(item => {
-                    if (item.assurance.toUpperCase() !== "aucune".toUpperCase()) {
-                        recette += parseInt(item.a_payer);
-                        resteAPayer += parseInt(item.reste_a_payer)
-                    }
-                });
-            }
-            recette -= resteAPayer
-            setRecetteTotal(recette);
-            setDette(resteAPayer);
-            setIsLoading(false)
+        });
+
+        req.addEventListener("error", function () {
+            // La requête n'a pas réussi à atteindre le serveur
+            setMessageErreur('Erreur réseau');
+        });
+
+        req.send(data);
     }
 
     const rechercherHistorique = () => {
