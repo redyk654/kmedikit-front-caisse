@@ -104,7 +104,7 @@ export default function Comptes(props) {
                             <option value={ROLES.caissier}>caissier</option>
                             <option value={ROLES.regisseur}>regisseur</option>
                             {props.role === ROLES.admin ? <option value={ROLES.admin}>admin</option> : null}
-                            <option value={ROLES.secretaire}>sécrétaire</option>
+                            <option value={ROLES.compta}>compta</option>
                         </select>
                     </p>
                 </div>
@@ -279,9 +279,9 @@ export default function Comptes(props) {
                             <div style={{width: '100%', fontWeight: '600'}}>{compteSelectionne.length > 0 && compteSelectionne[0].rol}</div>
                         </div>
                    </div>
-                   {/* <div style={{width: '100%', textAlign: 'center',}}>   
+                   <div style={{width: '100%', textAlign: 'center',}}>   
                         <button className='bootstrap-btn annuler' style={{width: '15%', marginTop: '30px',}} onClick={supprimerCompte}>Supprimer</button>
-                   </div> */}
+                   </div>
                 </div>
             </div>
         </section>

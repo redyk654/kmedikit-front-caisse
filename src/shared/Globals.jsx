@@ -49,7 +49,7 @@ export const ROLES = {
     secretaire: "secretaire",
     regisseur: "regisseur",
     admin: "admin",
-    laborantin: "laborantin",
+    compta: "compta",
 }
 
 export const SEXES = {

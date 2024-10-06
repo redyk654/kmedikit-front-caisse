@@ -295,8 +295,7 @@ export default function ListingFactures(props) {
                                     <td>{item.patient}</td>
                                     <td>{item.caissier}</td>
                                     <td>
-                                        {item.a_payer == 0 ?
-                                        <CBadge color='danger'>Annulé</CBadge> :
+                                        {
                                         item.a_payer + ' Fcfa'
                                         }
                                     </td>
