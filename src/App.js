@@ -139,7 +139,7 @@ function App() {
                 &nbsp;
                 Modifier
               </div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
+              <div className={`tab ${onglet === 4 ? 'active' : ''} ${role.toLowerCase() === ROLES.regisseur && 'd-none'}`} onClick={ () => {setOnglet(4)}}>
                 <FaUsers size={20} />
                 &nbsp;
                 Utilisateurs

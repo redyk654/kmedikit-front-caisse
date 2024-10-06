@@ -1,6 +1,6 @@
 import React from 'react';
 import { styleEntete } from './Globals';
-import logo from '../images/logo-minsante.png';
+import logo from '../images/logo_hdj.png';
 
 export default function EnteteHopital() {
   return (
@@ -9,13 +9,12 @@ export default function EnteteHopital() {
             <div style={styleEntete}><strong>Republique du Cameroun <br/><em style={{textTransform: 'capitalize'}}>Paix-Travail-Patrie</em></strong></div>
             <div style={styleEntete}><strong>Ministere de la sante publique</strong></div>
             <div style={styleEntete}><strong>Delegation regionale du Littoral</strong></div>
-            <div style={styleEntete}><strong>District sante de Mbanga</strong></div>
-            <div style={styleEntete}><strong>Hôpital de District de Mbanga</strong></div>
+            <div style={styleEntete}><strong>District sante de Japoma</strong></div>
+            <div style={styleEntete}><strong>Hôpital de District de Japoma</strong></div>
             <div style={{...styleEntete, lineHeight: '12px'}}>
                 <strong>
-                    B.P. 29 Mbanga <br />
-                    Tel: 243 53 62 60 / 243 53 62 61 <br />
-                    hdmbanga@yahoo.com
+                    B.P 7051 <br />
+                    Tel: 695 19 38 35
                 </strong>
             </div>
         </div>
@@ -26,13 +25,12 @@ export default function EnteteHopital() {
             <div style={styleEntete}><strong>Republic of Cameroon <br/><em style={{textTransform: 'capitalize'}}>Peace-Work-Fatherland</em></strong></div>
             <div style={styleEntete}><strong>Minister of Public Health</strong></div>
             <div style={styleEntete}><strong>Littoral regional delegation</strong></div>
-            <div style={styleEntete}><strong>Health District of Mbanga</strong></div>
-            <div style={styleEntete}><strong>District Hospital of Mbanga</strong></div>
+            <div style={styleEntete}><strong>Health District of Japoma</strong></div>
+            <div style={styleEntete}><strong>District Hospital of Japoma</strong></div>
             <div style={{...styleEntete, lineHeight: '12px'}}>
                 <strong>
-                    P.O BOX 29 Mbanga <br />
-                    Tel: 243 53 62 60 / 243 53 62 61 <br />
-                    hdmbanga@yahoo.com
+                    B.P 7051 <br />
+                    Tel: 695 19 38 35
                 </strong>
             </div>
         </div>

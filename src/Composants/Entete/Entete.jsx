@@ -182,7 +182,7 @@ export default function Entete(props) {
             </Modal>
             <div className="box-entete">
                 <h1 style={{textAlign: 'center', width: '98vw', fontSize: '29px'}}>
-                    Caisse
+                    Administration
                 </h1>
                 <h3 className='ms-4' onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
                 <div className='deconnection' style={{display: `${slide ? 'flex' : 'flex'}`,}}>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { extraireCode, mois, mois2, styleEntete } from '../../shared/Globals';
 import logo from '../../images/logo_hdj.png';
 import EnteteHdm from '../../shared/EnteteHdm';
+import EnteteHopital from '../../shared/EnteteHopital';
 
 const styles = {
     // display: 'flex',
@@ -41,7 +42,7 @@ export default class ImprimerHistorique extends Component {
         return (
             <div style={{backgroundColor: '#f1f1f1', height: '100vh', marginTop: '0px'}}>
                 <div className='w-75 m-auto'>
-                    <EnteteHdm />
+                    <EnteteHopital />
                 </div>
                 <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                     <div style={{textAlign: 'center', width: '410px'}}>
