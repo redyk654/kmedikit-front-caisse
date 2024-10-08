@@ -253,12 +253,12 @@ export const convertirFormatDateJMA = (date) => {
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
                             "CONSULTATION", "ECHOGRAPHIE", "MORGUE", "PEDIATRIE", "KIT", "CONSULTATION SPÉCIALISTE", "IMAGERIE", "AUTRE"];
 
-const backendLocal = 'http://localhost/backend-cmab/';
+const backendLocal = 'http://localhost:8080/backend-cmab/';
 const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = hdmbanga;
+export const nomDns = backendLocal;
 export const nomServeurNode = serveur;
 
 export const liensPhilmedical = {
@@ -268,7 +268,7 @@ export const liensPhilmedical = {
 
 export const getDateTime = async () => {
     try {
-        const response = await fetch(`${hdmbanga}get_time.php`);
+        const response = await fetch(`${backendLocal}get_time.php`);
         const data = await response.json();
         return data;
     } catch (error) {
