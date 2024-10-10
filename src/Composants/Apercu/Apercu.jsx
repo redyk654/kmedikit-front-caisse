@@ -4,7 +4,7 @@ import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
-import { extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour, sauvegarderBd } from '../../shared/Globals';
 import { CFormSwitch } from '@coreui/react';
 
 
@@ -73,6 +73,7 @@ export default function Apercu(props) {
                 execGetDateTime();
                 setMessageErreur('');
                 // console.log(JSON.parse(req.responseText));
+                // console.log(req.responseText);
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
@@ -192,7 +193,8 @@ export default function Apercu(props) {
     
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
-                    console.log(req.responseText);
+                    sauvegarderBd();
+                    // console.log(req.responseText);
                 }
             });
     

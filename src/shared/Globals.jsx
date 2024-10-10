@@ -234,22 +234,41 @@ export const convertirFormatDateJMA = (date) => {
 }
 
 
-const backendLocal = 'http://localhost:8080/backend-cmab/';
+const backendLocal = 'http://localhost:8080/';
 const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 
-export const nomDns = backendLocal;
+export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
 
 export const getDateTime = async () => {
     try {
-        const response = await fetch(`${backendLocal}get_time.php`);
+        const response = await fetch(`${hdmbanga}get_time.php`);
         const data = await response.json();
         return data;
     } catch (error) {
         console.error('Error fetching date:', error);
     }
+}
+
+export const sauvegarderBd = () => {
+    const req = new XMLHttpRequest();
+    req.open('POST', `${nomDns}backup.php`);
+
+    req.addEventListener("error", function () {
+        // La requête n'a pas réussi à atteindre le serveur
+        console.log(req.status + " " + req.statusText);
+        
+    });
+
+
+    req.addEventListener("error", function () {
+        // La requête n'a pas réussi à atteindre le serveur
+        console.log('Erreur réseau');
+    });
+
+    req.send();
 }
 
 export const convertirDateAvecTiret = (date) => {

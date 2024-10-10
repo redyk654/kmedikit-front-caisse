@@ -36,6 +36,8 @@ export default function Connexion(props) {
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
+                // console.log(req.responseText);
+                
                 if (req.responseText == "identifiant ou mot de passe incorrect") {
                     setErreur(req.responseText);
                 } else {

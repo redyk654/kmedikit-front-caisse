@@ -15,6 +15,7 @@ import Facture from '../Facture/Facture';
 import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
 import { io } from 'socket.io-client';
+import { CFormInput, CListGroup, CListGroupItem } from '@coreui/react';
 
 // const socket = io.connect(`${nomServeurNode}`);
 
@@ -126,7 +127,7 @@ export default function Commande(props) {
     const {chargement, stopChargement, startChargement } = useContext(ContextChargement);
 
     const autre  = {designation: '', prix: ''};
-    const assuranceDefaut = 'aucune';
+    const prescripteurDefault = {id: 0, designation: ''};
 
     const date_e = new Date('2036-12-19');
     const date_j = new Date();
@@ -159,6 +160,11 @@ export default function Commande(props) {
     const [msgPatient, setMsgPatient] = useState('');
     const [currentDate, setCurrentDate] = useState('');
     const [actesMorgue, setActesMorgue] = useState([]);
+    const [listePrescripteurs, setListePrescripteurs] = useState([]);
+    const [prescripteurRecherche, setPrescripteurRecherche] = useState('');
+    const [prescripteurChoisi, setPrescripteurChoisi] = useState(prescripteurDefault);
+
+    const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
     const {designation, prix} = autreState;
 
@@ -203,6 +209,7 @@ export default function Commande(props) {
                 req.addEventListener("load", () => {
                     if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                         // setInterval(() => {
+                            
                             const result = JSON.parse(req.responseText);
                             const temp = result
                                 .filter(item => item.designation.toLowerCase().includes("mortuaire"))
@@ -216,6 +223,7 @@ export default function Commande(props) {
                             stopChargement();
                             document.querySelector('.recherche').value = "";
                             document.querySelector('.recherche').focus();
+                            fetchPrescripteurs();
                         // }, props.delayLoad);
         
                     } else {
@@ -232,6 +240,54 @@ export default function Commande(props) {
             }
         }, props.delayLoad);
     }, [rerender]);
+
+    const handleChangePrescripteur = (e) => {
+        setPrescripteurRecherche(e.target.value.trim());
+    }
+
+    const fetchPrescripteurs = () => {
+        const req = new XMLHttpRequest();
+
+        req.open('GET', `${nomDns}gestion_prescripteurs.php?liste`);
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                const result = JSON.parse(req.responseText);
+                setListePrescripteurs(result);
+            }
+        });
+
+        req.send();
+    }
+
+    const choisirPrescripteur = (e) => {
+        const prescripteur = listePrescripteurs.filter(item => item.id == e.target.id)[0];
+        setPrescripteurChoisi(prescripteur);        
+        setPrescripteurRecherche('');
+    }
+
+    const creerPrescripteur = (e) => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append('designation', prescripteurRecherche.toUpperCase().trim());
+
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}gestion_prescripteurs.php?create`);
+
+        req.addEventListener('load', () => {
+            if (req.status >= 200 && req.status < 400) {
+                if (req.responseText.toLowerCase() == 'existe') {
+                    setMessageErreur('Ce prescripteur existe déjà');
+                } else {
+                    // const result = JSON.parse(req.responseText);
+                    setMessageErreur('');
+                    setRerender(true);
+                }
+            }
+        });
+
+        req.send(data);
+    }
 
     const modifierPrixActeMorgue = (item) => {
         if (item.designation.toLowerCase() == "toilette mortuaire") {
@@ -312,6 +368,8 @@ export default function Commande(props) {
         const medocSelectionne = listeMedoc.filter(item => (item.id == e.target.value));
         setMedoSelect(medocSelectionne);
         setQteDesire(1);
+        document.querySelector('#qteDesire').focus();
+
     }
 
     // Filtrage de la liste de médicaments affichés lors de la recherche d'un médicament
@@ -335,7 +393,8 @@ export default function Commande(props) {
     }
 
     // Enregistrement d'un médicament dans la commande
-    const ajouterMedoc = () => {
+    const ajouterMedoc = (e) => {
+        e.preventDefault();
 
         // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
@@ -379,6 +438,7 @@ export default function Commande(props) {
     // }
 
     const annulerCommande = () => {
+        setPrescripteurChoisi(prescripteurDefault);
         setMedoSelect(false);
         setMedocCommandes([]);
         setPatient('');
@@ -394,24 +454,6 @@ export default function Commande(props) {
         document.querySelector('#valider-facture').disabled = false;
         document.querySelector('#annuler-facture').disabled = false;
         activeBtnValidation();
-    }
-
-    const sauvegarder = () => {
-        const req = new XMLHttpRequest();
-        req.open('POST', `${nomDns}backup.php`);
-
-        req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('');
-        });
-
-
-        req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
-            setMessageErreur('Erreur réseau');
-        });
-
-        req.send();
     }
 
     const idUnique = () => {
@@ -448,11 +490,14 @@ export default function Commande(props) {
         data.append('assurance', patientChoisi.assurance);
         data.append('type_assurance', patientChoisi.type_assurance);
         data.append('statu', statu);
+        data.append('id_prescripteur', prescripteurChoisi.id);
 
         const req = new XMLHttpRequest();
         req.open('POST', `${nomDns}index.php?enregistrer_facture`);
 
         req.addEventListener('load', () => {
+            // console.log(req.responseText);
+            
             setMessageErreur('');
             execGetDateTime();
             actualisationHistorique();
@@ -503,6 +548,7 @@ export default function Commande(props) {
                 data2.append('categorie', item.categorie);
                 data2.append('caissier', props.nomConnecte);
                 data2.append('reduction', valeurReduction);
+                data2.append('id_prescripteur', prescripteurChoisi.id);
 
                 // Envoi des données
                 const req2 = new XMLHttpRequest();
@@ -510,6 +556,8 @@ export default function Commande(props) {
                 
                 // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
+                    // console.log(req2.responseText);
+                    
                     if (req2.status >= 200 && req2.status < 400) {
                         // console.log(req2.response);
                         setMessageErreur('');
@@ -597,6 +645,8 @@ export default function Commande(props) {
     
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
+                    console.log(req.responseText);
+                    
                     if (req.responseText.toUpperCase() === ServiceExiste.toUpperCase()) {
                         setMessageErreur('Ce service existe déjà');
                     } else {
@@ -726,7 +776,7 @@ export default function Commande(props) {
 
     const fermerModalReussi = () => {
         setModalReussi(false);
-        sauvegarder();
+        // sauvegarder();
         setMedocCommandes([]);
         annulerCommande();
         setPatientChoisi(detailsDuPatient);
@@ -909,11 +959,11 @@ export default function Commande(props) {
                     ))}
                 </div>
                 <div className="box" style={{marginLeft: 5}}>
-                    <div className="">
-                        <input type="text" name="qteDesire" value={qteDesire} onChange={(e) => {setQteDesire(e.target.value)}} autoComplete='off' />
-                        <button onClick={ajouterMedoc} className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}}>ajouter</button>
+                    <form onSubmit={ajouterMedoc}>
+                        <input id='qteDesire' type="text" name="qteDesire" value={qteDesire} onChange={(e) => {setQteDesire(e.target.value)}} autoComplete='off' />
+                        <button type='submit' className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}}>ajouter</button>
                         {/* <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button> */}
-                    </div>
+                    </form>
                     <div style={{textAlign: 'center'}}>
                         <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
                     </div>
@@ -924,21 +974,42 @@ export default function Commande(props) {
                         </div>
                     </div>
                     <div style={{textAlign: 'center'}}>
+                        <div className='d-flex justify-content-center align-items-center'>
+                            <CFormInput
+                                style={{width: '300px'}}
+                                type="text"
+                                id="prescripteur"
+                                placeholder="Rechercher un prescripteur"
+                                aria-describedby="prescripteur"
+                                value={prescripteurRecherche}
+                                onChange={handleChangePrescripteur}
+                                autoComplete='off'
+                            />
+                            <CListGroup>
+                                {vueListePrescripteurs.map(item => (
+                                    <CListGroupItem id={`${item.id}`} key={item.id} onClick={choisirPrescripteur}>{item.designation}</CListGroupItem>
+                                ))}
+                            </CListGroup>
+                            <a className='text-decoration-none' role='button' onClick={creerPrescripteur}>Creer prescripteur</a>
+                        </div>
+                        <div>
+                            Prescripteur: <span style={{color: '#000', fontWeight: '700'}}>{prescripteurChoisi.id == 0 ? 'Aucun' : prescripteurChoisi.designation}</span>
+                        </div>
                         {patientChoisi.nom.length > 0 ? (
                             <div>
-                                Patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
+                                Patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
                             </div>
                         ) : null}
                         {patientChoisi.nom.length > 0 ? (
                             <div>
-                                Code patient: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.code.toUpperCase()}</span>
+                                Code patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.code.toUpperCase()}</span>
                             </div>
                         ) : null}
-                        {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
+                        {/* {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
                             <div style={{}}>
                                 Couvert par: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.assurance.toLocaleUpperCase()}</span>
                             </div>
-                        ) : null}
+                        ) : null} */}
                         {/* <label htmlFor="">Montant versé : </label>
                         <input type="number" name='verse' value={montantVerse} onChange={handleChangeMontantVerse} autoComplete='off' /> */}
                     </div>
