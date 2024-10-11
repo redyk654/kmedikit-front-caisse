@@ -1101,6 +1101,7 @@ export default function Commande(props) {
                                 nomConnecte={props.nomConnecte}
                                 montantFrais={montantMateriel}
                                 dateJour={currentDate}
+                                prescripteur={prescripteurChoisi.designation}
                             />
                         </div>
                     </div>

@@ -34,6 +34,7 @@ export default class Facture extends Component {
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
                         dateJour={this.props.dateJour}
+                        prescripteur={this.props.prescripteur}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -54,6 +55,7 @@ export default class Facture extends Component {
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
                         dateJour={this.props.dateJour}
+                        prescripteur={this.props.prescripteur}
                     />
                 </div>
                 <div style={stylesDuContainer}>
@@ -74,6 +76,7 @@ export default class Facture extends Component {
                         nomConnecte={this.props.nomConnecte}
                         montantFrais={this.props.montantFrais}
                         dateJour={this.props.dateJour}
+                        prescripteur={this.props.prescripteur}
                     />
                 </div>
             </div>

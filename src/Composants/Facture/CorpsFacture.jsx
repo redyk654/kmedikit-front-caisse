@@ -55,14 +55,6 @@ export default function CorpsFacture(props) {
                     &nbsp; {props.codePatient.toUpperCase()}
                 </span>
             </div>
-            {props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
-                <div style={{marginTop: 3}}>
-                    couvert par :
-                    <span style={{fontWeight: '600', marginTop: '10px', color: 'black'}}>
-                        &nbsp; {props.assurance.toUpperCase()}
-                    </span>
-                </div>
-            ) : null}
             <div style={{textAlign: 'center', marginBottom: 15}}>
                 <table style={table_styles}>
                     <thead>
@@ -106,6 +98,14 @@ export default function CorpsFacture(props) {
                 </div>
             </div>
             <div style={{marginTop: '15px', textAlign: 'right', paddingRight: '30px'}}>Caissier : <span style={{fontWeight: '600', marginTop: '15px', textTransform: 'capitalize'}}>{props.nomConnecte.toUpperCase()}</span></div>
+            {props.prescripteur != "" ? (
+                <div style={{marginTop: 3}}>
+                    Prescripteur :
+                    <span style={{fontWeight: '600', marginTop: '10px', color: 'black'}}>
+                        &nbsp; {props.prescripteur.toUpperCase()}
+                    </span>
+                </div>
+            ) : null}
             <div style={{fontStyle: 'italic', marginTop: '9px'}}> Bonne Guérison !!!</div>
         </div>
     </div>
