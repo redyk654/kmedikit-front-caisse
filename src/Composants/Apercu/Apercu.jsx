@@ -292,7 +292,7 @@ export default function Apercu(props) {
                         </thead>
                         <tbody>
                             {!isLoading ? historique.length > 0 ? historique.map(item => (
-                                <tr key={item.id}>
+                                <tr>
                                     <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
                                     <td>{item.prix_total + ' Fcfa'}</td>
                                 </tr>
