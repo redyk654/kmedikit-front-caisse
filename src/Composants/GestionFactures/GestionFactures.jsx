@@ -111,7 +111,7 @@ export default function GestionFactures(props) {
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
                 setdetailsFacture(result);
-                console.log(detailsFacture);
+                // console.log(detailsFacture);
                 
                 fermerModalConfirmation();
             });
@@ -294,7 +294,8 @@ export default function GestionFactures(props) {
                                         <td style={table_styles2}>{item.prix}</td>
                                         <td style={table_styles2}>{item.qte}</td>
                                         <td style={table_styles2}>{item.prix_total}</td>
-                                        {(props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (                                            
+                                        {(
+                                            // props.role.toUpperCase() === ROLES.admin.toUpperCase()) && (
                                             <td>
                                                 {parseInt(item.statu_acte) ? 
                                                 (<CIcon
@@ -312,7 +313,8 @@ export default function GestionFactures(props) {
                                                         role="button"
                                                         size='lg'
                                                     />
-                                                )}
+                                                )
+                                                }
                                             </td>
                                         )}
                                     </tr>
