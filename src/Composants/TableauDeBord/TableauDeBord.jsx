@@ -119,11 +119,11 @@ export default function TableauDeBord(props) {
 
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
-                    console.log(req.responseText);
+                    // console.log(req.responseText);
                     
-                    // const res = JSON.parse(req.responseText);
-                    // recettePharmacieParPeriode(res, date1, date2);
-                    // recupDetailsParPeriode(date1, date2);
+                    const res = JSON.parse(req.responseText);
+                    recettePharmacieParPeriode(res, date1, date2);
+                    recupDetailsParPeriode(date1, date2);
                 }
             });
 
