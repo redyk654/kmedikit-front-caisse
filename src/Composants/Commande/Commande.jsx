@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode, getDateTime } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode, getDateTime, CATEGORIES_RUBRIQUES } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -163,6 +163,7 @@ export default function Commande(props) {
     const [listePrescripteurs, setListePrescripteurs] = useState([]);
     const [prescripteurRecherche, setPrescripteurRecherche] = useState('');
     const [prescripteurChoisi, setPrescripteurChoisi] = useState(prescripteurDefault);
+    const [hasPrescripteur, setHasPrescripteur] = useState(false);
 
     const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
@@ -209,8 +210,11 @@ export default function Commande(props) {
                 req.addEventListener("load", () => {
                     if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                         // setInterval(() => {
+                            // console.log(req.responseText);
                             
                             const result = JSON.parse(req.responseText);
+                            // console.log(result);
+                            
                             const temp = result
                                 .filter(item => item.designation.toLowerCase().includes("mortuaire"))
                             
@@ -242,7 +246,7 @@ export default function Commande(props) {
     }, [rerender]);
 
     const handleChangePrescripteur = (e) => {
-        setPrescripteurRecherche(e.target.value.trim());
+        setPrescripteurRecherche(e.target.value);
     }
 
     const fetchPrescripteurs = () => {
@@ -395,7 +399,12 @@ export default function Commande(props) {
     // Enregistrement d'un médicament dans la commande
     const ajouterMedoc = (e) => {
         e.preventDefault();
-
+        // verifier si l'acte doit exigé un prescripteur
+        const verif_rubrique = CATEGORIES_RUBRIQUES.filter(item => item == medocSelect[0].categorie || item == medocSelect[0].rubrique);
+        if (verif_rubrique.length > 0 && prescripteurChoisi.id == 0) {
+            setHasPrescripteur(true);
+        }
+        
         // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
         setTimeout(() => {
@@ -590,6 +599,10 @@ export default function Commande(props) {
     }
 
     const demanderConfirmation = () => {
+        if (hasPrescripteur && prescripteurChoisi.id == 0) {
+            setMessageErreur('Veuillez choisir un prescripteur pour cette facture'.toUpperCase());
+            return
+        }
         if (medocCommandes.length > 0) {
             if (patientChoisi.nom.length > 0) {
                 validerCommande();
