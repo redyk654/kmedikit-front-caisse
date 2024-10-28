@@ -296,7 +296,7 @@ export const liensPhilmedical = {
     acceuil: 'http://serveur/philmedical/acceuil',
 }
 
-export const CATEGORIES_RUBRIQUES = ["LABO", "LABORATOIRE", "IMAGERIE", "RADIO", "ECHO", "SPÉCIALISTE", "SPECIALISTE",
+export const CATEGORIES_RUBRIQUES = ["LABO", "LABORATOIRE", "IMAGERIE", "RADIO", "ECHO", "ECHOGRAPHIE", "CONSULTATION SPÉCIALISTE", "SPECIALISTE",
                                     "GYNECO", "GYNECOLOGUE", "PÉDIATRE", "PEDIATRE", "CARDIO", "CARDIOLOGUE",]
 
 export const CATEGORIES = ["MATERNITE", "CHIRURGIE", "LABORATOIRE", "MEDECINE", "CARNET",
