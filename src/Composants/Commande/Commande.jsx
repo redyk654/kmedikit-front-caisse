@@ -1003,7 +1003,7 @@ export default function Commande(props) {
                                     <CListGroupItem id={`${item.id}`} key={item.id} onClick={choisirPrescripteur}>{item.designation}</CListGroupItem>
                                 ))}
                             </CListGroup>
-                            <a className='text-decoration-none' role='button' onClick={creerPrescripteur}>Creer prescripteur</a>
+                            {/* <a className='text-decoration-none' role='button' onClick={creerPrescripteur}>Creer prescripteur</a> */}
                         </div>
                         <div>
                             Prescripteur: <span style={{color: '#000', fontWeight: '700'}}>{prescripteurChoisi.id == 0 ? 'Aucun' : prescripteurChoisi.designation}</span>
