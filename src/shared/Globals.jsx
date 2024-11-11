@@ -57,6 +57,12 @@ export const SEXES = {
     f: 'F'
 }
 
+export const genres = {
+    "": "non répertorié",
+    sp: "specialite",
+    generique: "generique",
+}
+
 export const MONTANTMATERIEL = 500;
 
 export function mois (str) {

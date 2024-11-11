@@ -23,6 +23,7 @@ import { ContextChargement } from './Context/Chargement';
 import { ROLES, liensPhilmedical } from "./shared/Globals";
 import TableauDeBord from './Composants/TableauDeBord/TableauDeBord';
 import ListingFactures from './Composants/Listing/ListingFactures';
+import Etats from './Composants/Etats/Etats';
 
 
 
@@ -98,6 +99,8 @@ function App() {
     case 13:
       contenu = <ListingFactures setOnglet={setOnglet} delay={delay} nomConnecte={nomConnecte} role={role} setConnecter={setConnecter} />
       break;
+    case 14:
+      contenu = <Etats role={role} nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} />
     default:
       break;
   }
@@ -123,6 +126,11 @@ function App() {
                 <FaClipboardList size={19} />
                 &nbsp;
                 Listing Actes
+              </div>
+              <div className={`tab ${onglet === 14 ? 'active' : ''}`} onClick={ () => {setOnglet(14)}}>
+                <FaClipboardList size={19} />
+                &nbsp;
+                Etats Pharmacie
               </div>
               <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
                 <FaClipboardList size={19} />
