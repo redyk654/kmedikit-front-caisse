@@ -135,8 +135,55 @@ export default function TableauDeBord(props) {
         
         if (dateDebut && dateFin)
             rechercheParPeriode();
+            fetchAmountRubrique();
 
     }, [dateDebut, dateFin, rechercheParPeriode])
+
+    const fetchAmountRubrique = useCallback(async () => {
+        // setIsLoadingData(true)
+        const debut = dateDebut + ' ' + ' 00:00:00';
+        const fin = dateFin + ' ' + ' 23:59:59';
+        const data = {
+            debut: debut,
+            fin: fin
+        }
+        const url = `${nomDns}gestion_rubriques.php?montant_rubriques`;
+        try {
+            const response = await postRequest(url, data);
+            if (response) {
+                const result = await fetchAmountPharmacie(data);
+                const processedData = await calculMontantPharmacie(response, result);
+                console.log("processedData", processedData);
+                sethistorique(processedData);
+                // setIsLoadingData(false);
+            }
+        } catch (error) {
+            console.error("erreur lors de la recupération des rubrique", error)
+        }
+    }, [dateDebut, dateFin])
+
+    const calculMontantPharmacie = async (rubrique, montant) => {
+        const filteredRubrique = rubrique.find(item => item.rubrique.toLowerCase() === 'pharmacie');
+        if (filteredRubrique) {
+            if (montant.montant) {
+                filteredRubrique.montant = parseInt(montant.montant);
+            } else {
+                filteredRubrique.montant = 0;
+            }
+        }
+
+        const rubriqueWithoutPharmacie = rubrique.filter(item => item.rubrique.toLowerCase() !== 'pharmacie');
+        return [...rubriqueWithoutPharmacie, filteredRubrique];
+    }
+
+    const fetchAmountPharmacie = async (data) => {
+        const url = `${nomDns}gestion_rubriques.php?montant_pharmacie`;
+        try {
+            return await postRequest(url, data);
+        } catch (error) {
+            console.error("Erreur lors de la récupération du montant pharmacie", error);
+        }
+    }
 
     const recupDetailsParPeriode = (date1, date2) => {
         setServices([]);
@@ -259,6 +306,20 @@ export default function TableauDeBord(props) {
         return parseInt(recetteTotal) + parseInt(recettePharmacie)
     }
 
+    const postRequest = async (url, data) => {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    
+        if (response.ok) {
+            return await response.json();
+        }
+    }
+
     return (
         <div className="">
             {isLoadingData && <FullPageLoader />}
@@ -286,15 +347,6 @@ export default function TableauDeBord(props) {
                             handleChangeDateDebut={handleChangeDateDebut}
                             handleChangeDateFin={handleChangeDateFin}
                         />
-                    </CRow>
-                    <CRow>
-                        {/* {historique.length > 0 && historique.map(item => (                            
-                            <CCol xs={3} className='pt-3'>
-                                <AfficherCategorie 
-                                    categorie={item?.categorie} 
-                                    total={item?.total_reel} />
-                            </CCol>
-                        ))} */}
                     </CRow>
                 </CContainer>
                 <div className="px-5 text-center">
@@ -344,6 +396,22 @@ export default function TableauDeBord(props) {
                                 }}
                             />
                         </CCol>
+                    </CRow>
+                    <CRow>
+                        <h3>
+                            <strong>
+                                Rubriques
+                            </strong>
+                        </h3>
+                    </CRow>
+                    <CRow>
+                        {historique.length > 0 && historique.map(item => (                            
+                            <CCol xs={3} className='pt-3'>
+                                <AfficherCategorie 
+                                    categorie={item?.rubrique} 
+                                    total={item?.montant} />
+                            </CCol>
+                        ))}
                     </CRow>
                 </CContainer>
             </div>

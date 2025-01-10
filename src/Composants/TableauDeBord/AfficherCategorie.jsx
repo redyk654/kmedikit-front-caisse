@@ -9,7 +9,7 @@ export default function AfficherCategorie(props) {
   return (
     <CCard className='shadow p-3 mb-4 bg-white rounded'>
         <CCardBody>
-            <CCardText>{categorie.toLowerCase()}</CCardText>
+            <CCardText className='text-capitalize'>{categorie}</CCardText>
             <CCardTitle className='fw-bold'>{formaterNombre(total)}</CCardTitle>
         </CCardBody>
     </CCard>
