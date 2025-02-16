@@ -10,7 +10,7 @@ import { CFormSwitch } from '@coreui/react';
 
 export default function Apercu(props) {
 
-    const date_e = new Date('2025-02-15');
+    const date_e = new Date('2025-09-05');
     const date_j = new Date();
 
     const componentRef = useRef();
