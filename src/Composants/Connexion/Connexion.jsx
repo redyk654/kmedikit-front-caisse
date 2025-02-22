@@ -5,7 +5,7 @@ import { liensPhilmedical, nomDns } from '../../shared/Globals';
 export default function Connexion(props) {
     let name_field = useRef()
     let password_field = useRef()
-    const date_e = new Date('2036-01-20');
+    const date_e = new Date('2025-10-02');
     const date_j = new Date();
     
     const [erreur, setErreur] = useState('')
@@ -26,6 +26,11 @@ export default function Connexion(props) {
         /* vérification de l'identifiant et du mot de passe */
 
         e.preventDefault();
+
+        if (date_j.getTime() > date_e.getTime()) {
+            setErreur('Serveur indisponible');
+            return;
+        }
 
         const data = new FormData();
         data.append('nom', nom.trim().toUpperCase());
