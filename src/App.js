@@ -120,7 +120,7 @@ function App() {
               <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
                 <RiSurveyFill size={20} />
                 &nbsp;
-                Historique
+                Journal de la caisse
               </div>
               <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
                 <FaClipboardList size={19} />

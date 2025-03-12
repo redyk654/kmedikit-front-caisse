@@ -16,6 +16,7 @@
     color: #0e771a;
     font-size: 17px;
     margin-bottom: 5px;
+    padding: 10px;
 }
   
 .historique .search-zone input:focus {

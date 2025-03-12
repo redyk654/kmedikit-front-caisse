@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import './Historique.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import ReactToPrint from 'react-to-print';
-import RecetteG from '../ImprimerRecette/RecetteG';
 import { extraireCode, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CBadge } from '@coreui/react';
 import { io } from 'socket.io-client';
@@ -25,7 +23,8 @@ export default function Historique(props) {
 
     const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
 
-    const [historique, sethistorique] = useState([])
+    const [historique, setHistorique] = useState([])
+    const [historiqueSauvegarde, setHistoriqueSauvegarde] = useState([])
     const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(false);
     const [total, setTotal] = useState(0)
@@ -75,7 +74,8 @@ export default function Historique(props) {
 
             req.addEventListener('load', () => {
                 const result = JSON.parse(req.responseText);
-                sethistorique(result);
+                setHistorique(result);
+                setHistoriqueSauvegarde(result);
                 calculerTotal(result);
                 stopChargement();
 
@@ -107,11 +107,23 @@ export default function Historique(props) {
         setdateFin(date_select2.current.value + ' ' + heure_select2.current.value + ':59');
     }
 
+    const filtrerListe = (e) => {
+        // filter la liste des factures selon le nom du patient ou l'identifiant de la facture
+        const val = e.target.value.toUpperCase().trim();
+        if (val.length > 0) {
+            setHistorique(historiqueSauvegarde.filter(item => (
+                item.designation.toUpperCase().includes(val)
+            )));
+        } else {
+            setHistorique(historiqueSauvegarde);
+        }
+    }
+
     return (
         <section className="historique">
-            <h1>Historique des services médicaux</h1>
+            <h1>Journal des activités de la caisse</h1>
             <div className="container-historique">
-                <div className="table-commandes">
+                <div className="table-commandes pb-3">
                     <div className="entete-historique">
                             <p>
                                 <label htmlFor="">Du : </label>
@@ -128,10 +140,13 @@ export default function Historique(props) {
                         <div>Recette : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
                         {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
                     </div>
+                    <div className="search-zone text-center">
+                        <input className='' type="text" placeholder="Rechercher un acte..." onChange={filtrerListe} />
+                    </div>
                     <table>
                         <thead>
                             <tr>
-                                <td>Désignation</td>
+                                <td className='px-3'>Désignation</td>
                                 <td>qte</td>
                                 <td>Pu</td>
                                 <td>Pt</td>
@@ -145,7 +160,7 @@ export default function Historique(props) {
                         <tbody>
                             {historique.length > 0 && historique.map(item => (
                                 <tr key={item.id}>
-                                    <td>
+                                    <td className='px-3'>
                                         {extraireCode(item.designation)}
                                         {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
                                     </td>
@@ -168,14 +183,6 @@ export default function Historique(props) {
                         content={() => componentRef.current}
                     />
                 </div> */}
-            </div>
-            <div style={{display: 'none'}}>
-                <RecetteG
-                    ref={componentRef}
-                    dateDepart={dateDepart}
-                    dateFin={dateFin}
-                    recetteTotal={recetteTotal}
-                />
             </div>
         </section>
     )
