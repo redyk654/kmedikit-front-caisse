@@ -1,5 +1,6 @@
 import React from 'react';
 import { extraireCode, mois } from '../../shared/Globals';
+import { CBadge } from '@coreui/react';
 
 
 const table_styles1 = {
@@ -76,7 +77,10 @@ export default function CorpsFactureEnreg(props) {
                     <tbody>
                         {props.detailsFacture.map(item => (
                             <tr>
-                                <td style={table_styles1}>{extraireCode(item.designation)}</td>
+                                <td style={table_styles1}>
+                                    {extraireCode(item.designation)}
+                                    {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
+                                </td>
                                 <td style={table_styles2}>{item.prix}</td>
                                 <td style={table_styles2}>{item.qte}</td>
                                 <td style={table_styles2}>{item.prix_total}</td>
