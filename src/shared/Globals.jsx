@@ -238,7 +238,7 @@ const backendLocal = 'http://localhost:8080/';
 const hdmbanga = 'http://serveur/hdmbanga/';
 const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
-const onlineAPI =  'https://philmedical.alwaysdata.net/backend';
+const onlineAPI =  'https://philmedical.alwaysdata.net/backend/';
 
 export const nomDns = onlineAPI;
 export const nomServeurNode = serveur;
@@ -294,7 +294,7 @@ export const convertDate = (date) => {
 };
 
 export const liensPhilmedical = {
-    acceuil: 'http://serveur/philmedical/acceuil',
+    acceuil: 'https://philmedical.vercel.app/',
 }
 
 export const CATEGORIES_RUBRIQUES = ["LABO", "LABORATOIRE", "IMAGERIE", "RADIO", "ECHO", "ECHOGRAPHIE", "CONSULTATION SPÉCIALISTE", "SPECIALISTE",
