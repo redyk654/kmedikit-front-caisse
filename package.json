@@ -1,7 +1,7 @@
 {
   "main": "public/electron.js",
   "homepage": "./",
-  "copyright": "Copyright © 2022 Chrisppo Youmbissi",
+  "copyright": "Copyright © 2025 Chrisppo Youmbissi",
   "name": "philmedical-caisse",
   "author": "Chrisppo Youmbissi Kamdem",
   "version": "1.0.1",
