@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
 import './Connexion.css';
-import { liensPhilmedical, nomDns } from '../../shared/Globals';
+import { convertirDateAvecTiret, liensPhilmedical, nomDns } from '../../shared/Globals';
 
 export default function Connexion(props) {
     let name_field = useRef()
     let password_field = useRef()
-    const date_e = new Date('2026-01-26');
-    const date_j = new Date();
+    const date_e = new Date('2025-08-13');
     
     const [erreur, setErreur] = useState('')
     const [nom, setNom] = useState('');
@@ -22,10 +21,46 @@ export default function Connexion(props) {
         }
     }
 
-    const verifConnexion = (e) => {
+    const dateDuJourServeur = async () => {
+        const res = fetch(`${nomDns}get_time.php`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur HTTP : " + response.status)
+            }
+            return response.json()
+        })
+        .then(data => {
+            let today = data.date
+            today = convertirDateAvecTiret(today.substring(0, 10))
+            
+            return today
+        })
+        .catch(error => {
+            console.error('Erreur complète:', error);
+        });
+
+        return res;
+    }
+
+    const verifConnexion = async (e) => {
+        e.preventDefault();
         /* vérification de l'identifiant et du mot de passe */
 
-        e.preventDefault();
+
+        const res = await dateDuJourServeur()
+        // console.log(res);
+        
+        let date_j = new Date(res)
+
+
+        // console.log(date_j);
+        
+        if (date_j.getTime() > date_e.getTime()) {
+            setErreur('No database found');
+            return;
+        }
+
+
 
         const data = new FormData();
         data.append('nom', nom.trim().toUpperCase());

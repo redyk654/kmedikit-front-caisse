@@ -42,7 +42,7 @@ export default class ImprimerListingFactures extends Component {
         return (
             <div style={{backgroundColor: '#f1f1f1', height: '100vh', marginTop: '0px'}}>
                 <div className='w-75 m-auto'>
-                    <EnteteHopital />
+                    <EnteteHdm />
                 </div>
                 <div style={{fontSize: 10, color: 'black', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                     <div style={{textAlign: 'center', width: '410px'}}>
