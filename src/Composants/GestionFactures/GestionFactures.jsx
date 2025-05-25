@@ -36,12 +36,16 @@ export default function GestionFactures() {
     const [factures, setFactures] = useState([]);
     const [factureSauvegarde, setfactureSauvegarde] = useState([]);
     const [factureSelectionne, setfactureSelectionne] = useState([]);
+    const [listePrescripteurs, setlistePrescripteurs] = useState([]);
+    const [prescripteurSelectionne, setprescripteurSelectionne] = useState([]);
+    const [isModifierPrescripteur, setisModifierPrescripteur] = useState(false);
     const [detailsFacture, setdetailsFacture] = useState([]);
     const [effet, seteffet] = useState(false);
     const [effet2, seteffet2] = useState(false);
     const [isLoadingData, setIsLoadingData] = useState(true);
 
     useEffect(() => {
+        getPrescrpteurs();
         // Récupération des factures
         setIsLoadingData(true);
         setFactures([]);
@@ -68,6 +72,24 @@ export default function GestionFactures() {
         req.send();
     }, [effet]);
 
+
+    const getPrescrpteurs = () => {
+        // Récupération des prescripteurs
+        const req = new XMLHttpRequest();
+        req.open('GET', `${nomDns}gestion_prescripteurs.php?liste`);
+        req.addEventListener("load", () => {
+            if (req.status >= 200 && req.status < 400) {
+                const result = JSON.parse(req.responseText);
+                setlistePrescripteurs(result);
+                // console.log(JSON.parse(req.responseText));
+            }
+        });
+        req.addEventListener("error", function () {
+            console.error("Erreur réseau lors de la récupération des prescripteurs");
+        });
+        req.send();
+    }
+
     useEffect(() => {
         if (factureSelectionne.length > 0) {
             // Récupération des détails de la facture selectionnée
@@ -86,6 +108,7 @@ export default function GestionFactures() {
     const afficherInfos = (e) => {
         // Affichage des informations de la facture selectionnée
         setfactureSelectionne(factures.filter(item => (item.id == e.target.id)));
+        setisModifierPrescripteur(false);
         seteffet2(!effet2);
     }
 
@@ -188,7 +211,43 @@ export default function GestionFactures() {
             console.error("Erreur lors de la mise à jour du montant:", error);
         }
     };
-  
+
+    // Modifier le prescripteur de la facture
+    const modifierPrescripteur = () => {
+        // console.log(isModifierPrescripteur, prescripteurSelectionne);
+        
+        const data = new FormData();
+        data.append('id_fac', factureSelectionne[0].id_fac);
+        data.append('prescripteur', prescripteurSelectionne);
+        // console.log(data);
+        
+        
+        const req = new XMLHttpRequest();
+        req.open('POST', `${nomDns}update_prescrpteur.php?modifier_prescripteur`);
+        req.addEventListener("load", () => {
+            if (req.status >= 200 && req.status < 400) {
+                const result = JSON.parse(req.responseText);
+                // console.log(req.responseText);
+                
+                if (result.success) {
+                    factureSelectionne[0].prescripteur = listePrescripteurs.filter(p => p.id == prescripteurSelectionne)[0]?.designation;
+                    setisModifierPrescripteur(false);
+                    seteffet(!effet); // Déclencher un rafraîchissement
+                    seteffet2(!effet2); // Rafraîchir les détails de la facture
+                    alert("Prescripteur modifié avec succès");
+                } else {
+                    alert("Erreur lors de la modification du prescripteur");
+                }
+            } else {
+                console.error(req.status + " " + req.statusText);
+            }
+        });
+        req.addEventListener("error", function () {
+            console.error("Erreur réseau lors de la modification du prescripteur");
+        });
+        req.send(data);
+    }
+
     // Fonctions d'annulation et de restauration
     const annulerActe = (idFacture, designation) => gererActe(idFacture, designation, 1);
     const restaurerActe = (idFacture, designation) => gererActe(idFacture, designation, 0);
@@ -223,6 +282,34 @@ export default function GestionFactures() {
                     </div>
                     <div style={{marginTop: 5}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].patient}</span></div>
                     <div style={{marginTop: 5}}>code patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].code_patient}</span></div>
+                    <div style={{marginTop: 5}}>
+                        prescripteur : 
+                        {isModifierPrescripteur ?
+                        <>
+                            <select
+                                defaultChecked={factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : ''}
+                                value={prescripteurSelectionne}
+                                onChange={(e) => {
+                                    setprescripteurSelectionne(e.target.value);
+                                }}
+                                style={{marginLeft: 10, padding: 5, borderRadius: 5, border: '1px solid #ccc'}}
+                            >
+                                <option value="">Sélectionner un prescripteur</option>
+                                {listePrescripteurs.map((prescripteur, index) => (
+                                    <option value={prescripteur.id}>
+                                        {prescripteur.designation}
+                                    </option>
+                                ))}
+                            </select>
+                            <button onClick={modifierPrescripteur}>Enregistrer les modifications</button>
+                        </>
+                        :
+                        <>
+                            <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : 'null'}</span>
+                            <button onClick={() => setisModifierPrescripteur(true)}>modifier</button>
+                        </>
+                        }
+                    </div>
                     {factureSelectionne.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase() ? 
                         <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
