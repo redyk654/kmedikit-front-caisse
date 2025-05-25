@@ -599,10 +599,10 @@ export default function Commande(props) {
     }
 
     const demanderConfirmation = () => {
-        if (hasPrescripteur && prescripteurChoisi.id == 0) {
-            setMessageErreur('Veuillez choisir un prescripteur pour cette facture'.toUpperCase());
-            return
-        }
+        // if (hasPrescripteur && prescripteurChoisi.id == 0) {
+        //     setMessageErreur('Veuillez choisir un prescripteur pour cette facture'.toUpperCase());
+        //     return
+        // }
         if (medocCommandes.length > 0) {
             if (patientChoisi.nom.length > 0) {
                 validerCommande();
