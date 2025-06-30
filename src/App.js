@@ -40,11 +40,11 @@ function App() {
   useEffect(() => {
 
     // majTime();
-    if (date_j.getTime() >= date_e.getTime()) {
-      setDelay(18850);
-    } else {
-      setDelay(0);
-    }
+    // if (date_j.getTime() >= date_e.getTime()) {
+    //   setDelay(18850);
+    // } else {
+    //   setDelay(0);
+    // }
 
     if(role === ROLES.regisseur) {
       setOnglet(5);
@@ -53,14 +53,14 @@ function App() {
     }
   }, [role, connecter]);
 
-  const majTime = () => {
-    fetch(`${nomDns}update_valeur.php`)
-    .then(response => response.json())
-    .then(data => {
-      setDelay(parseInt(data))
-    })
-    .catch(error => console.error('Erreur réseau'));
-  }
+  // const majTime = () => {
+  //   fetch(`${nomDns}update_valeur.php`)
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     setDelay(parseInt(data))
+  //   })
+  //   .catch(error => console.error('Erreur réseau'));
+  // }
 
   let contenu;
   switch(onglet) {

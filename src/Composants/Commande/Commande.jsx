@@ -195,54 +195,52 @@ export default function Commande(props) {
     }, []);
 
     useEffect(() => {
-        setTimeout(() => {
-            const d = new Date();
+        const d = new Date();
+
+        if (rerender || !rerender) {
+            // Etat d'urgence entre 17h et 8h et les weekends
+
+            setRerender(false);
+            startChargement();
+            // Récupération des médicaments dans la base via une requête Ajax
+            const req = new XMLHttpRequest();
+            req.open('GET', `${nomDns}recuperer_services.php`);
+            
+            req.addEventListener("load", () => {
+                if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
+                    // setInterval(() => {
+                        // console.log(req.responseText);
+                        
+                        const result = JSON.parse(req.responseText);
+                        // console.log(result);
+                        
+                        const temp = result
+                            .filter(item => item.designation.toLowerCase().includes("mortuaire"))
+                        
+                        ajouterQteActesMorgue(temp);                            
+                        setActesMorgue(temp);
+                        
+                        // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
+                        setListeMedoc(result);
+                        setListeMedocSauvegarde(result);
+                        stopChargement();
+                        document.querySelector('.recherche').value = "";
+                        document.querySelector('.recherche').focus();
+                        fetchPrescripteurs();
+                    // }, props.delayLoad);
     
-            if (rerender || !rerender) {
-                // Etat d'urgence entre 17h et 8h et les weekends
-    
-                setRerender(false);
-                startChargement();
-                // Récupération des médicaments dans la base via une requête Ajax
-                const req = new XMLHttpRequest();
-                req.open('GET', `${nomDns}recuperer_services.php`);
-                
-                req.addEventListener("load", () => {
-                    if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                        // setInterval(() => {
-                            // console.log(req.responseText);
-                            
-                            const result = JSON.parse(req.responseText);
-                            // console.log(result);
-                            
-                            const temp = result
-                                .filter(item => item.designation.toLowerCase().includes("mortuaire"))
-                            
-                            ajouterQteActesMorgue(temp);                            
-                            setActesMorgue(temp);
-                            
-                            // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
-                            setListeMedoc(result);
-                            setListeMedocSauvegarde(result);
-                            stopChargement();
-                            document.querySelector('.recherche').value = "";
-                            document.querySelector('.recherche').focus();
-                            fetchPrescripteurs();
-                        // }, props.delayLoad);
-        
-                    } else {
-                        // Affichage des informations sur l'échec du traitement de la requête
-                        console.error(req.status + " " + req.statusText);
-                    }
-                });
-                req.addEventListener("error", function () {
-                    // La requête n'a pas réussi à atteindre le serveur
-                    setMessageErreur('Erreur réseau');
-                });    
-                
-                req.send();
-            }
-        }, props.delayLoad);
+                } else {
+                    // Affichage des informations sur l'échec du traitement de la requête
+                    console.error(req.status + " " + req.statusText);
+                }
+            });
+            req.addEventListener("error", function () {
+                // La requête n'a pas réussi à atteindre le serveur
+                setMessageErreur('Erreur réseau');
+            });    
+            
+            req.send();
+        }
     }, [rerender]);
 
     const handleChangePrescripteur = (e) => {

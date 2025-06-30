@@ -47,18 +47,18 @@ export default function Connexion(props) {
         /* vérification de l'identifiant et du mot de passe */
 
 
-        const res = await dateDuJourServeur()
+        // const res = await dateDuJourServeur()
         // console.log(res);
         
-        let date_j = new Date(res)
+        // let date_j = new Date(res)
 
 
         // console.log(date_j);
         
-        if (date_j.getTime() > date_e.getTime()) {
-            setErreur('No database found');
-            return;
-        }
+        // if (date_j.getTime() > date_e.getTime()) {
+        //     setErreur('No database found');
+        //     return;
+        // }
 
 
 
@@ -109,7 +109,7 @@ export default function Connexion(props) {
                 </a>
             </div>
             <form action="">
-                <h1 className='title'>Administration</h1>
+                <h1 className='title'>Caisse</h1>
                 <p className='text-field'>
                     <label htmlFor="nom" ref={name_field}>Identifiant</label>
                     <input
