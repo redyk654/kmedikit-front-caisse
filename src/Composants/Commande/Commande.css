@@ -1,84 +1,934 @@
 .commande {
     display: grid;
-    grid-template-columns: 400px 1fr;
-    height: 85vh;
+    grid-template-columns: 420px 1fr;
+    gap: 2rem;
+    height: calc(100vh - 2rem);
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-.commande .left-side, .commande .right-side {
-    width: 100%;
-}
-
-.commande .right-side h1 {
-    background: #03ca7e;
-    color: #f1f1f1;
-    text-align: center;
-    margin: 0px 5px;
-    border-radius: 10px 10px 0px 0px;
-    margin-top: 5px;
-    font-size: larger;
-    font-weight: bolder;
-}
-
-.commande .left-side .liste-medoc h1 {
-    background-color: #03ca7e;
-    color: #f1f1f1;
-    width: 100%;
-    text-align: center;
-    border-radius: 10px 10px 0px 0px;
-    font-size: larger;
-    font-weight: bolder;
-
-}
-
+/* Section gauche modernisée */
 .commande .left-side {
-    padding: 10px;
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid var(--border-light);
+}
+
+.commande .left-side .search-zone {
+    margin: 0;
 }
 
 .commande .left-side .search-zone input {
-  width: 90%;
-  height: 5vh;
-  outline: none;
-  border-radius: 5px;
-  color: #038654;
-  font-size: 17px;
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem 0 2.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--surface-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    position: relative;
+}
+
+.commande .left-side .search-zone input::placeholder {
+    color: var(--text-muted);
+    font-weight: 400;
 }
 
 .commande .left-side .search-zone input:focus {
-    border: 1px solid #1beabd;
-    box-shadow: inset 0 0 0 3px #fff,
-			/* 0 0 0 4px #fff, */
-			1px -1px 4px #1beabd,
-			-1px 1px 4px #0cd3a8;}
-
-.commande .left-side .liste-medoc {
-    margin-top: 10px;
+    border-color: var(--secondary-color);
+    background: var(--surface-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
 }
 
-.commande .left-side .liste-medoc ul{
-    height: 55vh;
-    border: 1px solid gray;
-    overflow: auto;
+/* Bouton nouveau service modernisé */
+.nouveau-service-btn {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
     position: relative;
-    border-radius: 0px 0px 10px 10px;
+    overflow: hidden;
+}
+
+.nouveau-service-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.nouveau-service-btn:hover::before {
+    left: 100%;
+}
+
+.nouveau-service-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+.nouveau-service-btn:active {
+    transform: translateY(0);
+}
+
+/* Liste des services modernisée */
+.commande .left-side .liste-medoc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.commande .left-side .liste-medoc h1 {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+    margin: 0 0 1rem 0;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.025em;
+}
+
+.commande .left-side .liste-medoc ul {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--surface-color);
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-muted) transparent;
+}
+
+.commande .left-side .liste-medoc ul::-webkit-scrollbar {
+    width: 6px;
+}
+
+.commande .left-side .liste-medoc ul::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.commande .left-side .liste-medoc ul::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 3px;
+}
+
+.commande .left-side .liste-medoc ul::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
 .commande .left-side .liste-medoc ul .loader {
     position: absolute;
-    bottom: 45%;
-    left: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .commande .left-side .liste-medoc ul li {
-    color: rgb(107, 102, 102);
-    font-weight: 600;
-    width: 100%;
-    line-height: 30px;
+    color: var(--text-primary);
+    font-weight: 500;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.commande .left-side .liste-medoc ul li:last-child {
+    border-bottom: none;
+}
+
+.commande .left-side .liste-medoc ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--secondary-color);
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
 }
 
 .commande .left-side .liste-medoc ul li:hover {
-    background-color: rgba(4, 150, 94, 0.795);
-    color: #f1f1f1;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+    color: white;
+    transform: translateX(4px);
+}
+
+.commande .left-side .liste-medoc ul li:hover::before {
+    transform: scaleY(1);
+}
+
+/* Section droite modernisée */
+.commande .right-side {
+    background: var(--surface-color);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid var(--border-light);
+    overflow-y: auto;
+}
+
+.commande .right-side h1 {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+    margin: 0;
+    padding: 1rem 1.5rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.025em;
+}
+
+/* Informations du service */
+.commande .right-side .infos-medoc {
+    background: var(--surface-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.commande .right-side .infos-medoc:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.commande .right-side .infos-medoc .service {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    color: var(--text-primary);
+}
+
+.commande .right-side .infos-medoc .service > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.commande .right-side .infos-medoc .service p:first-child {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.commande .right-side .infos-medoc .service p:last-child {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Zone de contrôles */
+.commande .right-side .box {
+    background: var(--surface-secondary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.commande .right-side .box form {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.commande .right-side input {
+    height: 2.75rem;
+    padding: 0 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--surface-color);
+    transition: all 0.3s ease;
+    outline: none;
+    min-width: 0;
+    flex: 1;
+}
+
+.commande .right-side input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Boutons modernisés */
+.btn-patient {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-patient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-patient:hover::before {
+    left: 100%;
+}
+
+.btn-patient:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Messages d'erreur */
+.erreur-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    font-weight: 500;
+    text-align: center;
+    animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tableau des commandes */
+.commande .right-side .details-commande {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 0;
+}
+
+.commande .right-side .details-commande table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface-color);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.commande .right-side .details-commande table thead {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+}
+
+.commande .right-side .details-commande table thead td {
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.commande .right-side .details-commande table tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.commande .right-side .details-commande table tbody tr {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.commande .right-side .details-commande table tbody tr:hover {
+    background: var(--surface-secondary);
+    transform: scale(1.01);
+}
+
+.commande .right-side .details-commande table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.commande .right-side .details-commande table thead tr td:nth-child(2),
+.commande .right-side .details-commande table tbody tr td:nth-child(2),
+.commande .right-side .details-commande table thead tr td:last-child,
+.commande .right-side .details-commande table tbody tr td:last-child {
+    text-align: center;
+}
+
+/* Section totaux et validation */
+.commande .right-side .details-commande .valider-annuler {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--surface-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+}
+
+.commande .right-side .details-commande .valider-annuler .totaux {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.commande .right-side .details-commande .valider-annuler .totaux > div {
+    background: var(--surface-color);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    font-weight: 500;
+    color: var(--text-secondary);
+    box-shadow: var(--shadow-sm);
+}
+
+.commande .right-side .details-commande .valider-annuler .totaux span {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+.commande .right-side .details-commande .valider-annuler > button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.commande .right-side .details-commande .valider-annuler > button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.commande .right-side .details-commande .valider-annuler > button:hover::before {
+    left: 100%;
+}
+
+.commande .right-side .details-commande .valider-annuler > button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+.commande .right-side .details-commande .valider-annuler > button:active {
+    transform: translateY(0);
+}
+
+.bootstrap-btn.annuler {
+    background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-light) 100%);
+    color: white;
+}
+
+.bootstrap-btn.valider {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    color: white;
+}
+
+/* Styles pour les modales modernisées */
+.ReactModal__Overlay {
+    background-color: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+}
+
+.ReactModal__Content {
+    border: none !important;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: var(--shadow-xl) !important;
+    padding: 2rem !important;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Styles pour les icônes de fermeture */
+.modal-close-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.modal-close-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Styles pour les titres de modales */
+.modal-title {
+    color: white;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Styles pour les formulaires dans les modales */
+.modal-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-form-group label {
+    color: white;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.modal-form-group input,
+.modal-form-group select {
+    height: 3rem;
+    padding: 0 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.modal-form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.modal-form-group input:focus,
+.modal-form-group select:focus {
+    border-color: var(--secondary-light);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+}
+
+/* Styles pour les boutons dans les modales */
+.modal-btn {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    min-width: 140px;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-btn.success {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+.modal-btn.danger {
+    background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-light) 100%);
+}
+
+/* Styles pour les listes dans les modales */
+.modal-list {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-list-item {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.modal-list-item:last-child {
+    border-bottom: none;
+}
+
+.modal-list-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+/* Styles pour les informations patient */
+.patient-info-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.patient-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.patient-info-item:last-child {
+    border-bottom: none;
+}
+
+.patient-info-label {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+}
+
+.patient-info-value {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Animation pour les éléments de liste */
+@keyframes listItemSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.commande .left-side .liste-medoc ul li {
+    animation: listItemSlideIn 0.3s ease-out;
+}
+
+/* Amélioration des scrollbars pour les modales */
+.ReactModal__Content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ReactModal__Content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.ReactModal__Content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.ReactModal__Content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Styles pour les états de chargement */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.loading-text {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Styles pour les badges et étiquettes */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.badge.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-color);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge.warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge.info {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--secondary-color);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Styles pour les transitions de page */
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.page-transition-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .commande {
+        grid-template-columns: 380px 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .commande {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: auto;
+        min-height: calc(100vh - 2rem);
+    }
+    
+    .commande .left-side {
+        order: 1;
+    }
+    
+    .commande .right-side {
+        order: 2;
+    }
+    
+    .commande .left-side .liste-medoc ul {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .commande {
+        padding: 0.5rem;
+        gap: 1rem;
+    }
+    
+    .commande .left-side,
+    .commande .right-side {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+    }
+    
+    .commande .right-side .infos-medoc .service {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .commande .right-side .box form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .commande .right-side .details-commande .valider-annuler .totaux {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-button {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .commande {
+        padding: 0.25rem;
+    }
+    
+    .commande .left-side,
+    .commande .right-side {
+        padding: 0.75rem;
+    }
+    
+    .commande .left-side .search-zone input {
+        height: 2.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .nouveau-service-btn,
+    .btn-patient {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .commande .right-side .details-commande table thead td,
+    .commande .right-side .details-commande table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Animations d'entrée */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.commande .left-side,
+.commande .right-side {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.commande .left-side {
+    animation-delay: 0.1s;
+}
+
+.commande .right-side {
+    animation-delay: 0.2s;
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible pour l'accessibilité */
+.commande input:focus-visible,
+.nouveau-service-btn:focus-visible,
+.btn-patient:focus-visible,
+.bootstrap-btn:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Variables CSS pour une cohérence des couleurs */
+:root {
+    --primary-color: #1e293b;
+    --primary-light: #334155;
+    --secondary-color: #3b82f6;
+    --secondary-light: #60a5fa;
+    --accent-color: #10b981;
+    --accent-light: #34d399;
+    --danger-color: #ef4444;
+    --danger-light: #f87171;
+    --warning-color: #f59e0b;
+    --warning-light: #fbbf24;
+    --surface-color: #ffffff;
+    --surface-secondary: #f8fafc;
+    --surface-tertiary: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
 }
 
 .erreur-message {
@@ -192,25 +1042,6 @@
 
 .commande .right-side .details-commande .valider-annuler button:last-child {
     margin-left: 20px;
-}
-
-.btn-patient {
-	background: linear-gradient(90deg, #007bff, #489df7);
-    width: 20%;
-    height: 5vh;
-    color: honeydew;
-    font-size: medium;
-    letter-spacing: 1px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.detail-item {
-    display: flex;
-    justify-content: space-between;
-    /* border: 1px solid #fff; */
-    padding-top: 15px;
 }
 
 .a-link {

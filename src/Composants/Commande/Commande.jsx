@@ -22,27 +22,27 @@ import { CFormInput, CListGroup, CListGroupItem } from '@coreui/react';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
-      top: '15%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#0e771a',
+        top: '15%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#0e771a',
     }, 
 };
 
 const customStyles4 = {
     content: {
-      top: '47%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#e5f3fc',
-      color: '#000',
-      width: '65%'
+        top: '47%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#e5f3fc',
+        color: '#000',
+        width: '65%'
     },
 };
 
@@ -76,18 +76,17 @@ const styleItem = {
 
 const customStyles3 = {
     content: {
-      top: '48%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#038654',
-      width: '80%',
-      height: '95vh'
+        top: '48%',
+        left: '60vw',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#038654',
+        width: '80%',
+        height: '95vh'
     }, 
 };
-
 
 const customStyles2 = {
     content: {
@@ -98,7 +97,7 @@ const customStyles2 = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         background: '#0e771a',
-      },
+    },
 };
 
 const styleBox = {
@@ -184,9 +183,8 @@ export default function Commande(props) {
         } else {
             // setTimeout(() => {
             //     setListeMedoc([]);
-            //     setListeMedocSauvegarde([])
+            //     setListeMedocSauvegarde([]);
             //     props.setConnecter(false);
-            //     // props.setOnglet(1);
             // }, 5000);
             // setTimeout(() => {
             //     props.setConnecter(false);
@@ -205,21 +203,21 @@ export default function Commande(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             req.open('GET', `${nomDns}recuperer_services.php`);
-            
+
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                     // setInterval(() => {
                         // console.log(req.responseText);
-                        
+
                         const result = JSON.parse(req.responseText);
                         // console.log(result);
-                        
+
                         const temp = result
                             .filter(item => item.designation.toLowerCase().includes("mortuaire"))
-                        
+
                         ajouterQteActesMorgue(temp);                            
                         setActesMorgue(temp);
-                        
+
                         // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
                         setListeMedoc(result);
                         setListeMedocSauvegarde(result);
@@ -228,7 +226,7 @@ export default function Commande(props) {
                         document.querySelector('.recherche').focus();
                         fetchPrescripteurs();
                     // }, props.delayLoad);
-    
+
                 } else {
                     // Affichage des informations sur l'échec du traitement de la requête
                     console.error(req.status + " " + req.statusText);
@@ -238,7 +236,7 @@ export default function Commande(props) {
                 // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
             });    
-            
+
             req.send();
         }
     }, [rerender]);
@@ -316,7 +314,7 @@ export default function Commande(props) {
                     configurable: true,
                     enumerable: true
                 });
-                
+
                 Object.defineProperty(item, 'prix_total', {
                     value: parseInt(item.prix) * parseInt(item.qte_commander),
                     configurable: true,
@@ -342,7 +340,7 @@ export default function Commande(props) {
 
         if (!isNaN(valeurReduction))
             netAPayer = netAPayer - (netAPayer * (parseFloat(valeurReduction) / 100))
-        
+
         return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
     }
 
@@ -356,7 +354,7 @@ export default function Commande(props) {
     //         return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
     //     }
     // }
-    
+
     // const calculerRelicat = () => {
     //     let relicat = 0;
     //     if (parseInt(montantVerse) > calculerNetAPayer())
@@ -402,7 +400,7 @@ export default function Commande(props) {
         if (verif_rubrique.length > 0 && prescripteurChoisi.id == 0) {
             setHasPrescripteur(true);
         }
-        
+
         // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
         setTimeout(() => {
@@ -560,7 +558,7 @@ export default function Commande(props) {
                 // Envoi des données
                 const req2 = new XMLHttpRequest();
                 req2.open('POST', `${nomDns}index.php?enreg_historique_service`);
-                
+
                 // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
                     // console.log(req2.responseText);
@@ -580,7 +578,7 @@ export default function Commande(props) {
                     // La requête n'a pas réussi à atteindre le serveur
                     setMessageErreur('Erreur réseau');
                 });
-        
+
                 req2.send(data2);
             })
         } else {
@@ -613,6 +611,7 @@ export default function Commande(props) {
     const infosPatient = () => {
 
         // Affiche la fenêtre des informations du patient
+
         ouvrirModalPatient();
 
         const req = new XMLHttpRequest();
@@ -628,7 +627,6 @@ export default function Commande(props) {
             // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
         });
-
 
         req.send();
     }
@@ -650,10 +648,10 @@ export default function Commande(props) {
             data.append('designation', autreState.designation.toUpperCase().trim());
             data.append('prix', prix);
             data.append('categorie', document.getElementById('categorie').value);
-    
+
             const req = new XMLHttpRequest();
             req.open('POST', `${nomDns}nouveau_service.php`);
-    
+
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
                     console.log(req.responseText);
@@ -668,7 +666,7 @@ export default function Commande(props) {
                     }
                 }
             });
-    
+
             req.send(data);
         }
     }
@@ -692,6 +690,7 @@ export default function Commande(props) {
                             />
                         </>
                         <>
+
                             <AfficherPatient 
                                 patientChoisi={patientChoisi} 
                                 fermerModalPatient={fermerModalPatient}
@@ -758,7 +757,6 @@ export default function Commande(props) {
 
                 setlistePatient(result);
             }
-            
         });
 
         req.send();
@@ -773,7 +771,7 @@ export default function Commande(props) {
         setoption('patient');
         setModalPatient(true);
     }
-    
+
     const fermerModalPatient = () => {
         setMessageErreur('');
         setModalPatient(false);
@@ -849,7 +847,6 @@ export default function Commande(props) {
                .toString(32)
                .substring(1).toUpperCase();        
     }
-
 
     const ajouterNouveauPatient = () => {
         const req = new XMLHttpRequest();
@@ -935,164 +932,224 @@ export default function Commande(props) {
                 />
             </Modal>
             <div className="left-side">
-
-                <p className="search-zone">
-                    <input type="text" className="recherche" placeholder="recherchez un service" onChange={filtrerListe} autoComplete='off' />
-                </p>
+                <div className="search-zone">
+                    <input 
+                        type="text" 
+                        className="recherche" 
+                        placeholder="Rechercher un service..." 
+                        onChange={filtrerListe} 
+                        autoComplete='off' 
+                    />
+                </div>
                 <div>
-                    <button className='bootstrap-btn' style={styleBtnAutre} onClick={autreService}>nouveau service</button>
+                    <button 
+                        className='nouveau-service-btn' 
+                        onClick={autreService}
+                    >
+                        ✨ Nouveau service
+                    </button>
                 </div>
                 <div className="liste-medoc">
-                    <h1>Liste des actes</h1>
+                    <h1>📋 Liste des actes</h1>
                     <ul>
-                        {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100}/></div> : listeMedoc.map(item => (
-                            <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation).toUpperCase()}</li>
-                        ))}
+                        {chargement ? (
+                            <div className="loader">
+                                <Loader type="TailSpin" color="#3b82f6" height={60} width={60}/>
+                            </div>
+                        ) : (
+                            listeMedoc.map(item => (
+                                <li 
+                                    value={item.id} 
+                                    key={item.id} 
+                                    onClick={afficherInfos}
+                                >
+                                    {extraireCode(item.designation).toUpperCase()}
+                                </li>
+                            ))
+                        )}
                     </ul>
                 </div>
             </div>
-
             <div className="right-side">
-                <h1>{medocSelect ? "Détails du service" : "Selectionnez un service pour voir les détails"}</h1>
-
+                <h1>
+                    {medocSelect ? "📄 Détails du service" : "👆 Sélectionnez un service"}
+                </h1>
                 <div className="infos-medoc">
                     {medocSelect && medocSelect.map(item => (
-                        <div className="service">
+                        <div className="service" key={item.id}>
                             <div>
-                                <p>Designation</p>
-                                <p style={{fontWeight: '700'}}>{extraireCode(item.designation).toUpperCase()}</p>
+                                <p>Désignation</p>
+                                <p>{extraireCode(item.designation).toUpperCase()}</p>
                             </div>
-                            <div style={{paddingTop: 10}}>
-                                <p>Prix</p>
-                                <p style={{fontWeight: '700'}}>{item.prix + ' Fcfa'}</p>
+                            <div>
+                                <p>Prix unitaire</p>
+                                <p>{item.prix} FCFA</p>
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className="box" style={{marginLeft: 5}}>
+                <div className="box">
                     <form onSubmit={ajouterMedoc}>
-                        <input id='qteDesire' type="text" name="qteDesire" value={qteDesire} onChange={(e) => {setQteDesire(e.target.value)}} autoComplete='off' />
-                        <button type='submit' className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}}>ajouter</button>
-                        {/* <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button> */}
+                        <input 
+                            id='qteDesire' 
+                            type="text" 
+                            name="qteDesire" 
+                            value={qteDesire} 
+                            onChange={(e) => {setQteDesire(e.target.value)}} 
+                            placeholder="Quantité"
+                            autoComplete='off' 
+                        />
+                        <button 
+                            type='submit' 
+                            className='bootstrap-btn valider' 
+                            ref={btnAjout}
+                        >
+                            ➕ Ajouter
+                        </button>
                     </form>
                     <div style={{textAlign: 'center'}}>
-                        <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
+                        <button 
+                            className='btn-patient' 
+                            onClick={infosPatient}
+                        >
+                            👤 Informations patient
+                        </button>
                     </div>
                     <div>
                         <div>
-                            <input id='montant-reduction' type="text" name="reduction" onChange={handleChangeReduction} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
-                            <button className='bootstrap-btn' style={{display: reduction ? 'none' : 'inline-block', backgroundColor: '#6d6f94'}}  onClick={appliquerReduction}>reduction</button>
+                            <input 
+                                id='montant-reduction' 
+                                type="text" 
+                                name="reduction" 
+                                onChange={handleChangeReduction} 
+                                placeholder="Montant de réduction"
+                                autoComplete='off' 
+                                style={{display: reduction ? 'block' : 'none'}} 
+                            />
+                            <button 
+                                className='bootstrap-btn' 
+                                style={{ 
+                                    display: reduction ? 'none' : 'inline-block', 
+                                    background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
+                                    color: 'white'
+                                }}  
+                                onClick={appliquerReduction}
+                            >
+                                💰 Réduction
+                            </button>
                         </div>
                     </div>
                     <div style={{textAlign: 'center'}}>
-                        <div className='d-flex justify-content-center align-items-center'>
+                        <div className='d-flex justify-content-center align-items-center flex-column gap-3'>
                             <CFormInput
-                                style={{width: '300px'}}
+                                style={{width: '100%', maxWidth: '300px'}}
                                 type="text"
                                 id="prescripteur"
-                                placeholder="Rechercher un prescripteur"
+                                placeholder="🔍 Rechercher un prescripteur"
                                 aria-describedby="prescripteur"
                                 value={prescripteurRecherche}
                                 onChange={handleChangePrescripteur}
                                 autoComplete='off'
                             />
-                            <CListGroup>
-                                {vueListePrescripteurs.map(item => (
-                                    <CListGroupItem id={`${item.id}`} key={item.id} onClick={choisirPrescripteur}>{item.designation}</CListGroupItem>
-                                ))}
-                            </CListGroup>
-                            {/* <a className='text-decoration-none' role='button' onClick={creerPrescripteur}>Creer prescripteur</a> */}
+                            {vueListePrescripteurs.length > 0 && (
+                                <CListGroup style={{width: '100%', maxWidth: '300px'}}>
+                                    {vueListePrescripteurs.map(item => (
+                                        <CListGroupItem 
+                                            id={`${item.id}`} 
+                                            key={item.id} 
+                                            onClick={choisirPrescripteur}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            {item.designation}
+                                        </CListGroupItem>
+                                    ))}
+                                </CListGroup>
+                            )}
                         </div>
-                        <div>
-                            Prescripteur: <span style={{color: '#000', fontWeight: '700'}}>{prescripteurChoisi.id == 0 ? 'Aucun' : prescripteurChoisi.designation}</span>
-                        </div>
-                        {patientChoisi.nom.length > 0 ? (
-                            <div>
-                                Patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
+                        {prescripteurChoisi.id !== 0 && (
+                            <div style={{marginTop: '1rem', padding: '0.75rem', background: 'var(--surface-secondary)', borderRadius: 'var(--radius-md)'}}>
+                                <strong>👨‍⚕️ Prescripteur:</strong> {prescripteurChoisi.designation}
                             </div>
-                        ) : null}
-                        {patientChoisi.nom.length > 0 ? (
-                            <div>
-                                Code patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.code.toUpperCase()}</span>
+                        )}
+                        {patientChoisi.nom.length > 0 && (
+                            <div style={{marginTop: '1rem', padding: '0.75rem', background: 'var(--surface-secondary)', borderRadius: 'var(--radius-md)'}}>
+                                {/* <Thinking>
+                                    L'utilisateur me demande de continuer exactement où je me suis arrêté. Je vois que j'étais en train de mettre à jour le JSX du composant Commande.jsx et je me suis arrêté au milieu de la section qui affiche les informations du patient. Je dois continuer à partir de là sans répéter le code précédent.
+                                </Thinking> */}
+                                <strong>👤 Patient:</strong> {patientChoisi.nom.toUpperCase()}
+                                <br />
+                                <strong>🆔 Code:</strong> {patientChoisi.code.toUpperCase()}
                             </div>
-                        ) : null}
-                        {/* {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
-                            <div style={{}}>
-                                Couvert par: <span style={{color: '#0e771a', fontWeight: '700'}}>{patientChoisi.assurance.toLocaleUpperCase()}</span>
-                            </div>
-                        ) : null} */}
-                        {/* <label htmlFor="">Montant versé : </label>
-                        <input type="number" name='verse' value={montantVerse} onChange={handleChangeMontantVerse} autoComplete='off' /> */}
+                        )}
                     </div>
                 </div>
-
-                <div className='erreur-message'>{messageErreur}</div>
-
+                {messageErreur && (
+                    <div className='erreur-message'>
+                        ⚠️ {messageErreur}
+                    </div>
+                )}
                 <div className="details-commande">
-                    <h1>Facture en cours</h1>
-
+                    <h1>🧾 Facture en cours</h1>
                     <table>
                         <thead>
                             <tr>
                                 <td>Désignation</td>
-                                <td>Pu</td>
+                                <td>P.U</td>
                                 <td>Qtés</td>
                                 <td>Total</td>
                             </tr>
                         </thead>
                         <tbody>
                             {medocCommandes.map(item => (
-                                <tr key={item.id} style={{cursor: 'pointer'}} onClick={() => retirerActe(item.id)}>
+                                <tr key={item.id} onClick={() => retirerActe(item.id)}>
                                     <td>{extraireCode(item.designation).toUpperCase()}</td>
                                     <td>{item.prix}</td>
                                     <td>{item.qte_commander}</td>
-                                    <td>{item.prix_total}</td>
+                                    <td>{item.prix_total} FCFA</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
-                                Prix total : <span style={{color: "#012557", fontWeight: "600"}}>{calculerPrixTotal() + ' Fcfa'}</span>
+                                💰 <strong>Prix total:</strong>
+                                <br />
+                                <span>{calculerPrixTotal()} FCFA</span>
                             </div>
                             <div>
-                                Réduction : <span style={{color: "#012557", fontWeight: "600"}}>{valeurReduction + '%'}</span>
+                                🏷️ <strong>Réduction:</strong>
+                                <br />
+                                <span>{valeurReduction}%</span>
                             </div>
-                            <div style={{display: `${parseInt(patientChoisi.type_assurance) === 0 ? 'none' : 'block'}`}}>
-                                Assurance: <span style={{color: '#012557', fontWeight: '700'}}>{patientChoisi.type_assurance + '%'}</span>
-                            </div>
+                            {parseInt(patientChoisi.type_assurance) !== 0 && (
+                                <div>
+                                    🏥 <strong>Assurance:</strong>
+                                    <br />
+                                    <span>{patientChoisi.type_assurance}%</span>
+                                </div>
+                            )}
                             <div>
-                                Net à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerNetAPayer() + ' Fcfa'}</span>
+                                💳 <strong>Net à payer:</strong>
+                                <br />
+                                <span>{calculerNetAPayer()} FCFA</span>
                             </div>
-                            {/* <div>
-                                Montant versé : <span style={{color: "#012557", fontWeight: "600"}}>{montantVerse > 0 ? montantVerse + ' Fcfa': 0 + ' Fcfa'}</span>
-                            </div>
-                            <div>
-                                Relicat : <span style={{color: "#012557", fontWeight: "600"}}>{calculerRelicat() + ' Fcfa'}</span>
-                            </div>
-                            <div>
-                                Reste à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerResteAPayer() + ' Fcfa'}</span>
-                            </div> */}
                         </div>
                         <button 
                             className='bootstrap-btn annuler' 
                             id='annuler-facture'
                             onClick={annulerCommande}
                         >
-                            Annnuler
+                            ❌ Annuler
                         </button>
                         <button 
                             className='bootstrap-btn valider' 
                             id='valider-facture' 
                             onClick={demanderConfirmation}
                         >
-                            Valider
+                            ✅ Valider
                         </button>
-
                     </div>
-
                     <div>
                         <div style={{display: 'none'}}>
                             <Facture
@@ -1116,7 +1173,6 @@ export default function Commande(props) {
                             />
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
