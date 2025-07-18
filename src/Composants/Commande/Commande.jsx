@@ -119,6 +119,7 @@ const detailsDuPatient = {
 
 export default function Commande(props) {
 
+    // ... existing code ... (all state variables and functions remain the same)
     const componentRef = useRef();
     const annuler = useRef();
     const btnAjout = useRef();
@@ -140,14 +141,12 @@ export default function Commande(props) {
     const [patient, setPatient] = useState('');
     const [autreState, setAutreState] = useState(autre);
     const [medocSelect, setMedoSelect] = useState(false);
-    // const [medocCommandes, setMedocCommandes] = useState([]);
     const [montantMateriel, setMontantMateriel] = useState(0);
     const [option, setoption] = useState('');
     const [reduction, setreduction] = useState(false);
     const [valeurReduction, setvaleurReduction] = useState(0);
     const [montantVerse, setMontantVerse] = useState('');
     const [idFacture, setidFacture] = useState('');
-    // const [urgence, setUrgence] = useState(false);
     const [listePatient, setlistePatient] = useState([]);
     const [modalEditerPatient, setModalEditerPatient] = useState(false);
     const [statu, setStatu] = useState('done');
@@ -167,28 +166,19 @@ export default function Commande(props) {
     const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
     const {designation, prix} = autreState;
-
     const { code, nom, age, sexe, quartier, assurance, type_assurance } = nouveauPatient;
 
+    // ... existing code ... (all functions remain exactly the same)
     const execGetDateTime = async () => {
         const dateTime = await getDateTime();
         setCurrentDate(dateTime.date);
     }
 
     useEffect(() => {
-        // startChargement();
-        // Récupération des médicaments dans la base via une requête Ajax
         if (date_j.getTime() <= date_e.getTime()) {
-            
+            // ... existing code ...
         } else {
-            // setTimeout(() => {
-            //     setListeMedoc([]);
-            //     setListeMedocSauvegarde([]);
-            //     props.setConnecter(false);
-            // }, 5000);
-            // setTimeout(() => {
-            //     props.setConnecter(false);
-            // }, 8000);
+            // ... existing code ...
         }
     }, []);
 
@@ -196,44 +186,31 @@ export default function Commande(props) {
         const d = new Date();
 
         if (rerender || !rerender) {
-            // Etat d'urgence entre 17h et 8h et les weekends
-
             setRerender(false);
             startChargement();
-            // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             req.open('GET', `${nomDns}recuperer_services.php`);
 
             req.addEventListener("load", () => {
-                if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                    // setInterval(() => {
-                        // console.log(req.responseText);
+                if (req.status >= 200 && req.status < 400) {
+                    const result = JSON.parse(req.responseText);
+                    const temp = result
+                        .filter(item => item.designation.toLowerCase().includes("mortuaire"))
 
-                        const result = JSON.parse(req.responseText);
-                        // console.log(result);
+                    ajouterQteActesMorgue(temp);                            
+                    setActesMorgue(temp);
 
-                        const temp = result
-                            .filter(item => item.designation.toLowerCase().includes("mortuaire"))
-
-                        ajouterQteActesMorgue(temp);                            
-                        setActesMorgue(temp);
-
-                        // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
-                        setListeMedoc(result);
-                        setListeMedocSauvegarde(result);
-                        stopChargement();
-                        document.querySelector('.recherche').value = "";
-                        document.querySelector('.recherche').focus();
-                        fetchPrescripteurs();
-                    // }, props.delayLoad);
-
+                    setListeMedoc(result);
+                    setListeMedocSauvegarde(result);
+                    stopChargement();
+                    document.querySelector('.recherche').value = "";
+                    document.querySelector('.recherche').focus();
+                    fetchPrescripteurs();
                 } else {
-                    // Affichage des informations sur l'échec du traitement de la requête
                     console.error(req.status + " " + req.statusText);
                 }
             });
             req.addEventListener("error", function () {
-                // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
             });    
 
@@ -247,16 +224,13 @@ export default function Commande(props) {
 
     const fetchPrescripteurs = () => {
         const req = new XMLHttpRequest();
-
         req.open('GET', `${nomDns}gestion_prescripteurs.php?liste`);
-
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
                 const result = JSON.parse(req.responseText);
                 setListePrescripteurs(result);
             }
         });
-
         req.send();
     }
 
@@ -279,7 +253,6 @@ export default function Commande(props) {
                 if (req.responseText.toLowerCase() == 'existe') {
                     setMessageErreur('Ce prescripteur existe déjà');
                 } else {
-                    // const result = JSON.parse(req.responseText);
                     setMessageErreur('');
                     setRerender(true);
                 }
@@ -314,7 +287,6 @@ export default function Commande(props) {
                     configurable: true,
                     enumerable: true
                 });
-
                 Object.defineProperty(item, 'prix_total', {
                     value: parseInt(item.prix) * parseInt(item.qte_commander),
                     configurable: true,
@@ -327,52 +299,26 @@ export default function Commande(props) {
     const calculerPrixTotal = () => {
         let prixTotalT = 0;
         if (medocSelect || designation.length > 0 && prix.length > 0) {
-            
             prixTotalT = medocCommandes.reduce((som, curr) => som + parseInt(curr.prix_total), 0)
             prixTotalT += montantMateriel;
-
         }
         return parseInt(prixTotalT);
     }
 
     const calculerNetAPayer = () => {
         let netAPayer = (calculerPrixTotal() * ((100 - parseInt(patientChoisi.type_assurance)) / 100));
-
         if (!isNaN(valeurReduction))
             netAPayer = netAPayer - (netAPayer * (parseFloat(valeurReduction) / 100))
-
         return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
     }
 
-    // const calculerResteAPayer = () => {
-    //     let resteAPayer = 0;
-    //     if (isNaN(parseInt(montantVerse))) {
-    //         resteAPayer = (calculerNetAPayer() - resteAPayer);
-    //         return parseInt(resteAPayer);
-    //     } else {
-    //         resteAPayer = (calculerNetAPayer() - montantVerse);
-    //         return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
-    //     }
-    // }
-
-    // const calculerRelicat = () => {
-    //     let relicat = 0;
-    //     if (parseInt(montantVerse) > calculerNetAPayer())
-    //         relicat = (montantVerse - calculerNetAPayer())
-
-    //     return parseInt(relicat);
-    // }
-
-    // permet de récolter les informations sur le médicament sélectioné
     const afficherInfos = (e) => {
         const medocSelectionne = listeMedoc.filter(item => (item.id == e.target.value));
         setMedoSelect(medocSelectionne);
         setQteDesire(1);
         document.querySelector('#qteDesire').focus();
-
     }
 
-    // Filtrage de la liste de médicaments affichés lors de la recherche d'un médicament
     const filtrerListe = (e) => {
         const medocFilter = listeMedocSauvegarde.filter(item => (item.designation.toLowerCase().indexOf(e.target.value.trim().toLowerCase()) !== -1));
         setListeMedoc(medocFilter);
@@ -392,36 +338,28 @@ export default function Commande(props) {
         setMedocCommandes(tab);
     }
 
-    // Enregistrement d'un médicament dans la commande
     const ajouterMedoc = (e) => {
         e.preventDefault();
-        // verifier si l'acte doit exigé un prescripteur
         const verif_rubrique = CATEGORIES_RUBRIQUES.filter(item => item == medocSelect[0].categorie || item == medocSelect[0].rubrique);
         if (verif_rubrique.length > 0 && prescripteurChoisi.id == 0) {
             setHasPrescripteur(true);
         }
-
-        // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
         setTimeout(() => {
             btnAjout.current.disabled = false;
         }, 1000);
-
         if (qteDesire && !isNaN(qteDesire) && medocSelect) {
             setMessageErreur('');
-
             Object.defineProperty(medocSelect[0], 'qte_commander', {
                 value: qteDesire,
                 configurable: true,
                 enumerable: true
             });
-            
             Object.defineProperty(medocSelect[0], 'prix_total', {
                 value: parseInt(medocSelect[0].prix) * parseInt(qteDesire),
                 configurable: true,
                 enumerable: true
             });
-            
             medocSelect[0].reduction = false;
             if (medocSelect[0].designation.toLowerCase().includes('morgue')) {
                 setMedocCommandes([...medocCommandes, ...actesMorgue, medocSelect[0]]);
@@ -429,18 +367,11 @@ export default function Commande(props) {
             }
             setMessageErreur('');
             setMedocCommandes([...medocCommandes, medocSelect[0]]);
-
             document.querySelector('.recherche').value = "";
             document.querySelector('.recherche').focus();
-
         }
         setQteDesire(1);
     }
-
-    // const desactiverBoutonMateriel = () => {
-    //     btnMateriel.current.disabled = true;
-    //     setMontantMateriel(MONTANTMATERIEL);
-    // }
 
     const annulerCommande = () => {
         setPrescripteurChoisi(prescripteurDefault);
@@ -462,26 +393,18 @@ export default function Commande(props) {
     }
 
     const idUnique = () => {
-        // Création d'un identifiant unique pour la facture
         return Math.floor((1 + Math.random()) * 0x1000000000000)
                .toString(32)
                .substring(1).toUpperCase();
     }
 
     const actualisationHistorique = () => {
-        // setTimeout(() => {
-        //     socket.emit('actualisation_historique');
-        // }, 5000);
+        // ... existing code ...
     }
 
     const enregisterFacture = (id) => {
-
-        // Enregistrement de la facture
-
         const data = new FormData();
-
         montantMateriel === 500 ? data.append('frais_materiel', 500) : data.append('frais_materiel', 0);
-
         data.append('id', id);
         data.append('caissier', props.nomConnecte);
         data.append('nom_patient', patientChoisi.nom);
@@ -496,54 +419,32 @@ export default function Commande(props) {
         data.append('type_assurance', patientChoisi.type_assurance);
         data.append('statu', statu);
         data.append('id_prescripteur', prescripteurChoisi.id);
-
         const req = new XMLHttpRequest();
         req.open('POST', `${nomDns}index.php?enregistrer_facture`);
-
         req.addEventListener('load', () => {
-            // console.log(req.responseText);
-            
             setMessageErreur('');
             execGetDateTime();
             actualisationHistorique();
-            // setActualiserQte(!actualiserQte);
-            // Activation de la fenêtre modale qui indique la réussite de la commmande
             setModalReussi(true);
-            // Désactivation de la fenêtre modale de confirmation
             fermerModalConfirmation();
         });
-
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
         });
-
         setTimeout(() => {       
             req.send(data);
         }, props.delayLoad);
     }
 
     const validerCommande = () => {
-
-        /* 
-            Organisation des données qui seront envoyés au serveur :
-                - pour la mise à jour des stocks de médicaments
-                - pour la mise à jour de l'historique des commandes
-        */
-    //    console.log("test");
        const id = idUnique();
        setidFacture(id);
        if(medocCommandes.length > 0) {
-
             let i = 0;
             document.querySelector('#valider-facture').disabled = true;
             document.querySelector('#annuler-facture').disabled = true;
-            // annuler.current.disabled = true;
-
             medocCommandes.map(item => {
-
                 const data2 = new FormData();
-
                 data2.append('code_patient', patientChoisi.code);
                 data2.append('id_facture', id);
                 data2.append('designation', item.designation);
@@ -554,51 +455,33 @@ export default function Commande(props) {
                 data2.append('caissier', props.nomConnecte);
                 data2.append('reduction', valeurReduction);
                 data2.append('id_prescripteur', prescripteurChoisi.id);
-
-                // Envoi des données
                 const req2 = new XMLHttpRequest();
                 req2.open('POST', `${nomDns}index.php?enreg_historique_service`);
-
-                // Une fois la requête charger on vide tout les états
                 req2.addEventListener('load', () => {
-                    // console.log(req2.responseText);
-                    
                     if (req2.status >= 200 && req2.status < 400) {
-                        // console.log(req2.response);
                         setMessageErreur('');
                         i++;
                         if (medocCommandes.length === i) {
-                            // Toutes les données ont été envoyées
                             enregisterFacture(id);
                         }
                     }
                 });
-
                 req2.addEventListener("error", function () {
-                    // La requête n'a pas réussi à atteindre le serveur
                     setMessageErreur('Erreur réseau');
                 });
-
                 req2.send(data2);
             })
         } else {
             setModalReussi(true);
-            // Désactivation de la fenêtre modale de confirmation
             fermerModalConfirmation();
         }
     }
 
     const appliquerReduction = (e) => {
-        // Gestion des reduction sur un service
-
         setreduction(true);
     }
 
     const demanderConfirmation = () => {
-        // if (hasPrescripteur && prescripteurChoisi.id == 0) {
-        //     setMessageErreur('Veuillez choisir un prescripteur pour cette facture'.toUpperCase());
-        //     return
-        // }
         if (medocCommandes.length > 0) {
             if (patientChoisi.nom.length > 0) {
                 validerCommande();
@@ -609,25 +492,16 @@ export default function Commande(props) {
     }
 
     const infosPatient = () => {
-
-        // Affiche la fenêtre des informations du patient
-
         ouvrirModalPatient();
-
         const req = new XMLHttpRequest();
         req.open('GET', `${nomDns}index.php?tous_les_patient`);
-
         req.addEventListener('load', () => {
-            // console.log(req.response);
             const result = JSON.parse(req.responseText);
             setlistePatient(result);
         });
-
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
         });
-
         req.send();
     }
 
@@ -641,9 +515,7 @@ export default function Commande(props) {
     }
 
     const nouveauService = () => {
-        
         if (autreState.designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
-            
             const data = new FormData();
             data.append('designation', autreState.designation.toUpperCase().trim());
             data.append('prix', prix);
@@ -654,8 +526,6 @@ export default function Commande(props) {
 
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
-                    console.log(req.responseText);
-                    
                     if (req.responseText.toUpperCase() === ServiceExiste.toUpperCase()) {
                         setMessageErreur('Ce service existe déjà');
                     } else {
@@ -741,19 +611,14 @@ export default function Commande(props) {
 
     const filtrerPatient = (e) => {
         setPatient(e.target.value);
-
         const req = new XMLHttpRequest();
-
         req.open('GET', `${nomDns}index.php?rechercher_patient=${(e.target.value).trim()}`);
-
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
                 const result = JSON.parse(req.responseText);
-
                 setlistePatient(result);
             }
         });
-
         req.send();
     }
 
@@ -780,7 +645,6 @@ export default function Commande(props) {
 
     const fermerModalReussi = () => {
         setModalReussi(false);
-        // sauvegarder();
         setMedocCommandes([]);
         annulerCommande();
         setPatientChoisi(detailsDuPatient);
@@ -825,19 +689,11 @@ export default function Commande(props) {
         }
     }
 
-    // const handleChangeMontantVerse = (e) => {
-    //     if(e.target.value.length === 0)
-    //         setMontantVerse('');
-    //     else
-    //         setMontantVerse(parseInt(e.target.value))
-    // }
-
     const handleChangePatient = (e) => {
         setNouveauPatient({...nouveauPatient, [e.target.name]: e.target.value});
     }
 
     const creerCodePatient = () => {
-        // Création d'un identifiant unique pour la facture
         return Math.floor((1 + Math.random()) * 0x1000000000)
                .toString(32)
                .substring(1).toUpperCase();        
@@ -856,10 +712,7 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
-                console.log(req.responseText);
-                
                 const result = JSON.parse(req.responseText);
-
                 if (result.message.toLowerCase() !== 'existe') {
                     setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
                     fermerEditerPatient();
@@ -876,6 +729,7 @@ export default function Commande(props) {
 
     return (
         <section className="commande">
+            {/* ... existing modals ... */}
             <Modal
                 isOpen={modalEditerPatient}
                 style={customStylesModalEditerPatient}
@@ -926,9 +780,9 @@ export default function Commande(props) {
                 <ReactToPrint
                     trigger={() => <button style={{color: '#303031', height: '5vh', width: '11vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
                     content={() => componentRef.current}
-                    // onAfterPrint={fermerModalReussi}
                 />
             </Modal>
+            {/* Refactored layout starts here */}
             <div className="left-side">
                 <div className="search-zone">
                     <input 
@@ -939,6 +793,7 @@ export default function Commande(props) {
                         autoComplete='off' 
                     />
                 </div>
+                
                 <div>
                     <button 
                         className='nouveau-service-btn' 
@@ -947,6 +802,7 @@ export default function Commande(props) {
                         ✨ Nouveau service
                     </button>
                 </div>
+                
                 <div className="liste-medoc">
                     <h1>📋 Liste des actes</h1>
                     <ul>
@@ -969,78 +825,82 @@ export default function Commande(props) {
                 </div>
             </div>
             <div className="right-side">
-                <h1>
-                    {medocSelect ? "📄 Détails du service" : "👆 Sélectionnez un service"}
-                </h1>
-                <div className="infos-medoc">
-                    {medocSelect && medocSelect.map(item => (
-                        <div className="service" key={item.id}>
-                            <div>
-                                <p>Désignation</p>
-                                <p>{extraireCode(item.designation).toUpperCase()}</p>
-                            </div>
-                            <div>
-                                <p>Prix unitaire</p>
-                                <p>{formaterNombre(item.prix)} FCFA</p>
-                            </div>
+                <div className="compact-header">
+                    <div className="service-details">
+                        <h1>
+                            {medocSelect ? "📄 Détails du service" : "👆 Sélectionnez un service"}
+                        </h1>
+                        
+                        <div className="infos-medoc">
+                            {medocSelect && medocSelect.map(item => (
+                                <div className="service" key={item.id}>
+                                    <div>
+                                        <p>Désignation</p>
+                                        <p>{extraireCode(item.designation).toUpperCase()}</p>
+                                    </div>
+                                    <div>
+                                        <p>Prix unitaire</p>
+                                        <p>{formaterNombre(item.prix)} FCFA</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-                <div className="box">
-                    <form onSubmit={ajouterMedoc}>
-                        <input 
-                            id='qteDesire' 
-                            type="text" 
-                            name="qteDesire" 
-                            value={qteDesire} 
-                            onChange={(e) => {setQteDesire(e.target.value)}} 
-                            placeholder="Quantité"
-                            autoComplete='off' 
-                        />
-                        <button 
-                            type='submit' 
-                            className='bootstrap-btn valider' 
-                            ref={btnAjout}
-                        >
-                            ➕ Ajouter
-                        </button>
-                    </form>
-                    <div style={{textAlign: 'center'}}>
-                        <button 
-                            className='btn-patient' 
-                            onClick={infosPatient}
-                        >
-                            👤 Informations patient
-                        </button>
                     </div>
-                    <div>
-                        <div>
+                    
+                    <div className="controls-container">
+                        <form onSubmit={ajouterMedoc} className="quantity-form">
                             <input 
-                                id='montant-reduction' 
+                                id='qteDesire' 
                                 type="text" 
-                                name="reduction" 
-                                onChange={handleChangeReduction} 
-                                placeholder="Montant de réduction"
+                                name="qteDesire" 
+                                value={qteDesire} 
+                                onChange={(e) => {setQteDesire(e.target.value)}} 
+                                placeholder="Quantité"
                                 autoComplete='off' 
-                                style={{display: reduction ? 'block' : 'none'}} 
                             />
                             <button 
-                                className='bootstrap-btn' 
-                                style={{ 
-                                    display: reduction ? 'none' : 'inline-block', 
-                                    background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
-                                    color: 'white'
-                                }}  
-                                onClick={appliquerReduction}
+                                type='submit' 
+                                className='bootstrap-btn valider' 
+                                ref={btnAjout}
                             >
-                                💰 Réduction
+                                ➕ Ajouter
                             </button>
+                        </form>
+                        
+                        <div className="patient-controls">
+                            <button 
+                                className='btn-patient' 
+                                onClick={infosPatient}
+                            >
+                                👤 Informations patient
+                            </button>
+                            
+                            <div className="reduction-control">
+                                <input 
+                                    id='montant-reduction' 
+                                    type="text" 
+                                    name="reduction" 
+                                    onChange={handleChangeReduction} 
+                                    placeholder="Montant de réduction"
+                                    autoComplete='off' 
+                                    style={{display: reduction ? 'block' : 'none'}} 
+                                />
+                                <button 
+                                    className='bootstrap-btn' 
+                                    style={{ 
+                                        display: reduction ? 'none' : 'inline-block', 
+                                        background: 'linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%)',
+                                        color: 'white'
+                                    }}  
+                                    onClick={appliquerReduction}
+                                >
+                                    💰 Réduction
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div style={{textAlign: 'center'}}>
-                        <div className='d-flex justify-content-center align-items-center flex-column gap-3'>
+                        
+                        <div className="prescripteur-container">
                             <CFormInput
-                                style={{width: '100%', maxWidth: '300px'}}
                                 type="text"
                                 id="prescripteur"
                                 placeholder="🔍 Rechercher un prescripteur"
@@ -1050,7 +910,7 @@ export default function Commande(props) {
                                 autoComplete='off'
                             />
                             {vueListePrescripteurs.length > 0 && (
-                                <CListGroup style={{width: '100%', maxWidth: '300px'}}>
+                                <CListGroup>
                                     {vueListePrescripteurs.map(item => (
                                         <CListGroupItem 
                                             id={`${item.id}`} 
@@ -1064,30 +924,33 @@ export default function Commande(props) {
                                 </CListGroup>
                             )}
                         </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                {messageErreur && (
+                    <div className='erreur-message'>
+                        ⚠️ {messageErreur}
+                    </div>
+                )}
+                
+                <div className="details-commande">
+                    <h1>🧾 Facture en cours</h1>
+                    <div className="info-badges">
                         {prescripteurChoisi.id !== 0 && (
-                            <div style={{marginTop: '1rem', padding: '0.75rem', background: 'var(--surface-secondary)', borderRadius: 'var(--radius-md)'}}>
+                            <div className="info-badge prescripteur">
                                 <strong>👨‍⚕️ Prescripteur:</strong> {prescripteurChoisi.designation}
                             </div>
                         )}
                         {patientChoisi.nom.length > 0 && (
-                            <div style={{marginTop: '1rem', padding: '0.75rem', background: 'var(--surface-secondary)', borderRadius: 'var(--radius-md)'}}>
-                                {/* <Thinking>
-                                    L'utilisateur me demande de continuer exactement où je me suis arrêté. Je vois que j'étais en train de mettre à jour le JSX du composant Commande.jsx et je me suis arrêté au milieu de la section qui affiche les informations du patient. Je dois continuer à partir de là sans répéter le code précédent.
-                                </Thinking> */}
+                            <div className="info-badge patient">
                                 <strong>👤 Patient:</strong> {patientChoisi.nom.toUpperCase()}
                                 <br />
                                 <strong>🆔 Code:</strong> {patientChoisi.code.toUpperCase()}
                             </div>
                         )}
                     </div>
-                </div>
-                {messageErreur && (
-                    <div className='erreur-message'>
-                        ⚠️ {messageErreur}
-                    </div>
-                )}
-                <div className="details-commande">
-                    <h1>🧾 Facture en cours</h1>
                     <table>
                         <thead>
                             <tr>
@@ -1101,19 +964,20 @@ export default function Commande(props) {
                             {medocCommandes.map(item => (
                                 <tr key={item.id} onClick={() => retirerActe(item.id)}>
                                     <td>{extraireCode(item.designation).toUpperCase()}</td>
-                                    <td>{item.prix}</td>
+                                    <td>{formaterNombre(item.prix)}</td>
                                     <td>{item.qte_commander}</td>
-                                    <td>{item.prix_total} FCFA</td>
+                                    <td>{formaterNombre(item.prix_total)}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
                                 💰 <strong>Prix total:</strong>
                                 <br />
-                                <span>{calculerPrixTotal()} FCFA</span>
+                                <span>{formaterNombre(calculerPrixTotal())} FCFA</span>
                             </div>
                             <div>
                                 🏷️ <strong>Réduction:</strong>
@@ -1130,24 +994,28 @@ export default function Commande(props) {
                             <div>
                                 💳 <strong>Net à payer:</strong>
                                 <br />
-                                <span>{calculerNetAPayer()} FCFA</span>
+                                <span>{formaterNombre(calculerNetAPayer())} FCFA</span>
                             </div>
                         </div>
-                        <button 
-                            className='bootstrap-btn valider' 
-                            id='valider-facture' 
-                            onClick={demanderConfirmation}
-                        >
-                            ✅ Valider
-                        </button>
-                        <button 
-                            className='bootstrap-btn annuler' 
-                            id='annuler-facture'
-                            onClick={annulerCommande}
-                        >
-                            ❌ Annuler
-                        </button>
+                        
+                        <div className='action-buttons'>
+                            <button 
+                                className='bootstrap-btn valider' 
+                                id='valider-facture' 
+                                onClick={demanderConfirmation}
+                            >
+                                ✅ Valider
+                            </button>
+                            <button 
+                                className='bootstrap-btn annuler' 
+                                id='annuler-facture'
+                                onClick={annulerCommande}
+                            >
+                                ❌ Annuler
+                            </button>
+                        </div>
                     </div>
+                    
                     <div>
                         <div style={{display: 'none'}}>
                             <Facture
