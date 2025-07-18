@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef, Fragment } from 'react';
 import './Commande.css';
 import { ContextChargement } from '../../Context/Chargement';
-import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode, getDateTime, CATEGORIES_RUBRIQUES } from '../../shared/Globals';
+import { extraireCode, CATEGORIES, nomDns, ServiceExiste, nomServeurNode, getDateTime, CATEGORIES_RUBRIQUES, formaterNombre } from '../../shared/Globals';
 import AfficherPatient from '../Patients/AfficherPatient';
 import EditerPatient from '../Patients/EditerPatient';
 import ModalPatient from '../Patients/ModalPatient';
@@ -32,7 +32,7 @@ const customStyles1 = {
     }, 
 };
 
-const customStyles4 = {
+const customStylesModalEditerPatient = {
     content: {
         top: '47%',
         left: '50%',
@@ -74,15 +74,15 @@ const styleItem = {
     borderBottom: '1px solid #0e771a',
 }
 
-const customStyles3 = {
+const customStylesModalPatient = {
     content: {
         top: '48%',
-        left: '60vw',
+        left: '53vw',
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        background: '#038654',
+        background: '#fff',
         width: '80%',
         height: '95vh'
     }, 
@@ -675,11 +675,9 @@ export default function Commande(props) {
         if (option === 'patient') {
             return (
                 <Fragment>
-                    <CIcon onClick={fermerModalPatient} icon={cilX} size='lg' className=' text-bg-light' role='button' />
+                    <CIcon onClick={fermerModalPatient} icon={cilX} size='lg' className='text-bg-light' role='button' />
                     <h2 style={{color: '#fff', textAlign: 'center'}}>informations du patient</h2>
-                    <div className="detail-item">
-                        <>
-
+                    <div className="modal-patient-container">
                             <ModalPatient
                                 patient={patient}
                                 filtrerPatient={filtrerPatient}
@@ -688,14 +686,11 @@ export default function Commande(props) {
                                 selectionnePatient={selectionnePatient}
                                 ouvrirEditerPatient={ouvrirEditerPatient}
                             />
-                        </>
-                        <>
 
                             <AfficherPatient 
                                 patientChoisi={patientChoisi} 
                                 fermerModalPatient={fermerModalPatient}
                             />
-                        </>
                     </div>
                 </Fragment>
             )
@@ -861,7 +856,10 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             if (req.status >= 200 && req.status < 400) {
+                console.log(req.responseText);
+                
                 const result = JSON.parse(req.responseText);
+
                 if (result.message.toLowerCase() !== 'existe') {
                     setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
                     fermerEditerPatient();
@@ -880,7 +878,7 @@ export default function Commande(props) {
         <section className="commande">
             <Modal
                 isOpen={modalEditerPatient}
-                style={customStyles4}
+                style={customStylesModalEditerPatient}
                 contentLabel=""
             >
                 <EditerPatient
@@ -900,7 +898,7 @@ export default function Commande(props) {
             </Modal>
             <Modal
                 isOpen={modalPatient}
-                style={customStyles3}
+                style={customStylesModalPatient}
                 contentLabel="validation commande"
                 ariaHideApp={false}
                 onRequestClose={fermerModalPatient}
@@ -983,7 +981,7 @@ export default function Commande(props) {
                             </div>
                             <div>
                                 <p>Prix unitaire</p>
-                                <p>{item.prix} FCFA</p>
+                                <p>{formaterNombre(item.prix)} FCFA</p>
                             </div>
                         </div>
                     ))}
@@ -1136,18 +1134,18 @@ export default function Commande(props) {
                             </div>
                         </div>
                         <button 
-                            className='bootstrap-btn annuler' 
-                            id='annuler-facture'
-                            onClick={annulerCommande}
-                        >
-                            ❌ Annuler
-                        </button>
-                        <button 
                             className='bootstrap-btn valider' 
                             id='valider-facture' 
                             onClick={demanderConfirmation}
                         >
                             ✅ Valider
+                        </button>
+                        <button 
+                            className='bootstrap-btn annuler' 
+                            id='annuler-facture'
+                            onClick={annulerCommande}
+                        >
+                            ❌ Annuler
                         </button>
                     </div>
                     <div>

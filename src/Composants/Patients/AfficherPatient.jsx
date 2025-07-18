@@ -1,45 +1,77 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { afficherAge, afficherSexe } from '../../shared/Globals';
 import './AfficherPatient.css'
 
 export default function AfficherPatient({ patientChoisi, fermerModalPatient }) {
 
   return (
-    <form action="" className="form-patient">
-        <h2 style={{textAlign: 'center', color: '#fff'}}>Détails Infos</h2>
-        <div className="box-input">
-            <p className="input-zone">
-                <label htmlFor="">Code : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="code" readOnly value={patientChoisi.code.toUpperCase()} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Noms et Prénoms : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="nom" readOnly value={patientChoisi.nom.toUpperCase()} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Age : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="age" readOnly value={afficherAge(patientChoisi.age)} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Sexe : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="sexe" readOnly value={afficherSexe(patientChoisi.sexe)} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Quartier : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="quartier" readOnly value={patientChoisi.quartier.toUpperCase()} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Assurance : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="assurance" readOnly value={patientChoisi.assurance.toUpperCase()} autoComplete="off" />
-            </p>
-            <p className="input-zone">
-                <label htmlFor="">Pourcentage : </label>
-                <input style={{color: `${'#fff'}`}} type="text" name="sexe" readOnly value={patientChoisi.type_assurance} autoComplete="off" />
-            </p>
+    <div className="patient-details-container">
+      <div className="patient-details-header">
+        <h2>👤 Détails du Patient</h2>
+      </div>
+
+      <div className="patient-details-content">
+        <div className="patient-info-grid">
+          <div className="patient-info-item">
+            <label>Code Patient</label>
+            <div className="patient-info-value">
+              {patientChoisi.code.toUpperCase()}
+            </div>
+          </div>
+
+          <div className="patient-info-item">
+            <label>Noms et Prénoms</label>
+            <div className="patient-info-value">
+              {patientChoisi.nom.toUpperCase()}
+            </div>
+          </div>
+
+          <div className="patient-info-item">
+            <label>Âge</label>
+            <div className="patient-info-value">
+              {afficherAge(patientChoisi.age)}
+            </div>
+          </div>
+
+          <div className="patient-info-item">
+            <label>Sexe</label>
+            <div className="patient-info-value">
+              {afficherSexe(patientChoisi.sexe)}
+            </div>
+          </div>
+
+          <div className="patient-info-item">
+            <label>Quartier</label>
+            <div className="patient-info-value">
+              {patientChoisi.quartier.toUpperCase()}
+            </div>
+          </div>
+
+          {/* <div className="patient-info-item">
+            <label>Assurance</label>
+            <div className="patient-info-value">
+              {patientChoisi.assurance.toUpperCase()}
+            </div>
+          </div>
+
+          <div className="patient-info-item">
+            <label>Pourcentage Assurance</label>
+            <div className="patient-info-value">
+              {patientChoisi.type_assurance}%
+            </div>
+          </div> */}
         </div>
-        <div style={{marginTop: '20px', marginLeft: '40%',}}>
-            <button style={{width: '130px'}} className='bootstrap-btn valider' type="submit" onClick={fermerModalPatient}>Selectionner</button>
-        </div>
-    </form>
+      </div>
+
+      <div className="patient-details-actions">
+        <button 
+          className="btn-select-patient" 
+          onClick={fermerModalPatient}
+          type="button"
+        >
+          ✅ Sélectionner ce patient
+        </button>
+      </div>
+    </div>
   )
 }
