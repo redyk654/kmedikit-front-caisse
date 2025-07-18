@@ -162,6 +162,9 @@ export default function Commande(props) {
     const [prescripteurRecherche, setPrescripteurRecherche] = useState('');
     const [prescripteurChoisi, setPrescripteurChoisi] = useState(prescripteurDefault);
     const [hasPrescripteur, setHasPrescripteur] = useState(false);
+    // Nouveaux états pour les calculs
+    const [prixTotal, setPrixTotal] = useState(0);
+    const [netAPayer, setNetAPayer] = useState(0);
 
     const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
@@ -409,10 +412,10 @@ export default function Commande(props) {
         data.append('caissier', props.nomConnecte);
         data.append('nom_patient', patientChoisi.nom);
         data.append('code_patient', patientChoisi.code);
-        data.append('prix_total', calculerPrixTotal());
+        data.append('prix_total', prixTotal); // Utilise l'état
+        data.append('net_a_payer', netAPayer); // Utilise l'état
+        data.append('montant_verse', netAPayer); // Utilise l'état
         data.append('reduction', valeurReduction);
-        data.append('net_a_payer', calculerNetAPayer());
-        data.append('montant_verse', calculerNetAPayer());
         data.append('relicat', 0);
         data.append('reste_a_payer', 0);
         data.append('assurance', patientChoisi.assurance);
@@ -600,15 +603,6 @@ export default function Commande(props) {
         setPatientChoisi(patientSelectionne);
     }
 
-    const ajouterService = () => {
-        if (designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
-            autreState.id = Math.random().toString();
-            autreState.designation = document.getElementById('categorie').value + ' ' + autreState.designation
-            setMedocCommandes([...medocCommandes, autreState]);
-            fermerModalPatient();
-        }
-    }
-
     const filtrerPatient = (e) => {
         setPatient(e.target.value);
         const req = new XMLHttpRequest();
@@ -726,6 +720,67 @@ export default function Commande(props) {
 
         req.send(data);
     }
+
+    useEffect(() => {
+    // Calcul du prix total
+    const total = medocCommandes.reduce((sum, curr) => sum + parseInt(curr.prix_total || 0), 0) + parseInt(montantMateriel || 0);
+    setPrixTotal(total);
+
+    // Calcul du net à payer
+    let net = total * ((100 - parseInt(patientChoisi.type_assurance || 0)) / 100);
+    if (!isNaN(valeurReduction) && valeurReduction > 0) {
+        net = net - (net * parseFloat(valeurReduction) / 100);
+    }
+    setNetAPayer(isNaN(net) ? 0 : parseInt(net));
+    }, [medocCommandes, montantMateriel, valeurReduction, patientChoisi.type_assurance]);
+
+    const BROUILLON_KEY = 'facture_brouillon';
+
+    const chargerBrouillon = () => {
+        const brouillon = localStorage.getItem(BROUILLON_KEY);
+        if (brouillon) {
+            try {
+                const data = JSON.parse(brouillon);
+                setMedocCommandes(data.medocCommandes || []);
+                setPatientChoisi(data.patientChoisi || detailsDuPatient);
+                setPrescripteurChoisi(data.prescripteurChoisi || prescripteurDefault);
+                setvaleurReduction(data.valeurReduction || 0);
+                setMontantMateriel(data.montantMateriel || 0);
+                setidFacture(data.idFacture || '');
+                setCurrentDate(data.currentDate || '');
+                // setMessageErreur('Brouillon chargé !');
+                      // Force le recalcul immédiat
+                const total = data.medocCommandes.reduce((sum, curr) => sum + parseInt(curr.prix_total || 0), 0) + parseInt(data.montantMateriel || 0);
+                setPrixTotal(total);
+                
+                let net = total * ((100 - parseInt(data.patientChoisi?.type_assurance || 0)) / 100);
+                if (!isNaN(data.valeurReduction) && data.valeurReduction > 0) {
+                    net = net - (net * parseFloat(data.valeurReduction) / 100);
+                }
+                setNetAPayer(isNaN(net) ? 0 : parseInt(net));
+            } catch (e) {
+                setMessageErreur('Brouillon corrompu');
+                localStorage.removeItem(BROUILLON_KEY);
+            }
+        } else {
+            setMessageErreur('Aucun brouillon trouvé');
+        }
+    };
+
+    const enregistrerBrouillon = () => {
+        const brouillon = {
+            medocCommandes,
+            patientChoisi,
+            prescripteurChoisi,
+            valeurReduction,
+            montantMateriel,
+            idFacture,
+            currentDate
+        };
+        localStorage.setItem(BROUILLON_KEY, JSON.stringify(brouillon));
+        annulerCommande();
+        setMessageErreur('Facture enregistrée en brouillon !');
+    };
 
     return (
         <section className="commande">
@@ -971,13 +1026,14 @@ export default function Commande(props) {
                             ))}
                         </tbody>
                     </table>
-                    
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
                                 💰 <strong>Prix total:</strong>
                                 <br />
-                                <span>{formaterNombre(calculerPrixTotal())} FCFA</span>
+                                <span>
+                                    {formaterNombre(prixTotal)} FCFA
+                                </span>
                             </div>
                             <div>
                                 🏷️ <strong>Réduction:</strong>
@@ -994,7 +1050,9 @@ export default function Commande(props) {
                             <div>
                                 💳 <strong>Net à payer:</strong>
                                 <br />
-                                <span>{formaterNombre(calculerNetAPayer())} FCFA</span>
+                                <span>
+                                    {formaterNombre(netAPayer)} FCFA
+                                </span>
                             </div>
                         </div>
                         
@@ -1013,6 +1071,22 @@ export default function Commande(props) {
                             >
                                 ❌ Annuler
                             </button>
+                            <button
+                                className='bootstrap-btn'
+                                onClick={enregistrerBrouillon}
+                                type="button"
+                                style={{background: 'linear-gradient(135deg, #6366f1 0%, #60a5fa 100%)'}}
+                            >
+                                💾 Enregistrer en brouillon
+                            </button>
+                            <button
+                                className='bootstrap-btn'
+                                type="button"
+                                style={{background: 'linear-gradient(135deg, #6366f1 0%, #60a5fa 100%)'}}
+                                onClick={chargerBrouillon}
+                            >
+                                📂 Charger le brouillon
+                            </button>
                         </div>
                     </div>
                     
@@ -1026,10 +1100,10 @@ export default function Commande(props) {
                                 idFacture={idFacture}
                                 patient={patientChoisi.nom}
                                 codePatient={patientChoisi.code}
-                                prixTotal={calculerPrixTotal}
+                                prixTotal={prixTotal}
                                 reduction={valeurReduction}
-                                aPayer={calculerNetAPayer}
-                                montantVerse={calculerNetAPayer}
+                                aPayer={netAPayer}
+                                montantVerse={netAPayer}
                                 relicat={0}
                                 resteaPayer={0}
                                 nomConnecte={props.nomConnecte}

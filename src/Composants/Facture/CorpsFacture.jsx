@@ -87,12 +87,12 @@ export default function CorpsFacture(props) {
                     <div>Reste à payer</div>
                 </div>
                 <div style={{ lineHeight: '11px', color: 'black'}}>
-                    <div><strong>{props.prixTotal() + ' Fcfa'}</strong></div>
+                    <div><strong>{props.prixTotal + ' Fcfa'}</strong></div>
                     {/* <div><strong>{props.montantFrais + ' Fcfa'}</strong></div> */}
                     <div><strong>{props.reduction.toString().substring(0, 5) + ' %'}</strong></div>
                     {/* <div><strong>{props.type_assurance + ' %'}</strong></div> */}
-                    <div><strong>{props.aPayer() + ' Fcfa'}</strong></div>
-                    <div><strong>{props.montantVerse() + ' Fcfa'}</strong></div>
+                    <div><strong>{props.aPayer + ' Fcfa'}</strong></div>
+                    <div><strong>{props.montantVerse + ' Fcfa'}</strong></div>
                     {/* <div><strong>{props.relicat + ' Fcfa'}</strong></div> */}
                     <div><strong>{props.resteaPayer + ' Fcfa'}</strong></div>
                 </div>
