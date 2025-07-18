@@ -32,18 +32,6 @@ const customStyles2 = {
 
 export default function Entete(props) {
 
-    const servicesInit = [
-        {code: 'PHA', service: 'Pharmacie', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'MA', service: 'Maternité', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'RX', service: 'Radiologie', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'LAB', service: 'Laboratoire', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'ECHO', service: 'Echographie', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'MED', service: 'Médécine', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'CHR', service: 'Petite chirurgie', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'UPEC', service: 'Upec', recette: 0, pourcentage: 0, recetteRestante: 0},
-        {code: 'CO', service: 'Consultation', recette: 0, pourcentage: 0, recetteRestante: 0},
-    ];
-
     const componentRef = useRef();
 
     const utilisateur = {
@@ -52,7 +40,6 @@ export default function Entete(props) {
         confirmation: ''
     }
 
-    const [slide, setSlide] = useState(false);
     const [nouveauMdp, setNouveauMdp] = useState(utilisateur);
     const [modalConfirmation, setModalConfirmation] = useState(false);
     const [msgErreur, setMsgErreur] = useState('');
@@ -121,7 +108,21 @@ export default function Entete(props) {
     }
 
     return (
-        <header className="entete" style={{height: `${slide ? '18vh' : '18vh'}`}}>
+        <header className={`entete ${props.sidebar ? 'entete-sidebar' : ''}`}>
+            <div className="box-entete">
+                <div className="entete-logo">
+                    {/* Remplacez par votre logo si besoin */}
+                    {/* <span className="logo-circle">P</span> */}
+                    Philmedical-Caisse
+                </div>
+                <div className="entete-user">
+                    <span className="entete-nom">{props.nomConnecte.toUpperCase()}</span>
+                    <button className="entete-btn" onClick={() => {setModalConfirmation(true);}}>Modifier</button>
+                    <span className="entete-logout" title="Déconnexion" onClick={deconnection}>
+                        <FaSignOutAlt size={22} />
+                    </span>
+                </div>
+            </div>
             <Modal
                 isOpen={modalReussi}
                 style={customStyles2}
@@ -180,20 +181,6 @@ export default function Entete(props) {
                     </div>
                 </form>
             </Modal>
-            <div className="box-entete">
-                <h1 style={{textAlign: 'center', width: '98vw', fontSize: '29px'}}>
-                    Caisse
-                </h1>
-                <h3 className='ms-4' onClick={() => setSlide(!slide)}>{props.nomConnecte.toUpperCase()}</h3>
-                <div className='deconnection' style={{display: `${slide ? 'flex' : 'flex'}`,}}>
-                    <div style={{cursor: 'pointer'}} onClick={deconnection} title="deconnection" >
-                        <FaSignOutAlt size={24} />
-                    </div>
-                    <div>
-                        <button style={{display: `${slide ? 'inline' : 'inline'}`}} onClick={() => {setModalConfirmation(true);}} >Modifier</button>
-                    </div>
-                </div>
-            </div>
         </header>
     )
 }

@@ -44,14 +44,6 @@ export default function Apercu(props) {
 
     useEffect(() => {
 
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            setTimeout(() => {
-                props.setOnglet(25);
-            }, 3000);
-        }
-
         if (dateDepart.length > 0 && dateFin.length > 0) {
             
             setIsLoading(true)

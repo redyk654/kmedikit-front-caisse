@@ -34,17 +34,7 @@ function App() {
   const [nomConnecte, setNomConnecte] = useState('');
   const [delayLoad, setDelay] = useState(0);
 
-  const date_e = new Date('2026-09-05');
-  const date_j = new Date();
-
   useEffect(() => {
-
-    // majTime();
-    // if (date_j.getTime() >= date_e.getTime()) {
-    //   setDelay(18850);
-    // } else {
-    //   setDelay(0);
-    // }
 
     if(role === ROLES.regisseur) {
       setOnglet(5);
@@ -52,15 +42,6 @@ function App() {
       setOnglet(1);
     }
   }, [role, connecter]);
-
-  // const majTime = () => {
-  //   fetch(`${nomDns}update_valeur.php`)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     setDelay(parseInt(data))
-  //   })
-  //   .catch(error => console.error('Erreur réseau'));
-  // }
 
   let contenu;
   switch(onglet) {
@@ -108,86 +89,65 @@ function App() {
   }
 
   if (connecter) {
-    if (role.toLowerCase() === ROLES.caissier) {
+    if (role.toLowerCase() === ROLES.caissier || role.toLowerCase() === ROLES.regisseur) {
       return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95vw', fontSize: '11px'}}>
-              <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
-                <FaStore size={22} />
-                &nbsp;
-                Actes caisse
-              </div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
-                <FiSettings size={20} />
-                &nbsp;
-                Modifier
-              </div>
-              <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
-                <FaPlusSquare size={24} />
-                &nbsp;
-                Pharmacie
-              </div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
-                <FaClipboardList size={22} />
-                &nbsp;
-                Listing Actes
-              </div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                <FaReceipt size={22} />
-                &nbsp;
-                Factures-Actes
-              </div>
-              <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
-                <FaReceipt size={22} />
-                &nbsp;
-                Listing Factures
-              </div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
-      );
-    } else if (role.toLowerCase() === ROLES.regisseur) {
-      return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '98%', fontSize: '10px'}}>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
-                <FaClipboardList size={19} />
-                &nbsp;
-                Listing
-              </div>
-              <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
-                <FaCoins size={18} />
-                &nbsp;
-                Recettes
-              </div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
-                <FiSettings size={20} />
-                &nbsp;
-                Modifier
-              </div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
-                <FaUsers size={20} />
-                &nbsp;
-                Comptes
-              </div>
-              {/* <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                <FaReceipt size={19} />
-                &nbsp;
-                Factures-services
-              </div> */}
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
+        <div className="layout">
+          <aside className="sidebar">
+            <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} sidebar />
+            <nav className="sidebar-nav">
+              {role.toLowerCase() === ROLES.caissier ? (
+                <>
+                  <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
+                    <FaStore size={22} />
+                    <span>Actes caisse</span>
+                  </div>
+                  <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                    <FiSettings size={20} />
+                    <span>Modifier</span>
+                  </div>
+                  <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
+                    <FaPlusSquare size={24} />
+                    <span>Pharmacie</span>
+                  </div>
+                  <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                    <FaClipboardList size={22} />
+                    <span>Listing Actes</span>
+                  </div>
+                  <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                    <FaReceipt size={22} />
+                    <span>Factures-Actes</span>
+                  </div>
+                  <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
+                    <FaReceipt size={22} />
+                    <span>Listing Factures</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                    <FaClipboardList size={19} />
+                    <span>Listing</span>
+                  </div>
+                  <div className={`tab ${onglet === 5 ? 'active' : ''}`} onClick={ () => {setOnglet(5)}}>
+                    <FaCoins size={18} />
+                    <span>Recettes</span>
+                  </div>
+                  <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                    <FiSettings size={20} />
+                    <span>Modifier</span>
+                  </div>
+                  <div className={`tab ${onglet === 4 ? 'active' : ''}`} onClick={ () => {setOnglet(4)}}>
+                    <FaUsers size={20} />
+                    <span>Comptes</span>
+                  </div>
+                </>
+              )}
+            </nav>
+          </aside>
+          <main className="main-content">
+            {contenu}
+          </main>
+        </div>
       );
     } else {
       return (
