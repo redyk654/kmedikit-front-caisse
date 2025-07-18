@@ -99,27 +99,27 @@ function App() {
                 <>
                   <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                     <FaStore size={22} />
-                    <span>Actes caisse</span>
+                    <span>Actes Caisse</span>
                   </div>
                   <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                     <FiSettings size={20} />
-                    <span>Modifier</span>
+                    <span>Modifier Actes</span>
                   </div>
                   <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
                     <FaPlusSquare size={24} />
-                    <span>Pharmacie</span>
+                    <span>Factures Pharmacie</span>
                   </div>
                   <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
                     <FaClipboardList size={22} />
                     <span>Listing Actes</span>
                   </div>
-                  <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
-                    <FaReceipt size={22} />
-                    <span>Factures-Actes</span>
-                  </div>
                   <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
                     <FaReceipt size={22} />
                     <span>Listing Factures</span>
+                  </div>
+                  <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                    <FaReceipt size={22} />
+                    <span>Factures Actes</span>
                   </div>
                 </>
               ) : (
