@@ -51,9 +51,11 @@
     transform: translateY(-1px);
 }
 
-/* Bouton nouveau service modernisé */
+/* Harmonisation des boutons principaux */
+.bootstrap-btn,
+.btn-patient,
 .nouveau-service-btn {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
     color: white;
     border: none;
     border-radius: var(--radius-lg);
@@ -65,8 +67,28 @@
     box-shadow: var(--shadow-md);
     position: relative;
     overflow: hidden;
+    min-width: 120px;
 }
 
+.bootstrap-btn.annuler {
+    background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-light) 100%);
+}
+
+.bootstrap-btn.valider {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+.nouveau-service-btn {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+}
+
+.btn-patient {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+/* Animation sur tous les boutons */
+.bootstrap-btn::before,
+.btn-patient::before,
 .nouveau-service-btn::before {
     content: '';
     position: absolute;
@@ -74,19 +96,26 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     transition: left 0.5s;
+    z-index: 1;
 }
 
+.bootstrap-btn:hover::before,
+.btn-patient:hover::before,
 .nouveau-service-btn:hover::before {
     left: 100%;
 }
 
+.bootstrap-btn:hover,
+.btn-patient:hover,
 .nouveau-service-btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-xl);
 }
 
+.bootstrap-btn:active,
+.btn-patient:active,
 .nouveau-service-btn:active {
     transform: translateY(0);
 }
@@ -157,6 +186,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
+    animation: listItemSlideIn 0.3s ease-out;
 }
 
 .commande .left-side .liste-medoc ul li:last-child {
@@ -284,42 +314,6 @@
 .commande .right-side input:focus {
     border-color: var(--secondary-color);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-/* Boutons modernisés */
-.btn-patient {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-    color: white;
-    border: none;
-    border-radius: var(--radius-lg);
-    padding: 0.875rem 1.5rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-md);
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-patient::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.btn-patient:hover::before {
-    left: 100%;
-}
-
-.btn-patient:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl);
 }
 
 /* Messages d'erreur */
@@ -475,16 +469,6 @@
 
 .commande .right-side .details-commande .valider-annuler > button:active {
     transform: translateY(0);
-}
-
-.bootstrap-btn.annuler {
-    background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-light) 100%);
-    color: white;
-}
-
-.bootstrap-btn.valider {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
-    color: white;
 }
 
 /* Styles pour les modales modernisées */
@@ -927,4 +911,107 @@
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
     --radius-xl: 1rem;
+}
+
+
+/* Compact header with service details and controls */
+.commande .right-side .compact-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.commande .right-side .service-details {
+    flex: 1;
+}
+
+.commande .right-side .controls-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.commande .right-side .quantity-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.commande .right-side .patient-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.commande .right-side .reduction-control {
+    width: 100%;
+}
+
+.commande .right-side .prescripteur-container {
+    grid-column: span 2;
+    margin-top: 0.5rem;
+}
+
+.commande .right-side .info-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.commande .right-side .info-badge {
+    background: var(--surface-secondary);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    flex: 1;
+    min-width: 200px;
+}
+
+.commande .right-side .info-badge.prescripteur {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.2);
+}
+
+.commande .right-side .info-badge.patient {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.commande .right-side .details-commande .valider-annuler .action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .commande .right-side .controls-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .commande .right-side .prescripteur-container {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .commande .right-side .compact-header {
+        flex-direction: column;
+    }
+    
+    .commande .right-side .controls-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .commande .right-side .quantity-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .commande .right-side .details-commande .valider-annuler .action-buttons {
+        flex-direction: column;
+    }
 }

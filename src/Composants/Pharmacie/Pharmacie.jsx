@@ -121,19 +121,6 @@ export default function GestionFactures(props) {
         req.send();
     }
 
-    // useEffect(() => {
-    //     socket.on('maj_produits', (data) => {
-    //         setFiltrer(true);
-    //         rechercherListePatients();
-    //     });
-
-    //     socket.on('maj_facture_pharmacie', () => {
-    //         setFiltrer(true);
-    //         rechercherListePatients();
-    //     });
-  
-    //   }, [socket])
-
     useEffect(() => {
         rechercherListePatients();
     }, [filtrer, effet])
@@ -171,12 +158,10 @@ export default function GestionFactures(props) {
         }
         req.addEventListener("load", () => {
             if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
-                // setTimeout(() => {
-                    setMessageErreur('');
-                    const result = JSON.parse(req.responseText);
-                    setFactures(result);
-                    setfactureSauvegarde(result);
-                // }, props.delayLoad);
+                setMessageErreur('');
+                const result = JSON.parse(req.responseText);
+                setFactures(result);
+                setfactureSauvegarde(result);
             } else {
                 // Affichage des informations sur l'échec du traitement de la requête
                 console.error(req.status + " " + req.statusText);
@@ -492,10 +477,6 @@ export default function GestionFactures(props) {
                 </p>
                 <p>
                     recette du jour : <strong>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</strong>
-                        {/* <ReactToPrint
-                            trigger={() => <button style={{color: '#f1f1f1', height: '5vh', width: '30%', cursor: 'pointer', fontSize: 'medium', fontWeight: '600'}}>Imprimer</button>}
-                            content={() => componentRef2.current}
-                        /> */}
                 </p>
                 <p className="search-zone">
                     <input type="text" placeholder="Nom du patient" className="recherche-patient" onChange={filtrerListe} />
@@ -504,11 +485,6 @@ export default function GestionFactures(props) {
                     <label htmlFor="non_regle" style={{marginRight: 5, fontWeight: 700}}>Non réglés</label>
                     <input type="checkbox" name="non_regle" id="non_regle" checked={filtrer} onChange={() => setFiltrer(!filtrer)} />
                 </p>
-                {/* <div>
-                    {filtrer ? (
-                        <div>Total non réglés: <span style={{fontWeight: 700}}>{manquantTotal == null ? '0 Fcfa' : manquantTotal + ' Fcfa'}</span></div>
-                    ) : null}
-                </div> */}
                 <h3>{filtrer ? 'Factures non réglés' : 'Factures'}</h3>
                 <ul>
                     {factures.length > 0 ? factures.map(item => (
@@ -584,24 +560,6 @@ export default function GestionFactures(props) {
                         <button className='bootstrap-btn annuler' style={{width: '20%', height: '5vh'}} onClick={() => {if(detailsFacture.length > 0 && parseInt(factureSelectionne[0].reste_a_payer) > 0) setModalConfirmation(true)}}>Annuler</button>
                     </div>
                     <h3 style={{marginTop: 5, display: `${filtrer ? 'block' : 'none'}`}}>Régler la facture</h3>
-                    {/* {filtrer ? (
-                        <div style={{marginTop: 13}}>
-                            <p>
-                                <label htmlFor="">Montant versé: </label>
-                                <input style={{height: '4vh', width: '15%'}} type="text" value={montantVerse} onChange={(e) => !isNaN(e.target.value) && setmontantVerse(e.target.value)} />
-                                <button className='bootstrap-btn' style={{width: '5%', marginLeft: 5, backgroundColor: '#6d6f94'}} onClick={mettreAjourData}>ok</button>
-                            </p>
-                            <p>
-                                Montant versé: <span style={{fontWeight: 'bold'}}>{verse + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Relicat: <span style={{fontWeight: 'bold'}}>{relicat + ' Fcfa'}</span>
-                            </p>
-                            <p>
-                                Reste à payer: <span style={{fontWeight: 'bold'}}>{resteaPayer + ' Fcfa'}</span>
-                            </p>
-                        </div>
-                    ) : null} */}
                     <button ref={btn} className='bootstrap-btn valider' style={{display: `${filtrer ? 'inline' : 'none'}`, width: '20%', height: '5vh'}} onClick={(e) => {if(filtrer && detailsFacture.length > 0) {reglerFacture(e)} else {}}}>Régler</button>
                     <div>
                         {factureSelectionne.length > 0 && (
