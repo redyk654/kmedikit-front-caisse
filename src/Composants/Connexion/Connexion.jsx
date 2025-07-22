@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './Connexion.css';
 import { convertirDateAvecTiret, liensPhilmedical, nomDns } from '../../shared/Globals';
 
@@ -11,6 +11,17 @@ export default function Connexion(props) {
     const [nom, setNom] = useState('');
     const [mdp, setMdp] = useState('');
     const [showMdp, setShowMdp] = useState(false);
+
+    // Vérifier si l'utilisateur est déjà connecté (localStorage)
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            const { nom_user, rol } = JSON.parse(user);
+            props.setNomConnecte(nom_user);
+            props.setRole(rol);
+            props.setConnecter(true);
+        }
+    }, []);
 
     // Contrôle des zone de saisie avec le state
     const handleChange = (e) => {
@@ -79,6 +90,8 @@ export default function Connexion(props) {
                     props.setRole(result.rol);
                     props.setNomConnecte(result.nom_user);
                     props.setConnecter(true);
+                    // Sauvegarde dans localStorage
+                    localStorage.setItem('user', JSON.stringify({ nom_user: result.nom_user, rol: result.rol }));
                 }
             } else {
                 console.log(req.status + " " + req.statusText);

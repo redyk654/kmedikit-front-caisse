@@ -35,7 +35,17 @@ function App() {
   const [delayLoad, setDelay] = useState(0);
 
   useEffect(() => {
+    // Initialisation depuis localStorage
+    const user = localStorage.getItem('user');
+    if (user) {
+      const { nom_user, rol } = JSON.parse(user);
+      setNomConnecte(nom_user);
+      setRole(rol);
+      setConnecter(true);
+    }
+  }, []);
 
+  useEffect(() => {
     if(role === ROLES.regisseur) {
       setOnglet(5);
     } else {

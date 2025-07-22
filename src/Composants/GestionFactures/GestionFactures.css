@@ -1,4 +1,4 @@
-.container-facture {
+/* .container-facture {
     display: grid;
     grid-template-columns: 400px 1fr;
     
@@ -31,7 +31,7 @@
     color: #0e771a;
     font-size: 17px;
     margin-bottom: 5px;
-}
+} */
 
 
 /* .container-facture button {
@@ -45,7 +45,7 @@
 } */
 
 
-.container-facture .liste-medoc ul{
+/* .container-facture .liste-medoc ul{
     height: 60vh;
     border: 1px solid gray;
     overflow: auto;
@@ -63,4 +63,4 @@
     background-color: #0e771a;
     color: #f1f1f1;
     cursor: pointer;
-}
+} */

@@ -14,7 +14,7 @@ const customStyles1 = {
       bottom: 'auto',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
-      background: '#0e771a',
+    //   background: '#0e771a',
     },
 };
 
@@ -26,7 +26,7 @@ const customStyles2 = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
-        background: '#0e771a',
+        // background: '#0e771a',
       },
 };
 
@@ -92,6 +92,7 @@ export default function Entete(props) {
     }
 
     const deconnection = () => {
+        localStorage.removeItem('user'); // Suppression du localStorage
         props.setConnecter(false);
         props.setOnglet(1);
         setModalReussi(false);
@@ -117,7 +118,7 @@ export default function Entete(props) {
                 </div>
                 <div className="entete-user">
                     <span className="entete-nom">{props.nomConnecte.toUpperCase()}</span>
-                    <button className="entete-btn" onClick={() => {setModalConfirmation(true);}}>Modifier</button>
+                    <button className="entete-btn" onClick={() => {setModalConfirmation(true);}}>Modifier mot de passe</button>
                     <span className="entete-logout" title="Déconnexion" onClick={deconnection}>
                         <FaSignOutAlt size={22} />
                     </span>
