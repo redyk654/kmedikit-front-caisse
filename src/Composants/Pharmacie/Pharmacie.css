@@ -104,7 +104,7 @@
     background: var(--text-muted);
     border-radius: 3px;
 }
-.container-facture .liste-medoc ul li {
+/* .container-facture .liste-medoc ul li {
     color: var(--text-primary);
     font-weight: 500;
     padding: 1rem 1.25rem;
@@ -117,10 +117,13 @@
     border-bottom: none;
 }
 .container-facture .liste-medoc ul li:hover {
-    background: var(--secondary-light);
-    color: #fff;
     transform: translateX(4px);
 }
+
+.container-facture .liste-medoc ul li:hover::before {
+    transform: translateX(4px);
+} */
+
 
 .container-facture .liste-medoc .search-zone {
     margin-bottom: 1rem;
