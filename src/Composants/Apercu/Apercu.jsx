@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext, useRef, Fragment } from 'react';
-import './Apercu.css';
+import '../Listing/ListingFactures.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import ReactToPrint from 'react-to-print';
 import ImprimerHistorique from '../ImprimerHistorique/ImprimerHistorique';
-import { extraireCode, getDateTime, nomDns, recupererDateJour, recupererHeureJour, sauvegarderBd } from '../../shared/Globals';
+import { extraireCode, formaterNombre, getDateTime, nomDns, recupererDateJour, recupererHeureJour, sauvegarderBd } from '../../shared/Globals';
 import { CFormSwitch } from '@coreui/react';
-
 
 export default function Apercu(props) {
 
@@ -14,7 +13,6 @@ export default function Apercu(props) {
     const date_j = new Date();
 
     const componentRef = useRef();
-
     let date_select1 = useRef();
     let date_select2 = useRef();
     let heure_select1 = useRef();
@@ -24,9 +22,8 @@ export default function Apercu(props) {
 
     const [historique, sethistorique] = useState([]);
     const [listeComptes, setListeComptes] = useState([]);
-    // const [dateJour, setdateJour] = useState('');
     const [total, setTotal] = useState('');
-    const [reccetteTotal, setRecetteTotal] = useState(false);
+    const [recetteTotal, setRecetteTotal] = useState(false);
     const [dette, setDette] = useState(false);
     const [dateDepart, setdateDepart] = useState('');
     const [dateFin, setdateFin] = useState('');
@@ -43,11 +40,9 @@ export default function Apercu(props) {
     }
 
     useEffect(() => {
-
         if (dateDepart.length > 0 && dateFin.length > 0) {
-            
-            setIsLoading(true)
-    
+            setIsLoading(true);
+
             let dateD = dateDepart;
             let dateF = dateFin;
 
@@ -56,43 +51,37 @@ export default function Apercu(props) {
             data.append('dateF', dateF);
             data.append('caissier', caissier.toLowerCase());
             data.append('assurance', assurance);
-    
+
             const req = new XMLHttpRequest();
-    
+
             req.open('POST', `${nomDns}apercu.php`);
-    
+
             req.addEventListener('load', () => {
                 execGetDateTime();
                 setMessageErreur('');
-                // console.log(JSON.parse(req.responseText));
-                // console.log(req.responseText);
                 recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
-                
+
                 let t = 0;
                 result.forEach(item => {
                     t += parseInt(item.prix_total);
                 })
 
                 setTotal(t);
-
                 stopChargement();
             });
-    
+
             req.addEventListener("error", function () {
-                // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
+                setIsLoading(false);
             });
-    
+
             req.send(data);
         }
-
     }, [dateDepart, dateFin, caissier, assurance]);
 
     useEffect(() => {
-        // Récupération des comptes
-
         recupererHeureDernierService();
         recupererDateJour('date-f-listing');
         recupererHeureJour('heure-f-listing');
@@ -110,7 +99,6 @@ export default function Apercu(props) {
         });
 
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
         });
 
@@ -133,7 +121,7 @@ export default function Apercu(props) {
                         result = result.filter(item => (item.caissier.toLowerCase() == caissier.toLowerCase()));
                     }
                 }
-                
+
                 let recette = 0, resteAPayer = 0;
                 if (assurance === "non") {
                     result.forEach(item => {
@@ -153,13 +141,13 @@ export default function Apercu(props) {
                 recette -= resteAPayer
                 setRecetteTotal(recette);
                 setDette(resteAPayer);
-                setIsLoading(false)
+                setIsLoading(false);
             }
         });
 
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
+            setIsLoading(false);
         });
 
         req.send(data);
@@ -177,24 +165,22 @@ export default function Apercu(props) {
 
     const enregistrerHeureFin = () => {
         let dateDuJour = new Date();
-        
+
         let dateDuJourFormate = dateDuJour.getFullYear() + '-' + ('0' + (dateDuJour.getMonth() + 1)).slice(-2) + '-' + ('0' + dateDuJour.getDate()).slice(-2);
         if (dateDuJourFormate === dateFin.slice(0, 10)) {
             const req = new XMLHttpRequest();
             req.open('GET', `${nomDns}horaire_caisse.php?heure_fin=${dateFin}`);
-    
+
             req.addEventListener('load', () => {
                 if(req.status >= 200 && req.status < 400) {
                     sauvegarderBd();
-                    // console.log(req.responseText);
                 }
             });
-    
+
             req.addEventListener("error", function () {
-                // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
             });
-    
+
             req.send();
         }
     }
@@ -212,7 +198,6 @@ export default function Apercu(props) {
         });
 
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
             setMessageErreur('Erreur réseau');
         });
 
@@ -220,101 +205,172 @@ export default function Apercu(props) {
     }
 
     return (
-        <section className="historique">
-            <h1>Listing des caissiers</h1>
-            <div className="container-historique">
-                <div className="table-commandes">
-                    <div className="entete-historique">
+        <section className="listing-section">
+            <h1>Aperçu des services</h1>
+            <div className="listing-container">
+                <div className="entete-historique">
+                    {messageErreur && (
                         <div className='erreur-message'>{messageErreur}</div>
-                        <div>
-                            <p>
-                                <label htmlFor="">Du : </label>
-                                <input id='date-d-listing' type="date" ref={date_select1} />
-                                <input id='heure-d-listing' type="time" ref={heure_select1} />
-                            </p>
-                            <p>
-                                <label htmlFor="">Au : </label>
-                                <input id='date-f-listing' type="date" ref={date_select2} />
-                                <input id='heure-f-listing' type="time" ref={heure_select2} />
-                            </p>
+                    )}
 
+                    <div className="form-controls">
+                        <div className="form-group">
                             <p>
-                                {
-                                props.role === "admin" && 
-                                <Fragment>
+                                <label>Période de recherche</label>
+                                <div className="date-time-group">
+                                    <input 
+                                        id='date-d-listing' 
+                                        type="date" 
+                                        ref={date_select1}
+                                        aria-label="Date de début"
+                                    />
+                                    <input 
+                                        id='heure-d-listing' 
+                                        type="time" 
+                                        ref={heure_select1}
+                                        aria-label="Heure de début"
+                                    />
+                                </div>
+                            </p>
+                            <p>
+                                <label>Au</label>
+                                <div className="date-time-group">
+                                    <input 
+                                        id='date-f-listing' 
+                                        type="date" 
+                                        ref={date_select2}
+                                        aria-label="Date de fin"
+                                    />
+                                    <input 
+                                        id='heure-f-listing' 
+                                        type="time" 
+                                        ref={heure_select2}
+                                        aria-label="Heure de fin"
+                                    />
+                                </div>
+                            </p>
+                        </div>
+
+                        {props.role === "admin" && (
+                            <div className="form-group">
+                                <p>
                                     <CFormSwitch
-                                        label="Filtrer"
+                                        label="Filtrer par caissier"
                                         id="formSwitchCheckDefault"
                                         checked={filtre}
                                         reverse={true}
                                         onChange={(e) => setFiltre(!filtre)}
                                     />
-                                </Fragment>
-                                }
-                            </p>
-                            <p>
-                                {/* <label htmlFor="assure">Categorie : </label>
-                                <select name="" id="assure" onChange={(e) => setAssurance(e.target.value)}>
-                                    <option value="non">non assuré</option>
-                                    <option value="oui">assuré</option>
-                                </select> */}
-                            </p>
-                            <p>
-                                <label htmlFor="">Caissier : </label>
-                                <select name="caissier" id="caissier">
-                                    {props.role === "caissier" ? 
-                                    <option value={props.nomConnecte.toLowerCase()}>{props.nomConnecte.toUpperCase()}</option> :
-                                    listeComptes.map(item => (
-                                        <option value={item.nom_user.toLowerCase()}>{item.nom_user.toUpperCase()}</option>
-                                    ))}
-                                </select>
-                            </p>
+                                </p>
+                                {filtre && (
+                                    <p>
+                                        <label htmlFor="caissier">Caissier</label>
+                                        <select name="caissier" id="caissier" aria-label="Sélectionner un caissier">
+                                            {listeComptes.map((item, index) => (
+                                                <option key={index} value={item.nom_user.toLowerCase()}>
+                                                    {item.nom_user.toUpperCase()}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {props.role === "caissier" && (
+                            <div className="form-group">
+                                <p>
+                                    <label htmlFor="caissier">Caissier</label>
+                                    <select name="caissier" id="caissier" aria-label="Caissier sélectionné">
+                                        <option value={props.nomConnecte.toLowerCase()}>
+                                            {props.nomConnecte.toUpperCase()}
+                                        </option>
+                                    </select>
+                                </p>
+                            </div>
+                        )}
+
+                        <div className="totaux-info">
+                            <div>
+                                <span>Total : </span>
+                                <span>{total ? (formaterNombre(total) + ' Fcfa') : '0 Fcfa'}</span>
+                            </div>
+                            <div>
+                                <span>Recette : </span>
+                                <span>{recetteTotal ? (formaterNombre(recetteTotal) + ' Fcfa') : '0 Fcfa'}</span>
+                            </div>
                         </div>
-                        <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
-                        <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
-                        {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
-                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal + ' Fcfa'}</span></div>
                     </div>
-                    <table>
+
+                    <button 
+                        className='bootstrap-btn valider' 
+                        onClick={rechercherHistorique}
+                        disabled={isLoading}
+                        aria-label="Rechercher l'historique"
+                    >
+                        {isLoading ? 'Recherche...' : 'Rechercher'}
+                    </button>
+                </div>
+
+                <div className="table-commandes">
+                    <table role="table" aria-label="Aperçu des services">
                         <thead>
                             <tr>
+                                <td></td>
                                 <td>Désignation</td>
                                 <td>Total</td>
                             </tr>
                         </thead>
                         <tbody>
-                            {!isLoading ? historique.length > 0 ? historique.map(item => (
-                                <tr>
-                                    <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
-                                    <td>{item.prix_total + ' Fcfa'}</td>
+                            {!isLoading ? (
+                                historique.length > 0 ? (
+                                    historique.map((item, index) => (
+                                        <tr key={index} role="row">
+                                            <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
+                                            <td>{item.prix_total + ' Fcfa'}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr className="empty-row">
+                                        <td colSpan={2} className='fw-bold'>
+                                            Aucune donnée correspondante
+                                        </td>
+                                    </tr>
+                                )
+                            ) : (
+                                <tr className="loading-row">
+                                    <td colSpan={2} className='fw-bold'>
+                                        Chargement en cours...
+                                    </td>
                                 </tr>
-                            )) :
-                                <div className='fw-bold text-center w-100'>
-                                    {'Aucune donnée correspondante'}
-                                </div>
-                                :
-                                <div className='fw-bold text-center w-100'>
-                                    {'Chargement... '}
-                                </div>
-                            }
+                            )}
                         </tbody>
                     </table>
                 </div>
+
                 {historique.length > 0 && (
-                    <div style={{textAlign: 'center'}}>
+                    <div className="print-section">
                         <ReactToPrint
-                            trigger={() => <button className='bootstrap-btn valider' style={{marginTop: '8px', color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                            trigger={() => (
+                                <button 
+                                    className='print-button'
+                                    aria-label="Imprimer l'aperçu"
+                                >
+                                    📄 Imprimer
+                                </button>
+                            )}
                             content={() => componentRef.current}
                             onAfterPrint={enregistrerHeureFin}
                         />
                     </div>
                 )}
             </div>
+
             <div style={{display: 'none'}}>
                 <ImprimerHistorique
                     ref={componentRef}
                     historique={historique}
-                    recetteTotal={reccetteTotal}
+                    recetteTotal={recetteTotal}
                     listing={assurance}
                     total={total}
                     nomConnecte={caissier}

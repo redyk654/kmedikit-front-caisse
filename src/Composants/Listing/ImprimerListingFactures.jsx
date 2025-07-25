@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { extraireCode, mois, mois2, styleEntete } from '../../shared/Globals';
+import { extraireCode, formaterNombre, mois, mois2, styleEntete } from '../../shared/Globals';
 import logo from '../../images/logo_hdj.png';
 import EnteteHdm from '../../shared/EnteteHdm';
 import EnteteHopital from '../../shared/EnteteHopital';
@@ -80,9 +80,9 @@ export default class ImprimerListingFactures extends Component {
                                 </tbody>
                             </table>
                         </div>
-                        <div style={{marginTop: 5}}>Total : <strong>{this.props.recetteTotal ? (this.props.total) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
+                        <div style={{marginTop: 5}}>Total : <strong>{this.props.recetteTotal ? formaterNombre(this.props.total) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
                         {/* <div style={{marginTop: 5}}>Matériel : <strong>{this.props.montantFrais ? this.props.montantFrais + ' Fcfa' : 0 + ' Fcfa'}</strong></div> */}
-                        <div style={{marginTop: 5}}>Recette : <strong>{this.props.recetteTotal ? this.props.recetteTotal + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
+                        <div style={{marginTop: 5}}>Recette : <strong>{this.props.recetteTotal ? formaterNombre(this.props.recetteTotal) + ' Fcfa' : 0 + ' Fcfa'}</strong></div>
                         {/* <div style={{marginTop: 5}}>
                             <h6>
                                 ATTENTION AU DECOUPAGE DES DONNÉES LORS DE L'IMPRESSION !

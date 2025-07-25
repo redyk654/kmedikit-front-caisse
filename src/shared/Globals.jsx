@@ -61,7 +61,9 @@ export const MONTANTMATERIEL = 500;
 
 export function mois (str) {
     // verifier si str est undefined
-    if (str === undefined) return;
+    if (!str) {
+        return '';
+    }
     switch(parseInt(str.substring(3, 5))) {
         case 1:
             return str.substring(0, 2) + " janvier " + str.substring(6, 10);

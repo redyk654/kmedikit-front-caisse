@@ -206,6 +206,7 @@
 }
 
 .liste-medoc ul li:hover {
+    font-weight: 700;
     transform: translateX(4px);
 }
 
