@@ -16,6 +16,7 @@ import CIcon from '@coreui/icons-react'
 import { cilX } from '@coreui/icons';
 import { io } from 'socket.io-client';
 import { CFormInput, CListGroup, CListGroupItem } from '@coreui/react';
+import { cilList, cilPlus, cilUser, cilMoney, cilCheckCircle, cilXCircle, cilSave, cilFolderOpen, cilHospital, cilTag, cilCreditCard, cilFile, cilPen } from '@coreui/icons';
 
 // const socket = io.connect(`${nomServeurNode}`);
 
@@ -485,13 +486,19 @@ export default function Commande(props) {
     }
 
     const demanderConfirmation = () => {
-        if (medocCommandes.length > 0) {
-            if (patientChoisi.nom.length > 0) {
-                validerCommande();
-            } else {
-                setMessageErreur('Entrez le nom et le prénom du patient');
-            }
+        if (medocCommandes.length === 0) {
+            setMessageErreur('Veuillez ajouter au moins un service avant de valider la facture');
+            return;
         }
+        if (patientChoisi.code.length === 0) {
+            setMessageErreur('Veuillez sélectionner un patient avant de valider la facture');
+            return;
+        }
+        // if (prescripteurChoisi.id === 0 && hasPrescripteur) {
+        //     setMessageErreur('Veuillez sélectionner un prescripteur avant de valider la facture');
+        //     return;
+        // }
+        validerCommande();
     }
 
     const infosPatient = () => {
@@ -854,12 +861,16 @@ export default function Commande(props) {
                         className='nouveau-service-btn' 
                         onClick={autreService}
                     >
-                        ✨ Nouveau service
+                        <CIcon icon={cilPlus} size="lg" style={{marginRight: 8}} />
+                        Nouveau service
                     </button>
                 </div>
                 
                 <div className="liste-medoc">
-                    <h1>📋 Liste des actes</h1>
+                    <h1>
+                        <CIcon icon={cilList} size="lg" style={{marginRight: 8}} />
+                        Liste des actes
+                    </h1>
                     <ul>
                         {chargement ? (
                             <div className="loader">
@@ -883,7 +894,17 @@ export default function Commande(props) {
                 <div className="compact-header">
                     <div className="service-details">
                         <h1>
-                            {medocSelect ? "📄 Détails du service" : "👆 Sélectionnez un service"}
+                            {medocSelect ? (
+                                <>
+                                    <CIcon icon={cilFile} size="lg" style={{marginRight: 8}} />
+                                    Détails du service
+                                </>
+                            ) : (
+                                <>
+                                    <CIcon icon={cilPen} size="lg" style={{marginRight: 8}} />
+                                    Sélectionnez un service
+                                </>
+                            )}
                         </h1>
                         
                         <div className="infos-medoc">
@@ -927,7 +948,8 @@ export default function Commande(props) {
                                 className='btn-patient' 
                                 onClick={infosPatient}
                             >
-                                👤 Informations patient
+                                <CIcon icon={cilUser} size="lg" style={{marginRight: 8}} />
+                                Informations patient
                             </button>
                             
                             <div className="reduction-control">
@@ -949,7 +971,8 @@ export default function Commande(props) {
                                     }}  
                                     onClick={appliquerReduction}
                                 >
-                                    💰 Réduction
+                                    <CIcon icon={cilTag} size="lg" style={{marginRight: 8}} />
+                                    Réduction
                                 </button>
                             </div>
                         </div>
@@ -995,14 +1018,23 @@ export default function Commande(props) {
                     <div className="info-badges">
                         {prescripteurChoisi.id !== 0 && (
                             <div className="info-badge prescripteur">
-                                <strong>👨‍⚕️ Prescripteur:</strong> {prescripteurChoisi.designation}
+                                <strong>
+                                    <CIcon icon={cilUser} size="lg" style={{marginRight: 8}} />
+                                    Prescripteur:
+                                </strong> {prescripteurChoisi.designation}
                             </div>
                         )}
                         {patientChoisi.nom.length > 0 && (
                             <div className="info-badge patient">
-                                <strong>👤 Patient:</strong> {patientChoisi.nom.toUpperCase()}
+                                <strong>
+                                    <CIcon icon={cilUser} size="lg" style={{marginRight: 8}} />
+                                    Patient:
+                                </strong> {patientChoisi.nom.toUpperCase()}
                                 <br />
-                                <strong>🆔 Code:</strong> {patientChoisi.code.toUpperCase()}
+                                <strong>
+                                    <CIcon icon={cilTag} size="lg" style={{marginRight: 8}} />
+                                    Code:
+                                </strong> {patientChoisi.code.toUpperCase()}
                             </div>
                         )}
                     </div>
@@ -1029,47 +1061,52 @@ export default function Commande(props) {
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
-                                💰 <strong>Prix total:</strong>
+                                <CIcon icon={cilMoney} size="lg" style={{marginRight: 8}} />
+                                <strong>Prix total:</strong>
                                 <br />
                                 <span>
                                     {formaterNombre(prixTotal)} FCFA
                                 </span>
                             </div>
                             <div>
-                                🏷️ <strong>Réduction:</strong>
+                                <CIcon icon={cilTag} size="lg" style={{marginRight: 8}} />
+                                <strong>Réduction:</strong>
                                 <br />
                                 <span>{valeurReduction}%</span>
                             </div>
                             {parseInt(patientChoisi.type_assurance) !== 0 && (
                                 <div>
-                                    🏥 <strong>Assurance:</strong>
+                                    <CIcon icon={cilHospital} size="lg" style={{marginRight: 8}} />
+                                    <strong>Assurance:</strong>
                                     <br />
                                     <span>{patientChoisi.type_assurance}%</span>
                                 </div>
                             )}
                             <div>
-                                💳 <strong>Net à payer:</strong>
+                                <CIcon icon={cilCreditCard} size="lg" style={{marginRight: 8}} />
+                                <strong>Net à payer:</strong>
                                 <br />
                                 <span>
                                     {formaterNombre(netAPayer)} FCFA
                                 </span>
                             </div>
                         </div>
-                        
                         <div className='action-buttons'>
                             <button 
                                 className='bootstrap-btn valider' 
                                 id='valider-facture' 
                                 onClick={demanderConfirmation}
                             >
-                                ✅ Valider
+                                <CIcon icon={cilCheckCircle} size="lg" style={{marginRight: 8}} />
+                                Valider
                             </button>
                             <button 
                                 className='bootstrap-btn annuler' 
                                 id='annuler-facture'
                                 onClick={annulerCommande}
                             >
-                                ❌ Annuler
+                                <CIcon icon={cilXCircle} size="lg" style={{marginRight: 8}} />
+                                Annuler
                             </button>
                             <button
                                 className='bootstrap-btn'
@@ -1077,7 +1114,8 @@ export default function Commande(props) {
                                 type="button"
                                 style={{background: 'linear-gradient(135deg, #6366f1 0%, #60a5fa 100%)'}}
                             >
-                                💾 Enregistrer en brouillon
+                                <CIcon icon={cilSave} size="lg" style={{marginRight: 8}} />
+                                Enregistrer en brouillon
                             </button>
                             <button
                                 className='bootstrap-btn'
@@ -1085,7 +1123,8 @@ export default function Commande(props) {
                                 style={{background: 'linear-gradient(135deg, #6366f1 0%, #60a5fa 100%)'}}
                                 onClick={chargerBrouillon}
                             >
-                                📂 Charger le brouillon
+                                <CIcon icon={cilFolderOpen} size="lg" style={{marginRight: 8}} />
+                                Charger le brouillon
                             </button>
                         </div>
                     </div>
