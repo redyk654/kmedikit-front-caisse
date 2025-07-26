@@ -5,12 +5,13 @@ import { convertirDateAvecTiret, liensPhilmedical, nomDns } from '../../shared/G
 export default function Connexion(props) {
     let name_field = useRef()
     let password_field = useRef()
-    const date_e = new Date('2025-08-13');
-    
+    const date_e = new Date();
+
     const [erreur, setErreur] = useState('')
-    const [nom, setNom] = useState('');
-    const [mdp, setMdp] = useState('');
-    const [showMdp, setShowMdp] = useState(false);
+    const [nom, setNom] = useState('')
+    const [mdp, setMdp] = useState('')
+    const [showMdp, setShowMdp] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     // Vérifier si l'utilisateur est déjà connecté (localStorage)
     useEffect(() => {
@@ -43,7 +44,7 @@ export default function Connexion(props) {
         .then(data => {
             let today = data.date
             today = convertirDateAvecTiret(today.substring(0, 10))
-            
+
             return today
         })
         .catch(error => {
@@ -55,23 +56,9 @@ export default function Connexion(props) {
 
     const verifConnexion = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+
         /* vérification de l'identifiant et du mot de passe */
-
-
-        // const res = await dateDuJourServeur()
-        // console.log(res);
-        
-        // let date_j = new Date(res)
-
-
-        // console.log(date_j);
-        
-        // if (date_j.getTime() > date_e.getTime()) {
-        //     setErreur('No database found');
-        //     return;
-        // }
-
-
 
         const data = new FormData();
         data.append('nom', nom.trim().toUpperCase());
@@ -81,6 +68,7 @@ export default function Connexion(props) {
         req.open('POST', `${nomDns}connexion_caisse.php`);
 
         req.addEventListener('load', () => {
+            setIsLoading(false);
             if (req.status >= 200 && req.status < 400) {
                 if (req.responseText == "identifiant ou mot de passe incorrect") {
                     setErreur(req.responseText);
@@ -99,7 +87,7 @@ export default function Connexion(props) {
         });
 
         req.addEventListener("error", function () {
-            // La requête n'a pas réussi à atteindre le serveur
+            setIsLoading(false);
             setErreur('Erreur réseau');
         });
 
@@ -115,45 +103,64 @@ export default function Connexion(props) {
 
     return (
         <div className='form'>
-            <div style={{fontWeight: '600', opacity: '.1', position: 'absolute', top: 0}}>Chrisppo Youmbissi Kamdem</div>\
-            <div className='float-start px-3'>
+            <div className='developer-credit'>
+                Phimedical - Développé par Chrisppo Youmbissi - Tous droits réservés © {date_e.getFullYear()} - Version 2.0.0
+            </div>
+            <div className='back-link'>
                 <a href={`${liensPhilmedical.acceuil}`} className='link-light' role='button'>
-                    retour à l'accueil
+                    ← Retour à l'accueil
                 </a>
             </div>
-            <form action="">
-                <h1 className='title'>Caisse</h1>
-                <p className='text-field'>
-                    <label htmlFor="nom" ref={name_field}>Identifiant</label>
+            <form onSubmit={verifConnexion}>
+                <h1 className='title'>Connexion Caisse</h1>
+
+                <div className='text-field'>
                     <input
-                    type="text"
-                    name="nom"
-                    id="nom"
-                    value={nom}
-                    autoComplete='off'
-                    onChange={handleChange}
-                    onFocus={() => {name_field.current.style.bottom = '20px'}}
-                    onBlur={(e) => {if(e.target.value === '') name_field.current.style.bottom = '1px'}}
+                        type="text"
+                        name="nom"
+                        id="nom"
+                        value={nom}
+                        autoComplete='username'
+                        onChange={handleChange}
+                        placeholder=" "
+                        required
                     />
-                </p>
-                <p className='text-field'>
-                    <label htmlFor="mdp" ref={password_field}>Mot de passe</label>
+                    <label htmlFor="nom">Identifiant</label>
+                </div>
+
+                <div className='text-field'>
                     <input
-                    type={`${showMdp ? 'text' : 'password'}`}
-                    name="mdp"
-                    id="mdp"
-                    value={mdp}
-                    onChange={handleChange}
-                    onFocus={() => password_field.current.style.bottom = '20px'}
-                    onBlur={(e) => {if(e.target.value === '') password_field.current.style.bottom = '1px'}}
+                        type={showMdp ? 'text' : 'password'}
+                        name="mdp"
+                        id="mdp"
+                        value={mdp}
+                        autoComplete='current-password'
+                        onChange={handleChange}
+                        placeholder=" "
+                        required
                     />
-                </p>
-                <p style={{marginTop: 8}}>
-                    <label htmlFor="" style={{color: '#fff'}}>Afficher mot de passe</label>
-                    <input type="checkbox" checked={showMdp} id="" onChange={(e) => setShowMdp(!showMdp)} />
-                </p>
-                <button type='submit' onClick={verifConnexion} >Se connecter</button>
-                <div className='message-erreur'>{erreur}</div>
+                    <label htmlFor="mdp">Mot de passe</label>
+                </div>
+
+                <div className='checkbox-field'>
+                    <input 
+                        type="checkbox" 
+                        id="showPassword"
+                        checked={showMdp} 
+                        onChange={(e) => setShowMdp(!showMdp)} 
+                    />
+                    <label htmlFor="showPassword">Afficher le mot de passe</label>
+                </div>
+
+                <button 
+                    type='submit' 
+                    disabled={isLoading}
+                    className={isLoading ? 'loading' : ''}
+                >
+                    {isLoading ? '' : 'Se connecter'}
+                </button>
+
+                {erreur && <div className='message-erreur'>{erreur}</div>}
             </form>
         </div>
     )
