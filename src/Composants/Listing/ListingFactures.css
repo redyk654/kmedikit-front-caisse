@@ -222,7 +222,7 @@
     font-weight: 600;
     text-align: center;
     border: 1px solid rgba(239, 68, 68, 0.2);
-    display: none;
+    display: block;
 }
 
 .totaux-info {
