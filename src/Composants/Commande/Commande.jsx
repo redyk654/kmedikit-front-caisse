@@ -862,7 +862,7 @@ export default function Commande(props) {
                         onClick={autreService}
                     >
                         <CIcon icon={cilPlus} size="lg" style={{marginRight: 8}} />
-                        Nouveau service
+                        Creer Acte
                     </button>
                 </div>
                 
@@ -897,12 +897,12 @@ export default function Commande(props) {
                             {medocSelect ? (
                                 <>
                                     <CIcon icon={cilFile} size="lg" style={{marginRight: 8}} />
-                                    Détails du service
+                                    Détails de l'acte
                                 </>
                             ) : (
                                 <>
                                     <CIcon icon={cilPen} size="lg" style={{marginRight: 8}} />
-                                    Sélectionnez un service
+                                    Sélectionnez un acte
                                 </>
                             )}
                         </h1>
