@@ -108,56 +108,48 @@ function App() {
   if (connecter) {
     if(role.toLowerCase() === ROLES.admin || role.toLowerCase() === ROLES.regisseur) {
       return (
-        <main className='app'>
-          <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
-          <section className="conteneur-onglets">
-            <div className="onglets-blocs" style={{width: '95vw', fontSize: '10px'}}>
-              <div className={`tab ${onglet === 12 ? 'active' : ''}`} onClick={ () => {setOnglet(12)}}>
+        <div className="layout">
+          <aside className="sidebar">
+            <Entete nomConnecte={nomConnecte} setConnecter={setConnecter} setOnglet={setOnglet} role={role} />
+            <nav className="sidebar-nav">
+              <button className={`tab${onglet === 12 ? ' active' : ''}`} onClick={() => setOnglet(12)}>
                 <BsSpeedometer2 size={20} />
-                &nbsp;
-                Graphe
-              </div>
-              <div className={`tab ${onglet === 3 ? 'active' : ''}`} onClick={ () => {setOnglet(3)}}>
+                <span>Graphe</span>
+              </button>
+              <button className={`tab${onglet === 3 ? ' active' : ''}`} onClick={() => setOnglet(3)}>
                 <RiSurveyFill size={20} />
-                &nbsp;
-                Journal de la caisse
-              </div>
-              <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
+                <span>Journal de la caisse</span>
+              </button>
+              <button className={`tab${onglet === 8 ? ' active' : ''}`} onClick={() => setOnglet(8)}>
                 <FaClipboardList size={19} />
-                &nbsp;
-                Listing Actes
-              </div>
-              <div className={`tab ${onglet === 14 ? 'active' : ''}`} onClick={ () => {setOnglet(14)}}>
+                <span>Listing Actes</span>
+              </button>
+              <button className={`tab${onglet === 14 ? ' active' : ''}`} onClick={() => setOnglet(14)}>
                 <FaClipboardList size={19} />
-                &nbsp;
-                Etats Pharmacie
-              </div>
-              <div className={`tab ${onglet === 13 ? 'active' : ''}`} onClick={ () => {setOnglet(13)}}>
+                <span>Listing Pharmacie</span>
+              </button>
+              <button className={`tab${onglet === 13 ? ' active' : ''}`} onClick={() => setOnglet(13)}>
                 <FaClipboardList size={19} />
-                &nbsp;
-                Listing Factures-actes
-              </div>
-              <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
+                <span>Listing Factures-actes</span>
+              </button>
+              <button className={`tab${onglet === 11 ? ' active' : ''}`} onClick={() => setOnglet(11)}>
                 <FiSettings size={20} />
-                &nbsp;
-                Modifier
-              </div>
-              <div className={`tab ${onglet === 4 ? 'active' : ''} ${role.toLowerCase() === ROLES.regisseur && 'd-none'}`} onClick={ () => {setOnglet(4)}}>
+                <span>Editer acte</span>
+              </button>
+              <button className={`tab${onglet === 4 ? ' active' : ''} ${role.toLowerCase() === ROLES.regisseur ? 'd-none' : ''}`} onClick={() => setOnglet(4)}>
                 <FaUsers size={20} />
-                &nbsp;
-                Utilisateurs
-              </div>
-              <div className={`tab ${onglet === 2 ? 'active' : ''}`} onClick={ () => {setOnglet(2)}}>
+                <span>Utilisateurs</span>
+              </button>
+              <button className={`tab${onglet === 2 ? ' active' : ''}`} onClick={() => setOnglet(2)}>
                 <FaReceipt size={19} />
-                &nbsp;
-                Factures-services
-              </div>
-            </div>
-            <div className="onglets-contenu">
-                {contenu}
-            </div>
-          </section>
-        </main>
+                <span>Factures-caisse</span>
+              </button>
+            </nav>
+          </aside>
+          <main className="main-content">
+            {contenu}
+          </main>
+        </div>
       );
     } else {
       return (

@@ -209,8 +209,8 @@ export default function Commande(props) {
                     setListeMedoc(result);
                     setListeMedocSauvegarde(result);
                     stopChargement();
-                    document.querySelector('.recherche').value = "";
-                    document.querySelector('.recherche').focus();
+                    // document.querySelector('.recherche').value = "";
+                    // document.querySelector('.recherche').focus();
     
                 } else {
                     // Affichage des informations sur l'échec du traitement de la requête
