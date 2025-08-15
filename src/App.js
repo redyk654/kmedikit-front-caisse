@@ -109,15 +109,15 @@ function App() {
                 <>
                   <div className={`tab ${onglet === 1 ? 'active' : ''}`} onClick={ () => {setOnglet(1)}}>
                     <FaStore size={22} />
-                    <span>Actes Caisse</span>
+                    <span>Facturation Caisse</span>
                   </div>
                   <div className={`tab ${onglet === 11 ? 'active' : ''}`} onClick={ () => {setOnglet(11)}}>
                     <FiSettings size={20} />
-                    <span>Modifier Actes</span>
+                    <span>Editer Actes</span>
                   </div>
                   <div className={`tab ${onglet === 7 ? 'active' : ''}`} onClick={ () => {setOnglet(7)}}>
                     <FaPlusSquare size={24} />
-                    <span>Factures Pharmacie</span>
+                    <span>Facturation Pharmacie</span>
                   </div>
                   <div className={`tab ${onglet === 8 ? 'active' : ''}`} onClick={ () => {setOnglet(8)}}>
                     <FaClipboardList size={22} />
