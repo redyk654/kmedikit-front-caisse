@@ -1,44 +1,380 @@
 .entete {
-    background: #03ca7e;
-    color: #f1f1f1;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ecf0f1;
     position: relative;
-    transition: .2s;
-    /* border: 1px solid red; */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
 }
 
-.entete .deconnection {
-    padding-left: 20px;
-    margin-bottom: 20px;
+.entete.entete-sidebar {
+    background: transparent;
+    box-shadow: none;
+    padding: 2rem 0 1.5rem 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    /* border: 1px solid red; */
 }
-
-.entete h3 {
-    /* width: 100%;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    cursor: pointer;
-    padding-top: 2px; */
-    font-size: larger;
-}
-
-.entete h1 {
-    width: 100%;
-    padding-left: 80px;
-}
-
-.entete button {
-    color: #012557;
-    font-size: 18px;
-    height: 4vh;
-    cursor: pointer;
-    margin-left: 15px;
-}
-
 
 .entete .box-entete {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.entete-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.2;
+    transition: all 0.3s ease;
+}
+
+.entete-logo:hover {
+    transform: translateY(-1px);
+    color: #e8f4fd;
+}
+
+.logo-circle {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    color: #2c3e50;
+    font-weight: 800;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 0.5rem;
+}
+
+.logo-circle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.entete-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.entete-nom {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    color: #ffffff;
+    text-align: center;
+    opacity: 0.95;
+    transition: all 0.3s ease;
+}
+
+.entete-nom:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.entete-btn {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    color: #2c3e50;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-width: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.entete-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.entete-btn:hover::before {
+    left: 100%;
+}
+
+.entete-btn:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.entete-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.entete-logout {
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.entete-logout::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.entete-logout:hover {
+    color: #ef4444;
+    transform: translateY(-1px) scale(1.1);
+}
+
+.entete-logout:hover::before {
+    opacity: 1;
+}
+
+.entete-logout:active {
+    transform: translateY(0) scale(1.05);
+}
+
+/* Styles pour les modales */
+.form-compte {
+    padding: 2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: #ffffff;
+    min-width: 400px;
+}
+
+.form-compte h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+.box-input {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.input-zone label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #e2e8f0;
+    margin-bottom: 0.25rem;
+}
+
+.input-zone input {
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input-zone input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.input-zone input:focus {
+    border-color: #3b82f6;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn-control {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-control button {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 100px;
+}
+
+.btn-control button[type="reset"] {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-control button[type="reset"]:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #fecaca;
+    transform: translateY(-1px);
+}
+
+.btn-control button[type="submit"] {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-control button[type="submit"]:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-control button:active {
+    transform: translateY(0);
+}
+
+/* Loader styles */
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.loader p {
+    color: #ffffff;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .entete.entete-sidebar {
+        padding: 1rem 0;
+    }
+    
+    .entete-logo {
+        font-size: 0.875rem;
+    }
+    
+    .logo-circle {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+    
+    .entete-nom,
+    .entete-btn {
+        display: none;
+    }
+    
+    .entete-logout {
+        padding: 0.375rem;
+    }
+    
+    .form-compte {
+        min-width: 320px;
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .btn-control {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .btn-control button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-compte {
+        min-width: 280px;
+        padding: 1rem;
+    }
+    
+    .form-compte h3 {
+        font-size: 1.25rem;
+    }
+    
+    .input-zone input {
+        padding: 0.625rem 0.875rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation pour l'apparition */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.entete-user > * {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.entete-user > *:nth-child(1) { animation-delay: 0.1s; }
+.entete-user > *:nth-child(2) { animation-delay: 0.2s; }
+.entete-user > *:nth-child(3) { animation-delay: 0.3s; }
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible pour l'accessibilité */
+.entete-btn:focus-visible,
+.entete-logout:focus-visible,
+.btn-control button:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
 }

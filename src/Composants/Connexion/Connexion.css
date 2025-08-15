@@ -1,91 +1,531 @@
+:root {
+    --primary-color: #1e293b;
+    --primary-light: #334155;
+    --secondary-color: #3b82f6;
+    --secondary-light: #60a5fa;
+    --accent-color: #10b981;
+    --accent-light: #34d399;
+    --danger-color: #ef4444;
+    --danger-light: #f87171;
+    --surface-color: #ffffff;
+    --surface-secondary: #f8fafc;
+    --surface-tertiary: #e2e8f0;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-light: #f1f5f9;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+}
+
 .form {
-    background: #0f1236;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 50%, var(--secondary-color) 100%);
+    background-attachment: fixed;
     width: 100%;
-    height: 75vh;
-    padding-top: 50px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
     position: relative;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.form .developer-credit {
+    position: absolute;
+    top: var(--spacing-lg);
+    left: var(--spacing-lg);
+    font-weight: 600;
+    opacity: 0.3;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    z-index: 1;
+}
+
+.form .back-link {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: 10;
+}
+
+.form .back-link a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.form .back-link a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: white;
 }
 
 .form form {
-    background: transparent;
-    width: 400px;
-    height: 85vh;
-    margin: auto;
-    padding: 30px 50px;
-    border-radius: 8px;
-    box-shadow: 5px 5px 10px rgb(8, 8, 8),
-                -5px -5px 10px rgb(5, 5, 5);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    width: 100%;
+    max-width: 420px;
+    margin: 0;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 2;
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border-radius: var(--radius-xl);
+    pointer-events: none;
 }
 
 .title {
     text-align: center;
-    color: #fff;
-}
-
-form .text-field:nth-child(2)
-{
-    margin-top: 55px;
-}
-
-form p:nth-child(3) {
-    margin-top: 40px;
-}
-
-p:nth-child(2), p:nth-child(3) {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-2xl);
+    letter-spacing: 0.025em;
     position: relative;
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -var(--spacing-md);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    border-radius: var(--radius-sm);
+}
+
+.text-field {
+    position: relative;
+    margin-bottom: var(--spacing-xl);
+}
+
+.text-field:first-of-type {
+    margin-top: 0;
 }
 
 .text-field label {
+position: absolute;
+left: var(--spacing-md);
+top: 50%;
+transform: translateY(-50%);
+color: var(--text-secondary);
+font-weight: 500;
+font-size: 0.95rem;
+letter-spacing: 0.025em;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+pointer-events: none;
+background: var(--surface-color);
+padding: 0 var(--spacing-xs);
+z-index: 2;
+box-shadow: 0 0 0 2px var(--surface-color);
+}
+
+.text-field input {
+width: 100%;
+height: 3.5rem;
+padding: 0 var(--spacing-lg);
+border: 2px solid var(--border-color);
+border-radius: var(--radius-lg);
+background: var(--surface-color);
+color: var(--text-primary) !important;
+font-size: 1rem;
+font-weight: 500;
+transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+outline: none;
+position: relative;
+z-index: 2;
+}
+
+.text-field input:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+.text-field input:focus + label,
+.text-field input:not(:placeholder-shown) + label {
+top: -0.7rem;
+transform: none;
+font-size: 0.875rem;
+color: var(--secondary-color);
+font-weight: 600;
+background: var(--surface-color);
+padding: 0 var(--spacing-xs);
+z-index: 3;
+box-shadow: 0 0 0 2px var(--surface-color);
+}
+
+.text-field input::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+}
+
+.checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-light);
+    transition: all 0.2s ease;
+}
+
+.checkbox-field:hover {
+    background: var(--border-light);
+}
+
+.checkbox-field input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border-color);
+    background: var(--surface-color);
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+}
+
+.checkbox-field input[type="checkbox"]:checked {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.checkbox-field input[type="checkbox"]:checked::after {
+    content: '✓';
     position: absolute;
-    left: 0;
-    bottom: 1px;
-    cursor: text;
-    color: #f1f1f1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.checkbox-field label {
+    color: var(--text-primary);
     font-weight: 500;
-    letter-spacing: 1px;
-    transition: all .3s;
+    font-size: 0.95rem;
+    cursor: pointer;
+    user-select: none;
 }
-
-.form input[type="text"], .form input[type="password"] {
-    color: #f1f1f1;
-    width: 100%;
-    border: none;
-    background: none;
-    border-radius: 1px;
-    border-bottom: 1px solid #f1f1f1;
-    outline: none;
-    font-size: .93em;
-}
-
 
 .form form button[type="submit"] {
     width: 100%;
-    padding: 15px;
-    font-size: 1.1em;
+    height: 3.5rem;
+    padding: 0 var(--spacing-xl);
+    font-size: 1rem;
     font-weight: 600;
-    border: 3px solid #f1f1f1;
-    color: #f1f1f1;
-    background: none;
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    margin-top: 55px;
-    border-radius: 999px;
-    letter-spacing: 2px;
-    transition: all .2s;
+    margin-top: var(--spacing-xl);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.form form button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .form form button[type="submit"]:hover {
-    background: #ffffff;
-    color: #0f1236;
+    background: linear-gradient(135deg, #2563eb 0%, var(--secondary-color) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
-.form form .message-erreur {
-    text-align: center;
-    position: relative;
-    bottom: -100px;
-    left: 0px;
+.form form button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+.form form button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.form form button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.message-erreur {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    color: var(--danger-color);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
     font-weight: 600;
-    color: rgba(238, 42, 42, 0.952);
+    text-align: center;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    margin-top: var(--spacing-lg);
+    font-size: 0.95rem;
+    animation: slideInDown 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form {
+        padding: var(--spacing-md);
+        min-height: 100vh;
+    }
+    
+    .form .developer-credit,
+    .form .back-link {
+        position: static;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .form .back-link {
+        text-align: center;
+    }
+    
+    .form form {
+        padding: var(--spacing-xl);
+        max-width: 100%;
+    }
+    
+    .title {
+        font-size: 1.75rem;
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    .text-field input {
+        height: 3rem;
+        font-size: 0.95rem;
+    }
+    
+    .form form button[type="submit"] {
+        height: 3rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form {
+        padding: var(--spacing-sm);
+    }
+    
+    .form form {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+    }
+    
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .text-field input {
+        height: 2.75rem;
+        padding: 0 var(--spacing-md);
+        font-size: 0.9rem;
+    }
+    
+    .text-field label {
+        font-size: 0.9rem;
+        left: var(--spacing-sm);
+    }
+    
+    .form form button[type="submit"] {
+        height: 2.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .checkbox-field {
+        padding: var(--spacing-xs);
+    }
+    
+    .checkbox-field input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+    }
+    
+    .checkbox-field label {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animations d'entrée */
+.text-field {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.text-field:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.text-field:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.checkbox-field {
+    animation: fadeInUp 0.6s ease-out;
+    animation-delay: 0.3s;
+}
+
+.form form button[type="submit"] {
+    animation: fadeInUp 0.6s ease-out;
+    animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Amélioration de l'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible pour l'accessibilité */
+.form form button[type="submit"]:focus-visible,
+.text-field input:focus-visible,
+.checkbox-field input:focus-visible {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* États de validation */
+.text-field.error input {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.text-field.error label {
+    color: var(--danger-color);
+}
+
+.text-field.success input {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.text-field.success label {
+    color: var(--accent-color);
+}
+
+/* Loading state */
+.form form button[type="submit"].loading {
+    position: relative;
+    color: transparent;
+}
+
+.form form button[type="submit"].loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }

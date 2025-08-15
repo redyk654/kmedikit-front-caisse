@@ -302,3 +302,22 @@ export const convertDate = (date) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(date).toLocaleDateString('fr-FR', options);
 };
+
+export const sauvegarderBd = () => {
+    const req = new XMLHttpRequest();
+    req.open('POST', `${nomDns}backup.php`);
+
+    req.addEventListener("error", function () {
+        // La requête n'a pas réussi à atteindre le serveur
+        console.log(req.status + " " + req.statusText);
+        
+    });
+
+
+    req.addEventListener("error", function () {
+        // La requête n'a pas réussi à atteindre le serveur
+        console.log('Erreur réseau');
+    });
+
+    req.send();
+}
