@@ -114,7 +114,7 @@ function App() {
             <nav className="sidebar-nav">
               <button className={`tab${onglet === 12 ? ' active' : ''}`} onClick={() => setOnglet(12)}>
                 <BsSpeedometer2 size={20} />
-                <span>Graphe</span>
+                <span>Tableau de bord</span>
               </button>
               <button className={`tab${onglet === 3 ? ' active' : ''}`} onClick={() => setOnglet(3)}>
                 <RiSurveyFill size={20} />

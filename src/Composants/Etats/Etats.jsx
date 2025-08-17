@@ -283,117 +283,123 @@ export default function Etats(props) {
     }
 
     return (
-        <>
-            <section className="etats">
-                <h1>Historique des sorties de produits</h1>
-                <div className="container-historique">
-                    <div className="table-commandes">
-                        <div className="entete-historique">
-                            <div style={{fontSize: '14px'}}>
-                                <p>
-                                    Du :
+        <section className="listing-section">
+            <h1>Historique des sorties de produits</h1>
+            <div className="listing-container">
+                <div className="entete-historique">
+                    <div className="form-controls">
+                        <div className="form-group">
+                            <p>
+                                <label>Du :</label>
+                                <div className="date-time-group">
                                     <input id='date-d-etats' type="date" ref={date_select1} />
                                     <input id='heure-d-etats' type="time" ref={heure_select1} />
-                                </p>
-                                <p>
-                                    <label htmlFor="">Au : </label>
+                                </div>
+                            </p>
+                            <p>
+                                <label>Au :</label>
+                                <div className="date-time-group">
                                     <input id='date-f-etats' type="date" ref={date_select2} />
                                     <input id='heure-f-etats' type="time" ref={heure_select2} />
-                                </p>
+                                </div>
+                            </p>
+                        </div>
+                        <div className="form-group">
+                            <p>
+                                <CFormSwitch
+                                    label="Filtrer par vendeur"
+                                    id="formSwitchCheckDefault"
+                                    checked={filtre}
+                                    reverse={true}
+                                    onChange={(e) => setFiltre(!filtre)}
+                                />
+                            </p>
+                            {filtre && (
                                 <p>
-                                    {/* { */}
-                                    {/* // props.role === admin &&  */}
-                                    <Fragment>
-                                        <CFormSwitch
-                                            label="Filtrer"
-                                            id="formSwitchCheckDefault"
-                                            checked={filtre}
-                                            reverse={true}
-                                            onChange={(e) => setFiltre(!filtre)}
-                                        />
-                                    </Fragment>
-                                    {/* } */}
-                                </p>
-                                <p style={{display: `${filtre ? 'block' : 'none'}`}}>
-                                <p style={{display: 'none'}}>
-                                    <label htmlFor="non_paye">non payés : </label>
-                                    <input type="checkbox" id="non_paye" checked={non_paye} onChange={(e) => setNonPaye(!non_paye)} />
-                                </p>
-                                <label htmlFor="">Vendeur : </label>
-                                    <CFormSelect 
-                                        className='w-10' 
-                                        name="caissier" 
-                                        id="caissier" 
+                                    <label htmlFor="caissier">Vendeur</label>
+                                    <CFormSelect
+                                        className='w-10'
+                                        name="caissier"
+                                        id="caissier"
                                         onChange={(e) => setCaissier(e.target.value)}
+                                        value={caissier}
                                     >
-                                        {
-                                        // props.role !== admin ? 
-                                        //     <option value={props.nomConnecte}>{props.nomConnecte.toUpperCase()}</option> 
-                                        // :
-                                            listeComptes.map(item => (
-                                                <option value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
+                                        {listeComptes.map(item => (
+                                            <option key={item.nom_user} value={item.nom_user}>{item.nom_user.toUpperCase()}</option>
                                         ))}
                                     </CFormSelect>
                                 </p>
-                            </div>
-                            <button className='bootstrap-btn' onClick={rechercherHistorique}>rechercher</button>
-                            <div>Génériques : <span style={{fontWeight: '700'}}>{total ? recetteGenerique + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div>Spécialités : <span style={{fontWeight: '700'}}>{total ? recetteSp + ' Fcfa' : '0 Fcfa'}</span></div>
-                            <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
-                            {/* <div>Recette : <span style={{fontWeight: '700'}}>{total ? recetteReel + ' Fcfa' : '0 Fcfa'}</span></div> */}
+                            )}
+                            <p style={{display: 'none'}}>
+                                <label htmlFor="non_paye">non payés : </label>
+                                <input type="checkbox" id="non_paye" checked={non_paye} onChange={(e) => setNonPaye(!non_paye)} />
+                            </p>
                         </div>
-                        <div className='erreur-message'>{messageErreur}</div>
-
-                        <table>
-                            <thead>
-                                <tr>
-                                    {/* <td>Le</td>
-                                    <td>À</td>
-                                    <td>Par</td> */}
-                                    <td>Désignation</td>
-                                    <td>Qte sortie</td>
-                                    <td>Montant</td>
-                                    {/* <td>Status</td> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {historique.length > 0 ? historique.map(item => (
-                                    <tr>
-                                        {/* <td>{mois(item.date_heure.substring(0, 10))}</td>
-                                        <td>{item.date_heure.substring(11)}</td>
-                                        <td>{item.nom_vendeur}</td> */}
-                                        <td>{item.designation}</td>
-                                        <td>{item.quantite}</td>
-                                        <td>{item.prix_total + ' Fcfa'}</td>
-                                        {/* <td>{item.status_vente}</td> */}
-                                    </tr>
-                                )) : null}
-                            </tbody>
-                        </table>
+                        <div className="totaux-info">
+                            <div>
+                                <span>Génériques : </span>
+                                <span>{total ? recetteGenerique + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                            <div>
+                                <span>Spécialités : </span>
+                                <span>{total ? recetteSp + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                            <div>
+                                <span>Total : </span>
+                                <span>{total ? total + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div style={{textAlign: 'center'}}>
-                        <ReactToPrint
-                            trigger={() => <button className='bootstrap-btn' style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
-                            content={() => componentRef.current}
-                            onAfterPrint={enregistrerHeureFin}
-                        />
-                    </div>
+                    <button className='bootstrap-btn valider' onClick={rechercherHistorique}>Rechercher</button>
                 </div>
-                <div style={{display: 'none'}}>
-                    <ImprimerEtat
-                        ref={componentRef}
-                        dateDepart={dateDepart}
-                        dateFin={dateFin}
-                        caissier={caissier}
-                        historique={historique}
-                        total={total}
-                        recetteReel={recetteReel}
-                        recetteGenerique={recetteGenerique}
-                        recetteSp={recetteSp}
-                        filtre={filtre}
+                <div className='erreur-message'>{messageErreur}</div>
+                <div className="table-commandes">
+                    <table role="table" aria-label="Historique des sorties de produits">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>Désignation</td>
+                                <td>Qte sortie</td>
+                                <td>Montant</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {historique.length > 0 ? historique.map((item, idx) => (
+                                <tr key={idx}>
+                                    <td>{item.designation}</td>
+                                    <td>{item.quantite}</td>
+                                    <td>{item.prix_total + ' Fcfa'}</td>
+                                </tr>
+                            )) : (
+                                <tr className="empty-row">
+                                    <td colSpan={3} className='fw-bold'>Aucune donnée correspondante</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="print-section">
+                    <ReactToPrint
+                        trigger={() => <button className='print-button' aria-label="Imprimer l'historique">📄 Imprimer</button>}
+                        content={() => componentRef.current}
+                        onAfterPrint={enregistrerHeureFin}
                     />
                 </div>
-            </section>
-        </>
+            </div>
+            <div style={{display: 'none'}}>
+                <ImprimerEtat
+                    ref={componentRef}
+                    dateDepart={dateDepart}
+                    dateFin={dateFin}
+                    caissier={caissier}
+                    historique={historique}
+                    total={total}
+                    recetteReel={recetteReel}
+                    recetteGenerique={recetteGenerique}
+                    recetteSp={recetteSp}
+                    filtre={filtre}
+                />
+            </div>
+        </section>
     )
 }

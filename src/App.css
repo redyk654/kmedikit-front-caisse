@@ -58,6 +58,7 @@ body {
   background-color: #007bff;
   cursor: pointer;
   width: auto;
+  margin: auto;
 }
 
 .bootstrap-btn.disabled {
