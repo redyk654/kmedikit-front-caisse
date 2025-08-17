@@ -242,12 +242,12 @@ const serveurLocal = 'http://localhost:3010';
 const serveur = 'http://serveur:3010';
 const onlineAPI =  'https://philmedical.alwaysdata.net/backend/';
 
-export const nomDns = backendLocal;
+export const nomDns = hdmbanga;
 export const nomServeurNode = serveur;
 
 export const getDateTime = async () => {
     try {
-        const response = await fetch(`${backendLocal}get_time.php`);
+        const response = await fetch(`${hdmbanga}get_time.php`);
         const data = await response.json();
         return data;
     } catch (error) {

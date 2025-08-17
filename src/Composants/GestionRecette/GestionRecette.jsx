@@ -96,15 +96,6 @@ export default function GestionRecette(props) {
         recupererDateJour('date-d-recette');
         recupererDateJour('date-f-recette');
         recupererHeureJour('heure-f-listing')
-
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            setTimeout(() => {
-                props.setConnecter(false);
-                props.setOnglet(1);
-            }, 6000);
-        }
     }, []);
 
     useEffect(() => {
