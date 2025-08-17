@@ -219,84 +219,104 @@ export default function Apercu(props) {
     }
 
     return (
-        <section className="historique">
+        <section className="listing-section">
             <h1>Listing des caissiers</h1>
-            <div className="container-historique">
-                <div className="table-commandes">
-                    <div className="entete-historique">
+            <div className="listing-container">
+                <div className="entete-historique">
+                    {messageErreur && (
                         <div className='erreur-message'>{messageErreur}</div>
-                        <div>
+                    )}
+                    <div className="form-controls">
+                        <div className="form-group">
                             <p>
-                                <label htmlFor="">Du : </label>
-                                <input id='date-d-listing' type="date" ref={date_select1} />
-                                <input id='heure-d-listing' type="time" ref={heure_select1} />
+                                <label>Période de recherche</label>
+                                <div className="date-time-group">
+                                    <input id='date-d-listing' type="date" ref={date_select1} aria-label="Date de début" />
+                                    <input id='heure-d-listing' type="time" ref={heure_select1} aria-label="Heure de début" />
+                                </div>
                             </p>
                             <p>
-                                <label htmlFor="">Au : </label>
-                                <input id='date-f-listing' type="date" ref={date_select2} />
-                                <input id='heure-f-listing' type="time" ref={heure_select2} />
+                                <label>Au</label>
+                                <div className="date-time-group">
+                                    <input id='date-f-listing' type="date" ref={date_select2} aria-label="Date de fin" />
+                                    <input id='heure-f-listing' type="time" ref={heure_select2} aria-label="Heure de fin" />
+                                </div>
                             </p>
-                            {/* <p>
-                                <label htmlFor="assure">Categorie : </label>
-                                <select name="" id="assure" onChange={(e) => setAssurance(e.target.value)}>
-                                    <option value="non">non assuré</option>
-                                    <option value="oui">assuré</option>
-                                </select>
-                            </p> */}
-                            <p style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        </div>
+                        <div className="form-group">
+                            <p>
                                 <CFormSwitch
-                                    label="Filtrer"
+                                    label="Filtrer par caissier"
                                     id="formSwitchCheckDefault"
                                     checked={filtre}
                                     reverse={true}
                                     onChange={(e) => setFiltre(!filtre)}
                                 />
                             </p>
-                            <p style={{display: `${filtre ? 'block' : 'none'}`}}>
-                                <label htmlFor="">Caissier : </label>
-                                <select name="caissier" id="caissier">
-                                    {props.role === "caissier" ? 
-                                    <option value={props.nomConnecte.toLowerCase()}>{props.nomConnecte.toUpperCase()}</option> :
-                                    listeComptes.map(item => (
-                                        <option value={item.nom_user.toLowerCase()}>{item.nom_user.toUpperCase()}</option>
-                                    ))}
-                                </select>
-                            </p>
+                            {filtre && (
+                                <p>
+                                    <label htmlFor="caissier">Caissier</label>
+                                    <select name="caissier" id="caissier" aria-label="Sélectionner un caissier">
+                                        {props.role === "caissier" ?
+                                            <option value={props.nomConnecte.toLowerCase()}>{props.nomConnecte.toUpperCase()}</option> :
+                                            listeComptes.map(item => (
+                                                <option key={item.nom_user} value={item.nom_user.toLowerCase()}>{item.nom_user.toUpperCase()}</option>
+                                            ))}
+                                    </select>
+                                </p>
+                            )}
                         </div>
-                        <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
-                        <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
-                        {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
-                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
+                        <div className="totaux-info">
+                            <div>
+                                <span>Total : </span>
+                                <span>{total ? total + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                            <div>
+                                <span>Recette : </span>
+                                <span>{reccetteTotal ? reccetteTotal + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                        </div>
                     </div>
-                    <table>
+                    <button className='bootstrap-btn valider' onClick={rechercherHistorique}>Rechercher</button>
+                </div>
+                <div className="table-commandes">
+                    <table role="table" aria-label="Aperçu des ventes">
                         <thead>
                             <tr>
+                                <td></td>
+
                                 <td>Désignation</td>
                                 <td>Total</td>
                             </tr>
                         </thead>
                         <tbody>
-                            {!isLoading ? historique.length > 0 ? historique.map(item => (
-                                <tr key={item.id}>
-                                    <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
-                                    <td>{item.prix_total + ' Fcfa'}</td>
+                            {!isLoading ? (
+                                historique.length > 0 ? (
+                                    historique.map(item => (
+                                        <tr key={item.id}>
+                                            <td>{extraireCode(item.designation) + ' (' + item.qte + ')'}</td>
+                                            <td>{item.prix_total + ' Fcfa'}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr className="empty-row">
+                                        <td colSpan={2} className='fw-bold'>Aucune donnée correspondante</td>
+                                    </tr>
+                                )
+                            ) : (
+                                <tr className="loading-row">
+                                    <td colSpan={2} className='fw-bold'>Chargement...</td>
                                 </tr>
-                            )) :
-                                <div className='text-center fw-bold'>
-                                    {'Aucune donnée correspondante'}
-                                </div>
-                                :
-                                <div className='text-center fw-bold'>
-                                    {'Chargement...'}
-                                </div>
-                            }
+                            )}
                         </tbody>
                     </table>
                 </div>
                 {historique.length > 0 && (
-                    <div style={{textAlign: 'center'}}>
+                    <div className="print-section">
                         <ReactToPrint
-                            trigger={() => <button className='bootstrap-btn valider' style={{marginTop: '8px', color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                            trigger={() => (
+                                <button className='print-button' aria-label="Imprimer l'aperçu">📄 Imprimer</button>
+                            )}
                             content={() => componentRef.current}
                             onAfterPrint={enregistrerHeureFin}
                         />

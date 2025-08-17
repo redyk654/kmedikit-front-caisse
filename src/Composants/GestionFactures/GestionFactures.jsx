@@ -253,151 +253,158 @@ export default function GestionFactures() {
     const restaurerActe = (idFacture, designation) => gererActe(idFacture, designation, 0);
   
     return (
-        <div className="container-facture">
-            <div className="liste-medoc">
-                <p className="search-zone">
+        <div className="commande">
+            <div className="left-side">
+                <div className="search-zone">
                     <input type="text" placeholder="Nom patient" onChange={filtrerListe} />
-                </p>
-                <h3>{'Factures'}</h3>
-                <ul>
-                    {!isLoadingData ? 
-                        factures.length > 0 ? 
-                            factures.map(item => (
-                                <li id={item.id} key={item.id} onClick={afficherInfos}>{item.patient}</li>
-                            )) : 
-                            <div className='text-center'>Aucune donnée disponible</div>
-                        : 
-                        <div className='text-center fw-bold'>Chargement...</div>
-                    }
-                </ul>
-            </div>
-            <div className="details">
-                <h3>Détails facture</h3>
-                <div style={{textAlign: 'center', paddingTop: 10}}>
-                    <div>
-                        <div>Facture N°<span style={{color: '#038654', fontWeight: 700}}>{factureSelectionne.length > 0 && factureSelectionne[0].id}</span></div>
-                    </div>
-                    <div>
-                        <div>Le <strong>{factureSelectionne.length > 0 && mois(factureSelectionne[0].date_heure.substring(0, 10))}</strong> à <strong>{factureSelectionne.length > 0 && factureSelectionne[0].date_heure.substring(11)}</strong></div>
-                    </div>
-                    <div style={{marginTop: 5}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].patient}</span></div>
-                    <div style={{marginTop: 5}}>code patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].code_patient}</span></div>
-                    <div style={{marginTop: 5}}>
-                        prescripteur : 
-                        {isModifierPrescripteur ?
-                        <>
-                            <select
-                                defaultChecked={factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : ''}
-                                value={prescripteurSelectionne}
-                                onChange={(e) => {
-                                    setprescripteurSelectionne(e.target.value);
-                                }}
-                                style={{marginLeft: 10, padding: 5, borderRadius: 5, border: '1px solid #ccc'}}
-                            >
-                                <option value="">Sélectionner un prescripteur</option>
-                                {listePrescripteurs.map((prescripteur, index) => (
-                                    <option value={prescripteur.id}>
-                                        {prescripteur.designation}
-                                    </option>
-                                ))}
-                            </select>
-                            <button onClick={modifierPrescripteur}>Enregistrer les modifications</button>
-                        </>
-                        :
-                        <>
-                            <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : 'null'}</span>
-                            <button onClick={() => setisModifierPrescripteur(true)}>modifier</button>
-                        </>
+                </div>
+                <div className="liste-medoc">
+                    <h1>Factures</h1>
+                    <ul>
+                        {!isLoadingData ?
+                            factures.length > 0 ?
+                                factures.map(item => (
+                                    <li id={item.id} key={item.id} onClick={afficherInfos}>{item.patient}</li>
+                                )) :
+                                <div className='text-center'>Aucune donnée disponible</div>
+                            :
+                            <div className='text-center fw-bold'>Chargement...</div>
                         }
-                    </div>
-                    {factureSelectionne.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase() ? 
-                        <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
-                        <table style={table_styles}>
-                            <thead>
-                                <tr>
-                                    <th style={table_styles1}>Désignation</th>
-                                    <th>Pu</th>
-                                    <th>Qtés</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {detailsFacture.map(item => (
-                                    <tr key={item.id}>
-                                        <td style={table_styles1}>
-                                            {extraireCode(item.designation)}
-                                            {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
-                                        </td>
-                                        <td style={table_styles2}>{item.prix}</td>
-                                        <td style={table_styles2}>{item.qte}</td>
-                                        <td style={table_styles2}>{item.prix_total}</td>
-                                        <td>
-                                            {parseInt(item.statu_acte) ? 
-                                                (<CIcon
-                                                    onClick={() => restaurerActe(item.id_facture, item.designation)}
-                                                    icon={cilReload}
-                                                    className="text-success"
-                                                    role="button"
-                                                    size='lg'
-                                                />) : 
-                                                (<CIcon
-                                                    onClick={() => annulerActe(item.id_facture, item.designation)}
-                                                    icon={cilXCircle}
-                                                    className="text-danger"
-                                                    role="button"
-                                                    size='lg'
-                                                />)
-                                            }
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className='mt-4'>
-                        <div>Net à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].a_payer + ' Fcfa'}</span></div>
-                    </div>
-                    <div>
-                        <div>Réduction <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reduction + ' %'}</span></div>
-                    </div>
-                    <div>
-                        <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
-                    </div>
-                    <div>
-                        <div>Caissier <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].caissier.toUpperCase()}</span></div>
-                    </div>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <div style={{display: 'block'}}>
-                            <ReactToPrint
-                                trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
-                                content={() => componentRef.current}
-                            />
+                    </ul>
+                </div>
+            </div>
+            <div className="right-side">
+                <h1>Détails facture</h1>
+                <div className="infos-medoc">
+                    <div style={{textAlign: 'center', paddingTop: 10}}>
+                        <div>
+                            <div>Facture N°<span style={{color: '#038654', fontWeight: 700}}>{factureSelectionne.length > 0 && factureSelectionne[0].id}</span></div>
                         </div>
-                    </div>
-                    <div>
-                        {factureSelectionne.length > 0 && (
-                            <div style={{display: 'none'}}>
-                                <FactureEnreg
-                                    ref={componentRef}
-                                    detailsFacture={detailsFacture}
-                                    idFacture={factureSelectionne[0].id}
-                                    patient={factureSelectionne[0].patient}
-                                    codePatient={factureSelectionne[0].code_patient}
-                                    prixTotal={factureSelectionne[0].prix_total}
-                                    reduction={factureSelectionne[0].reduction}
-                                    aPayer={factureSelectionne[0].a_payer}
-                                    montantVerse={0}
-                                    relicat={factureSelectionne[0].relicat}
-                                    assurance={factureSelectionne[0].assurance}
-                                    type_assurance={factureSelectionne[0].type_assurance}
-                                    resteaPayer={factureSelectionne[0].reste_a_payer}
-                                    date={factureSelectionne[0].date_heure}
-                                    nomConnecte={factureSelectionne[0].caissier}
-                                    montantFrais={factureSelectionne[0].frais}
+                        <div>
+                            <div>Le <strong>{factureSelectionne.length > 0 && mois(factureSelectionne[0].date_heure.substring(0, 10))}</strong> à <strong>{factureSelectionne.length > 0 && factureSelectionne[0].date_heure.substring(11)}</strong></div>
+                        </div>
+                        <div style={{marginTop: 5}}>patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].patient}</span></div>
+                        <div style={{marginTop: 5}}>code patient : <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].code_patient}</span></div>
+                        <div style={{marginTop: 5}}>
+                            prescripteur :
+                            {isModifierPrescripteur ?
+                                <>
+                                    <select
+                                        defaultChecked={factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : ''}
+                                        value={prescripteurSelectionne}
+                                        onChange={(e) => {
+                                            setprescripteurSelectionne(e.target.value);
+                                        }}
+                                        style={{marginLeft: 10, padding: 5, borderRadius: 5, border: '1px solid #ccc'}}
+                                    >
+                                        <option value="">Sélectionner un prescripteur</option>
+                                        {listePrescripteurs.map((prescripteur, index) => (
+                                            <option value={prescripteur.id}>
+                                                {prescripteur.designation}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <button onClick={modifierPrescripteur}>Enregistrer les modifications</button>
+                                </>
+                                :
+                                <>
+                                    <span style={{fontWeight: '600', marginTop: '15px'}}>{factureSelectionne.length > 0 && factureSelectionne[0].prescripteur ? factureSelectionne[0].prescripteur : 'null'}</span>
+                                    <button onClick={() => setisModifierPrescripteur(true)}>modifier</button>
+                                </>
+                            }
+                        </div>
+                        {factureSelectionne.length > 0 && factureSelectionne[0].assurance.toUpperCase() !== "aucune".toUpperCase() ?
+                            <div>couvert par : <strong>{factureSelectionne[0].assurance.toUpperCase()}</strong></div> : null}
+                        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 20, width: '100%'}}>
+                            <div className="details-commande">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Désignation</th>
+                                            <th>Pu</th>
+                                            <th>Qtés</th>
+                                            <th>Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {detailsFacture.map(item => (
+                                            <tr key={item.id}>
+                                                <td>
+                                                    {extraireCode(item.designation)}
+                                                    {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}
+                                                </td>
+                                                <td>{item.prix}</td>
+                                                <td>{item.qte}</td>
+                                                <td>{item.prix_total}</td>
+                                                <td>
+                                                    {parseInt(item.statu_acte) ?
+                                                        (<CIcon
+                                                            onClick={() => restaurerActe(item.id_facture, item.designation)}
+                                                            icon={cilReload}
+                                                            className="text-success"
+                                                            role="button"
+                                                            size='lg'
+                                                        />) :
+                                                        (<CIcon
+                                                            onClick={() => annulerActe(item.id_facture, item.designation)}
+                                                            icon={cilXCircle}
+                                                            className="text-danger"
+                                                            role="button"
+                                                            size='lg'
+                                                        />)
+                                                    }
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div className='mt-4'>
+                            <div>Net à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].a_payer + ' Fcfa'}</span></div>
+                        </div>
+                        <div>
+                            <div>Réduction <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reduction + ' %'}</span></div>
+                        </div>
+                        <div>
+                            <div>Reste à payer <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].reste_a_payer + ' Fcfa'}</span></div>
+                        </div>
+                        <div>
+                            <div>Caissier <span style={{fontWeight: 700, color: '#038654'}}>{factureSelectionne.length > 0 && factureSelectionne[0].caissier.toUpperCase()}</span></div>
+                        </div>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <div style={{display: 'block'}}>
+                                <ReactToPrint
+                                    trigger={() => <button className='bootstrap-btn valider' style={{color: '#f1f1f1', height: '5vh', width: '15vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                                    content={() => componentRef.current}
                                 />
                             </div>
-                        )}
+                        </div>
+                        <div>
+                            {factureSelectionne.length > 0 && (
+                                <div style={{display: 'none'}}>
+                                    <FactureEnreg
+                                        ref={componentRef}
+                                        detailsFacture={detailsFacture}
+                                        idFacture={factureSelectionne[0].id}
+                                        patient={factureSelectionne[0].patient}
+                                        codePatient={factureSelectionne[0].code_patient}
+                                        prixTotal={factureSelectionne[0].prix_total}
+                                        reduction={factureSelectionne[0].reduction}
+                                        aPayer={factureSelectionne[0].a_payer}
+                                        montantVerse={0}
+                                        relicat={factureSelectionne[0].relicat}
+                                        assurance={factureSelectionne[0].assurance}
+                                        type_assurance={factureSelectionne[0].type_assurance}
+                                        resteaPayer={factureSelectionne[0].reste_a_payer}
+                                        date={factureSelectionne[0].date_heure}
+                                        nomConnecte={factureSelectionne[0].caissier}
+                                        montantFrais={factureSelectionne[0].frais}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

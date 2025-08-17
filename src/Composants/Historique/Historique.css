@@ -1,3 +1,31 @@
+/* Barre de recherche moderne */
+.search-zone input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  border: 2px solid var(--text-muted, #3b82f6);
+  background: var(--surface-secondary, #f8fafc);
+  font-size: 1rem;
+  color: var(--text-primary, #1e293b);
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.08);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin: 0 auto;
+  display: block;
+}
+
+.search-zone input[type="text"]:focus {
+  border-color: var(--secondary-color, #10b981);
+  box-shadow: 0 4px 16px 0 rgba(16,185,129,0.12);
+  background: var(--surface-color, #fff);
+}
+
+.search-zone input[type="text"]::placeholder {
+  color: var(--text-muted, #94a3b8);
+  font-style: italic;
+  opacity: 1;
+}
 .historique .table-commandes table {
     width: 100%;
     padding: 0px 10px;
@@ -6,21 +34,6 @@
 
 .historique .container-historique {
     margin: 10px;
-}
-
-.historique .search-zone input {
-    width: 90%;
-    height: 5vh;
-    outline: none;
-    border-radius: 5px;
-    color: #0e771a;
-    font-size: 17px;
-    margin-bottom: 5px;
-    padding: 10px;
-}
-  
-.historique .search-zone input:focus {
-      border: 2px solid #0e771a;
 }
 
 .historique h1 {
@@ -51,18 +64,6 @@
     left: 40%;
 }
 
-.historique .medocs-sortis ul li {
-    color: #0e771a;
-    font-weight: 600;
-    width: 100%;
-    padding: 0px 5px;
-}
-
-.historique .medocs-sortis ul li:hover {
-    background-color: #0e771a;
-    color: #f1f1f1;
-    cursor: pointer;
-}
 
 .historique .table-commandes {
     height: 76vh;

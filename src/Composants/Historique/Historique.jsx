@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from 'react';
 import './Historique.css';
 import { ContextChargement } from '../../Context/Chargement';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import { extraireCode, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
+import { extraireCode, formaterNombre, mois, nomDns, nomServeurNode, recupererDateJour, recupererHeureJour } from '../../shared/Globals';
 import { CBadge } from '@coreui/react';
 import { io } from 'socket.io-client';
 
@@ -18,14 +18,10 @@ export default function Historique(props) {
     let heure_select2 = useRef();
     const componentRef = useRef();
 
-    const date_e = new Date('2025-05-26');
-    const date_j = new Date();
-
     const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
 
     const [historique, setHistorique] = useState([])
     const [historiqueSauvegarde, setHistoriqueSauvegarde] = useState([])
-    const [dateJour, setdateJour] = useState('');
     const [recetteTotal, setRecetteTotal] = useState(false);
     const [total, setTotal] = useState(0)
     const [dette, setDette] = useState(false);
@@ -38,15 +34,6 @@ export default function Historique(props) {
         recupererDateJour('date-d-hist');
         recupererDateJour('date-f-hist');
         recupererHeureJour('heure-f-listing');
-
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            // setTimeout(() => {
-            //     props.setConnecter(false);
-            //     props.setOnglet(1);
-            // }, 6000);
-        }
     }, []);
 
     useEffect(() => {
@@ -120,32 +107,48 @@ export default function Historique(props) {
     }
 
     return (
-        <section className="historique">
+        <section className="listing-section">
             <h1>Journal des activités de la caisse</h1>
-            <div className="container-historique">
-                <div className="table-commandes pb-3">
-                    <div className="entete-historique">
+            <div className="listing-container">
+                <div className="entete-historique">
+                    <div className="form-controls">
+                        <div className="form-group">
                             <p>
-                                <label htmlFor="">Du : </label>
-                                <input id='date-d-hist' type="date" ref={date_select1} />
-                                <input type="time" ref={heure_select1} />
+                                <label>Du :</label>
+                                <div className="date-time-group">
+                                    <input id='date-d-hist' type="date" ref={date_select1} />
+                                    <input type="time" ref={heure_select1} />
+                                </div>
                             </p>
                             <p>
-                                <label htmlFor="">Au : </label>
-                                <input id='date-f-hist' type="date" ref={date_select2} />
-                                <input id='heure-f-listing' type="time" ref={heure_select2} />
+                                <label>Au :</label>
+                                <div className="date-time-group">
+                                    <input id='date-f-hist' type="date" ref={date_select2} />
+                                    <input id='heure-f-listing' type="time" ref={heure_select2} />
+                                </div>
                             </p>
-                        <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
-                        <div>Total : <span style={{fontWeight: '700'}}>{recetteTotal ? total + ' Fcfa' : '0 Fcfa'}</span></div>
-                        <div>Recette : <span style={{fontWeight: '700'}}>{recetteTotal ? recetteTotal + ' Fcfa' : '0 Fcfa'}</span></div>
-                        {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
+                        </div>
+                        <div className="totaux-info">
+                            <div>
+                                <span>Total : </span>
+                                <span>{recetteTotal ? formaterNombre(total) + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                            <div>
+                                <span>Recette : </span>
+                                <span>{recetteTotal ? formaterNombre(recetteTotal) + ' Fcfa' : '0 Fcfa'}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className="search-zone text-center">
-                        <input className='' type="text" placeholder="Rechercher un acte..." onChange={filtrerListe} />
-                    </div>
-                    <table>
+                    <button className='bootstrap-btn valider' onClick={rechercherHistorique}>Rechercher</button>
+                </div>
+                <div className="search-zone text-center" style={{margin: '1rem 0'}}>
+                    <input className='' type="text" placeholder="Rechercher un acte..." onChange={filtrerListe} />
+                </div>
+                <div className="table-commandes">
+                    <table role="table" aria-label="Journal des activités de la caisse">
                         <thead>
                             <tr>
+                                <td></td>
                                 <td className='px-3'>Désignation</td>
                                 <td>qte</td>
                                 <td>Pu</td>
@@ -153,16 +156,15 @@ export default function Historique(props) {
                                 <td>Caissier</td>
                                 <td>Date</td>
                                 <td>Heure</td>
-                                {/* <td>Patient</td> */}
                                 <td>Réduc</td>
                             </tr>
                         </thead>
                         <tbody>
-                            {historique.length > 0 && historique.map(item => (
+                            {historique.length > 0 ? historique.map(item => (
                                 <tr key={item.id}>
                                     <td className='px-3'>
                                         {extraireCode(item.designation)}
-                                        {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}  
+                                        {parseInt(item.statu_acte) ? <CBadge color='danger'>annulé</CBadge> : null}
                                     </td>
                                     <td>{item.qte}</td>
                                     <td>{item.prix}</td>
@@ -170,19 +172,16 @@ export default function Historique(props) {
                                     <td>{item.caissier}</td>
                                     <td>{mois(item.date_fait)}</td>
                                     <td>{item.heure_fait}</td>
-                                    {/* <td>{item.patient}</td> */}
                                     <td style={{fontWeight: '700'}}>{parseInt(item.reduction) > 0 ? '-' + item.reduction + ' %': 0}</td>
                                 </tr>
-                            ))}
+                            )) : (
+                                <tr className="empty-row">
+                                    <td colSpan={8} className='fw-bold'>Aucune donnée correspondante</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
-                {/* <div style={{textAlign: 'center'}}>
-                    <ReactToPrint
-                        trigger={() => <button className='bootstrap-btn' style={{color: '#f1f1f1', height: '5vh', width: '20%', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
-                        content={() => componentRef.current}
-                    />
-                </div> */}
             </div>
         </section>
     )
