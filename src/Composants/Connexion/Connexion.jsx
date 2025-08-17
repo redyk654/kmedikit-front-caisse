@@ -63,7 +63,7 @@ export default function Connexion(props) {
     return (
         <div className='form'>
             <div className='developer-credit'>
-                Phimedical-Admin - Développé par Chrisppo Youmbissi
+                Phimedical - Développé par Chrisppo Youmbissi - Tous droits réservés © {date_e.getFullYear()} - Version 2.0.0
             </div>
             <div className='back-link'>
                 <a href={`${liensPhilmedical.acceuil}`} className='link-light' role='button'>
