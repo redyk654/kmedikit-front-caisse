@@ -54,8 +54,8 @@ export default class ImprimerEtat extends Component {
         return (
             <div style={{backgroundColor: '#f1f1f1', height: '100vh', marginTop: '0px'}}>
                 <div className='w-75 m-auto'>
-                    {/* <EnteteHdm /> */}
-                    <EnteteHopital />
+                    <EnteteHdm />
+                    {/* <EnteteHopital /> */}
                 </div>
                     <div style={{fontSize: 9, display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '10px',}}>
                         <div style={{textAlign: 'center', width: '410px'}}>
