@@ -179,14 +179,6 @@ export default function Commande(props) {
     }
 
     useEffect(() => {
-        if (date_j.getTime() <= date_e.getTime()) {
-            // ... existing code ...
-        } else {
-            // ... existing code ...
-        }
-    }, []);
-
-    useEffect(() => {
         const d = new Date();
 
         if (rerender || !rerender) {

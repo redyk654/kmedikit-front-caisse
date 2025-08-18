@@ -296,7 +296,7 @@ export const convertDate = (date) => {
 };
 
 export const liensPhilmedical = {
-    acceuil: 'https://philmedical.vercel.app/',
+    acceuil: 'serveur/philmedical/acceuil',
 }
 
 export const CATEGORIES_RUBRIQUES = ["LABO", "LABORATOIRE", "IMAGERIE", "RADIO", "ECHO", "ECHOGRAPHIE", "CONSULTATION SPÉCIALISTE", "SPECIALISTE",
