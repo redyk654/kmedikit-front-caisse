@@ -9,7 +9,15 @@ export default function AfficherPatient({ patientChoisi, fermerModalPatient }) {
       <div className="patient-details-header">
         <h2>👤 Détails du Patient</h2>
       </div>
-
+            <div className="patient-details-actions">
+        <button 
+          className="btn-select-patient" 
+          onClick={fermerModalPatient}
+          type="button"
+        >
+          ✅ Sélectionner ce patient
+        </button>
+      </div>
       <div className="patient-details-content">
         <div className="patient-info-grid">
           <div className="patient-info-item">
@@ -61,16 +69,6 @@ export default function AfficherPatient({ patientChoisi, fermerModalPatient }) {
             </div>
           </div> */}
         </div>
-      </div>
-
-      <div className="patient-details-actions">
-        <button 
-          className="btn-select-patient" 
-          onClick={fermerModalPatient}
-          type="button"
-        >
-          ✅ Sélectionner ce patient
-        </button>
       </div>
     </div>
   )

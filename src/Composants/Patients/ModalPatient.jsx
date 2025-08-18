@@ -30,7 +30,7 @@ export default function ModalPatient({ patient, filtrerPatient, stylePatient, li
             )) : <li className="modal-patient-li empty">Aucun patient trouvé</li>}
           </ul>
           <button className="modal-patient-add-btn" onClick={ouvrirEditerPatient}>
-            + Ajouter un patient
+            + Créer un patient
           </button>
         </div>
       </div>

@@ -969,7 +969,7 @@ export default function Commande(props) {
                             </div>
                         </div>
                         
-                        <div className="prescripteur-container">
+                        {/* <div className="prescripteur-container">
                             <CFormInput
                                 type="text"
                                 id="prescripteur"
@@ -993,7 +993,7 @@ export default function Commande(props) {
                                     ))}
                                 </CListGroup>
                             )}
-                        </div>
+                        </div> */}
                     </div>
                     
                     

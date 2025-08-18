@@ -120,7 +120,7 @@ export default function Connexion(props) {
                         name="nom"
                         id="nom"
                         value={nom}
-                        autoComplete='username'
+                        autoComplete='off'
                         onChange={handleChange}
                         placeholder=" "
                         required
@@ -134,7 +134,7 @@ export default function Connexion(props) {
                         name="mdp"
                         id="mdp"
                         value={mdp}
-                        autoComplete='current-password'
+                        autoComplete='off'
                         onChange={handleChange}
                         placeholder=" "
                         required
