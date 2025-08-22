@@ -461,8 +461,6 @@ export default function Commande(props) {
 
         const data = new FormData();
 
-        montantMateriel === 500 ? data.append('frais_materiel', 500) : data.append('frais_materiel', 0);
-
         data.append('id', id);
         data.append('caissier', props.nomConnecte);
         data.append('nom_patient', patientChoisi.nom);
