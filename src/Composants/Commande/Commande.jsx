@@ -129,9 +129,6 @@ export default function Commande(props) {
     const autre  = {designation: '', prix: ''};
     const prescripteurDefault = {id: 0, designation: ''};
 
-    const date_e = new Date('2036-12-19');
-    const date_j = new Date();
-
     const [medocCommandes, setMedocCommandes] = useState([]);
     const [nouveauPatient, setNouveauPatient] = useState(detailsDuPatient);
     const [patientChoisi, setPatientChoisi] = useState(detailsDuPatient);
@@ -175,24 +172,6 @@ export default function Commande(props) {
         const dateTime = await getDateTime();
         setCurrentDate(dateTime.date);
     }
-
-    useEffect(() => {
-        // startChargement();
-        // Récupération des médicaments dans la base via une requête Ajax
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            // setTimeout(() => {
-            //     setListeMedoc([]);
-            //     setListeMedocSauvegarde([])
-            //     props.setConnecter(false);
-            //     // props.setOnglet(1);
-            // }, 5000);
-            // setTimeout(() => {
-            //     props.setConnecter(false);
-            // }, 8000);
-        }
-    }, []);
 
     useEffect(() => {
         const d = new Date();

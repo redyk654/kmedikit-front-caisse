@@ -34,33 +34,13 @@ function App() {
   const [nomConnecte, setNomConnecte] = useState('');
   const [delayLoad, setDelay] = useState(0);
 
-  const date_e = new Date('2026-09-05');
-  const date_j = new Date();
-
   useEffect(() => {
-
-    // majTime();
-    // if (date_j.getTime() >= date_e.getTime()) {
-    //   setDelay(18850);
-    // } else {
-    //   setDelay(0);
-    // }
-
     if(role === ROLES.regisseur) {
       setOnglet(5);
     } else {
       setOnglet(1);
     }
   }, [role, connecter]);
-
-  // const majTime = () => {
-  //   fetch(`${nomDns}update_valeur.php`)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     setDelay(parseInt(data))
-  //   })
-  //   .catch(error => console.error('Erreur réseau'));
-  // }
 
   let contenu;
   switch(onglet) {

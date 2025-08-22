@@ -10,9 +10,6 @@ import ImprimerListingFactures from './ImprimerListingFactures';
 
 export default function ListingFactures(props) {
 
-    const date_e = new Date('2026-09-05');
-    const date_j = new Date();
-
     const componentRef = useRef();
 
     let date_select1 = useRef();
@@ -43,14 +40,6 @@ export default function ListingFactures(props) {
     }
 
     useEffect(() => {
-
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            setTimeout(() => {
-                props.setOnglet(25);
-            }, 3000);
-        }
 
         if (dateDepart.length > 0 && dateFin.length > 0) {
             
