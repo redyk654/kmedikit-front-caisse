@@ -161,25 +161,6 @@ export default function Commande(props) {
     const { code, nom, age, sexe, quartier, assurance, type_assurance } = nouveauPatient;
 
     useEffect(() => {
-        startChargement();
-        // Récupération des médicaments dans la base via une requête Ajax
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            setTimeout(() => {
-                setListeMedoc([]);
-                setListeMedocSauvegarde([])
-                props.setConnecter(false);
-                // props.setOnglet(1);
-            }, 5000);
-            setTimeout(() => {
-                props.setConnecter(false);
-            }, 8000);
-        }
-    }, []);
-
-
-    useEffect(() => {
         const d = new Date();
         let urgence;
 

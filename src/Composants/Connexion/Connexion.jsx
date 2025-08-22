@@ -46,22 +46,6 @@ export default function Connexion(props) {
         e.preventDefault();
         /* vérification de l'identifiant et du mot de passe */
 
-
-        const res = await dateDuJourServeur()
-        // console.log(res);
-        
-        let date_j = new Date(res)
-
-
-        // console.log(date_j);
-        
-        if (date_j.getTime() > date_e.getTime()) {
-            setErreur('No database found');
-            return;
-        }
-
-
-
         const data = new FormData();
         data.append('nom', nom.trim().toUpperCase());
         data.append('mdp', mdp.trim().toUpperCase());
@@ -92,14 +76,7 @@ export default function Connexion(props) {
 
         req.send(data);
     }
-
-    const ouvrirLaboratoire = () => {
-        props.setOnglet(13)
-        props.setRole('laborantin');
-        props.setNomConnecte('technicien-labo');
-        props.setConnecter(true);
-    }
-
+    
     return (
         <div className='form'>
             <div style={{fontWeight: '600', opacity: '.1', position: 'absolute', top: 0}}>Chrisppo Youmbissi Kamdem</div>\

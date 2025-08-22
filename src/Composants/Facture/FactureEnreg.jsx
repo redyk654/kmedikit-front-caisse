@@ -17,7 +17,8 @@ export default class FactureEnreg extends Component {
         return (
             <div className='' style={{overflow: 'hidden', width: '96vw', display: 'flex', flexDirection: 'column'}}>
                 <div style={stylesDuContainer}>
-                    <EnteteHdm />
+                    {/* <EnteteHdm /> */}
+                    <EnteteHopital />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -36,7 +37,8 @@ export default class FactureEnreg extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHdm />
+                    {/* <EnteteHdm /> */}
+                    <EnteteHopital />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}
@@ -55,7 +57,8 @@ export default class FactureEnreg extends Component {
                     />
                 </div>
                 <div style={stylesDuContainer}>
-                    <EnteteHdm />
+                    {/* <EnteteHdm /> */}
+                    <EnteteHopital />
                     <CorpsFactureEnreg
                         assurance={this.props.assurance}
                         type_assurance={this.props.type_assurance}

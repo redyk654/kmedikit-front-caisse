@@ -68,9 +68,6 @@ export default function GestionRecette(props) {
     let heure_select1 = useRef();
     let heure_select2 = useRef();
 
-    const date_e = new Date('2025-05-26');
-    const date_j = new Date();
-
     Modal.defaultStyles.overlay.backgroundColor = '#18202ed3';
 
     const [historique, sethistorique] = useState([]);
@@ -96,15 +93,6 @@ export default function GestionRecette(props) {
         recupererDateJour('date-d-recette');
         recupererDateJour('date-f-recette');
         recupererHeureJour('heure-f-listing')
-
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            setTimeout(() => {
-                props.setConnecter(false);
-                props.setOnglet(1);
-            }, 6000);
-        }
     }, []);
 
     useEffect(() => {

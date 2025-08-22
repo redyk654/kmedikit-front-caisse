@@ -18,9 +18,6 @@ export default function Historique(props) {
     let heure_select2 = useRef();
     const componentRef = useRef();
 
-    const date_e = new Date('2025-05-26');
-    const date_j = new Date();
-
     const {chargement, stopChargement, startChargement} = useContext(ContextChargement);
 
     const [historique, setHistorique] = useState([])
@@ -38,15 +35,6 @@ export default function Historique(props) {
         recupererDateJour('date-d-hist');
         recupererDateJour('date-f-hist');
         recupererHeureJour('heure-f-listing');
-
-        if (date_j.getTime() <= date_e.getTime()) {
-            
-        } else {
-            // setTimeout(() => {
-            //     props.setConnecter(false);
-            //     props.setOnglet(1);
-            // }, 6000);
-        }
     }, []);
 
     useEffect(() => {
