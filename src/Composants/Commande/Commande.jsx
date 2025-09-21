@@ -509,7 +509,7 @@ export default function Commande(props) {
                 - pour la mise à jour des stocks de médicaments
                 - pour la mise à jour de l'historique des commandes
         */
-    //    console.log("test");
+    //    console.log(medocCommandes);
        const id = idUnique();
        setidFacture(id);
        if(medocCommandes.length > 0) {
@@ -525,6 +525,7 @@ export default function Commande(props) {
 
                 data2.append('code_patient', patientChoisi.code);
                 data2.append('id_facture', id);
+                data2.append('id_service', item.id);
                 data2.append('designation', item.designation);
                 data2.append('pu', item.prix);
                 data2.append('qte', item.qte_commander);
