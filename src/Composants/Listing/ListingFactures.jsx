@@ -68,14 +68,15 @@ export default function ListingFactures(props) {
                 }
                 sethistorique(result);
                 recupererRecetteTotal(data);
-                let t = 0;
-                result.forEach(item => {
-                    t += parseInt(item.prix_total);
-                })
+                
+                const t = result.reduce((acc, curr) => acc + parseInt(curr.prix_total), 0);
+                const r = result.reduce((acc, curr) => acc + parseInt(curr.a_payer), 0);
 
                 setTotal(t);
+                setRecetteTotal(r);
 
                 stopChargement();
+                setIsLoading(false);
             });
     
             req.addEventListener("error", function () {
@@ -264,7 +265,7 @@ export default function ListingFactures(props) {
                         <button className='bootstrap-btn valider' onClick={rechercherHistorique}>rechercher</button>
                         <div>Total : <span style={{fontWeight: '700'}}>{total ? total + ' Fcfa' : '0 Fcfa'}</span></div>
                         {/* <div>Dette : <span style={{fontWeight: '700'}}>{dette ? dette + ' Fcfa' : '0 Fcfa'}</span></div> */}
-                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal + ' Fcfa'}</span></div>
+                        <div>Recette : <span style={{fontWeight: '700'}}>{reccetteTotal ? reccetteTotal + ' Fcfa': ' 0 Fcfa'}</span></div>
                     </div>
                     <table>
                         <thead>
