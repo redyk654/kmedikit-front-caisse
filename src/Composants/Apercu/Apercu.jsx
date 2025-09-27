@@ -55,17 +55,17 @@ export default function Apercu(props) {
             req.addEventListener('load', () => {
                 setMessageErreur('');
                 // console.log(JSON.parse(req.responseText));
-                recupererRecetteTotal(data);
+                // recupererRecetteTotal(data);
                 const result = JSON.parse(req.responseText);
                 sethistorique(result);
                 
-                let t = 0;
-                result.forEach(item => {
-                    t += parseInt(item.prix_total);
-                })
+                const t = result.reduce((acc, curr) => acc + parseInt(curr.prix_total), 0);
+                const r = result.reduce((acc, curr) => acc + parseInt(curr.recette), 0);
 
                 setTotal(t);
+                setRecetteTotal(r);
 
+                setIsLoading(false)
                 stopChargement();
             });
     
