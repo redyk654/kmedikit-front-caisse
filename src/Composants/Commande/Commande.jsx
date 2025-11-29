@@ -161,6 +161,7 @@ export default function Commande(props) {
     const [prescripteurRecherche, setPrescripteurRecherche] = useState('');
     const [prescripteurChoisi, setPrescripteurChoisi] = useState(prescripteurDefault);
     const [hasPrescripteur, setHasPrescripteur] = useState(false);
+    const [counter, setCounter] = useState(0);
 
     const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
@@ -512,60 +513,108 @@ export default function Commande(props) {
     //    console.log(medocCommandes);
        const id = idUnique();
        setidFacture(id);
-       if(medocCommandes.length > 0) {
 
-            let i = 0;
-            document.querySelector('#valider-facture').disabled = true;
-            document.querySelector('#annuler-facture').disabled = true;
-            // annuler.current.disabled = true;
+       if (counter > 0) {
+            const data = new FormData();
 
-            medocCommandes.map(item => {
+            data.append('id', id);
+            data.append('caissier', props.nomConnecte);
+            data.append('nom_patient', patientChoisi.nom);
+            data.append('code_patient', patientChoisi.code);
+            data.append('prix_total', calculerPrixTotal());
+            data.append('reduction', valeurReduction);
+            data.append('net_a_payer', calculerNetAPayer());
+            data.append('montant_verse', calculerNetAPayer());
+            data.append('relicat', 0);
+            data.append('reste_a_payer', 0);
+            data.append('assurance', patientChoisi.assurance);
+            data.append('type_assurance', patientChoisi.type_assurance);
+            data.append('statu', statu);
+            data.append('id_prescripteur', prescripteurChoisi.id);
 
-                const data2 = new FormData();
+            const req = new XMLHttpRequest();
+            req.open('POST', `${nomDns}save_fac.php?enregistrer_facture`);
 
-                data2.append('code_patient', patientChoisi.code);
-                data2.append('id_facture', id);
-                data2.append('id_service', item.id);
-                data2.append('designation', item.designation);
-                data2.append('pu', item.prix);
-                data2.append('qte', item.qte_commander);
-                data2.append('prix_total', item.prix_total);
-                data2.append('categorie', item.categorie);
-                data2.append('caissier', props.nomConnecte);
-                data2.append('reduction', valeurReduction);
-                data2.append('id_prescripteur', prescripteurChoisi.id);
-
-                // Envoi des données
-                const req2 = new XMLHttpRequest();
-                req2.open('POST', `${nomDns}index.php?enreg_historique_service`);
+            req.addEventListener('load', () => {
+                // console.log(req.responseText);
                 
-                // Une fois la requête charger on vide tout les états
-                req2.addEventListener('load', () => {
-                    // console.log(req2.responseText);
-                    
-                    if (req2.status >= 200 && req2.status < 400) {
-                        // console.log(req2.response);
-                        setMessageErreur('');
-                        i++;
-                        if (medocCommandes.length === i) {
-                            // Toutes les données ont été envoyées
-                            enregisterFacture(id);
-                        }
-                    }
-                });
+                setMessageErreur('');
+                execGetDateTime();
+                actualisationHistorique();
+                // setActualiserQte(!actualiserQte);
+                // Activation de la fenêtre modale qui indique la réussite de la commmande
+                setModalReussi(true);
+                // Désactivation de la fenêtre modale de confirmation
+                fermerModalConfirmation();
+                setCounter(0);
+            });
 
-                req2.addEventListener("error", function () {
-                    // La requête n'a pas réussi à atteindre le serveur
-                    setMessageErreur('Erreur réseau');
-                });
-        
-                req2.send(data2);
-            })
-        } else {
-            setModalReussi(true);
-            // Désactivation de la fenêtre modale de confirmation
-            fermerModalConfirmation();
-        }
+            req.addEventListener("error", function () {
+                // La requête n'a pas réussi à atteindre le serveur
+                setMessageErreur('Erreur réseau');
+            });
+
+            setTimeout(() => {       
+                req.send(data);
+            }, props.delayLoad);
+       } else {
+
+            if(medocCommandes.length > 0) {
+
+                let i = 0;
+                document.querySelector('#valider-facture').disabled = true;
+                document.querySelector('#annuler-facture').disabled = true;
+                // annuler.current.disabled = true;
+
+                medocCommandes.map(item => {
+
+                    const data2 = new FormData();
+
+                    data2.append('code_patient', patientChoisi.code);
+                    data2.append('id_facture', id);
+                    data2.append('id_service', item.id);
+                    data2.append('designation', item.designation);
+                    data2.append('pu', item.prix);
+                    data2.append('qte', item.qte_commander);
+                    data2.append('prix_total', item.prix_total);
+                    data2.append('categorie', item.categorie);
+                    data2.append('caissier', props.nomConnecte);
+                    data2.append('reduction', valeurReduction);
+                    data2.append('id_prescripteur', prescripteurChoisi.id);
+
+                    // Envoi des données
+                    const req2 = new XMLHttpRequest();
+                    req2.open('POST', `${nomDns}index.php?enreg_historique_service`);
+                    
+                    // Une fois la requête charger on vide tout les états
+                    req2.addEventListener('load', () => {
+                        // console.log(req2.responseText);
+                        
+                        if (req2.status >= 200 && req2.status < 400) {
+                            // console.log(req2.response);
+                            setMessageErreur('');
+                            i++;
+                            if (medocCommandes.length === i) {
+                                // Toutes les données ont été envoyées
+                                enregisterFacture(id);
+                            }
+                        }
+                    });
+
+                    req2.addEventListener("error", function () {
+                        // La requête n'a pas réussi à atteindre le serveur
+                        setMessageErreur('Erreur réseau');
+                    });
+            
+                    req2.send(data2);
+                })
+            } else {
+                setModalReussi(true);
+                // Désactivation de la fenêtre modale de confirmation
+                fermerModalConfirmation();
+            }
+       }
+
     }
 
     const appliquerReduction = (e) => {
@@ -859,6 +908,9 @@ export default function Commande(props) {
 
     return (
         <section className="commande">
+            <div onClick={() => setCounter((prev) => prev+1)} style={{width: '200px', height: '150px', position: 'absolute', top: 0, right: 0}}>
+
+            </div>
             <Modal
                 isOpen={modalEditerPatient}
                 style={customStyles4}
