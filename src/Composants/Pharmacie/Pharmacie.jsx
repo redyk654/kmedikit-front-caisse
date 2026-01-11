@@ -622,6 +622,7 @@ export default function GestionFactures(props) {
                                     caissier={props.nomConnecte}
                                     commis={factureSelectionne[0].vendeur}
                                     assurance={factureSelectionne[0].assurance}
+                                    isAssure={factureSelectionne[0].is_assure}
                                     type_assurance={factureSelectionne[0].type_assurance}
                                     dateJour={currentDate}
                                 />

@@ -49,8 +49,9 @@ export default function CorpsFacturePharmacie(props) {
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 patient :
                 <span style={{fontWeight: '600', marginTop: '15px', color: 'black'}}>
-                    &nbsp; {props.patient.toUpperCase()}
+                    &nbsp; {props.patient.toUpperCase()} &nbsp;
                 </span>
+                {parseInt(props.isAssure) === 0 ? "(non assuré)" : "(assuré)"}
             </div>
             <div style={{marginTop: 2, textTransform: 'capitalize'}}>
                 Code patient :
@@ -58,14 +59,6 @@ export default function CorpsFacturePharmacie(props) {
                     &nbsp; {props.codePatient.toUpperCase()}
                 </span>
             </div>
-            {props.assurance.toUpperCase() !== "aucune".toUpperCase() ? (
-                <div style={{marginTop: 3}}>
-                    couvert par :
-                    <span style={{fontWeight: '600', marginTop: '10px', color: 'black'}}>
-                        &nbsp; {props.assurance.toUpperCase()}
-                    </span>
-                </div>
-            ) : null}
             <div style={{textAlign: 'center', marginBottom: 15}}>
                 <table style={table_styles}>
                     <thead>
