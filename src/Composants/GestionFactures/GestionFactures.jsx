@@ -217,7 +217,7 @@ export default function GestionFactures() {
         // console.log(isModifierPrescripteur, prescripteurSelectionne);
         
         const data = new FormData();
-        data.append('id_fac', factureSelectionne[0].id_fac);
+        data.append('id_fac', factureSelectionne[0].id);
         data.append('prescripteur', prescripteurSelectionne);
         // console.log(data);
         
