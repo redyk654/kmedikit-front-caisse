@@ -22,27 +22,27 @@ import { CFormInput, CListGroup, CListGroupItem } from '@coreui/react';
 // Styles pour les fenêtres modales
 const customStyles1 = {
     content: {
-      top: '15%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#0e771a',
-    }, 
+        top: '15%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#0e771a',
+    },
 };
 
 const customStyles4 = {
     content: {
-      top: '47%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#e5f3fc',
-      color: '#000',
-      width: '65%'
+        top: '47%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#e5f3fc',
+        color: '#000',
+        width: '65%'
     },
 };
 
@@ -66,26 +66,26 @@ const stylePatient = {
 }
 
 const styleItem = {
-    color: '#0e771a', 
-    fontWeight: 'bold', 
-    width: '100%', 
+    color: '#0e771a',
+    fontWeight: 'bold',
+    width: '100%',
     cursor: 'pointer',
-    padding: '8px', 
+    padding: '8px',
     borderBottom: '1px solid #0e771a',
 }
 
 const customStyles3 = {
     content: {
-      top: '48%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      background: '#038654',
-      width: '80%',
-      height: '95vh'
-    }, 
+        top: '48%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        background: '#038654',
+        width: '80%',
+        height: '95vh'
+    },
 };
 
 
@@ -98,7 +98,7 @@ const customStyles2 = {
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         background: '#0e771a',
-      },
+    },
 };
 
 const styleBox = {
@@ -124,10 +124,10 @@ export default function Commande(props) {
     const annuler = useRef();
     const btnAjout = useRef();
     const btnMateriel = useRef();
-    const {chargement, stopChargement, startChargement } = useContext(ContextChargement);
+    const { chargement, stopChargement, startChargement } = useContext(ContextChargement);
 
-    const autre  = {designation: '', prix: ''};
-    const prescripteurDefault = {id: 0, designation: ''};
+    const autre = { designation: '', prix: '' };
+    const prescripteurDefault = { id: 0, designation: '' };
 
     const [medocCommandes, setMedocCommandes] = useState([]);
     const [nouveauPatient, setNouveauPatient] = useState(detailsDuPatient);
@@ -165,7 +165,7 @@ export default function Commande(props) {
 
     const vueListePrescripteurs = prescripteurRecherche.length > 0 ? listePrescripteurs.filter(item => item.designation.toLowerCase().includes(prescripteurRecherche.toLowerCase())) : [];
 
-    const {designation, prix} = autreState;
+    const { designation, prix } = autreState;
 
     const { code, nom, age, sexe, quartier, assurance, type_assurance } = nouveauPatient;
 
@@ -185,30 +185,30 @@ export default function Commande(props) {
             // Récupération des médicaments dans la base via une requête Ajax
             const req = new XMLHttpRequest();
             req.open('GET', `${nomDns}recuperer_services.php`);
-            
+
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) { // Le serveur a réussi à traiter la requête
                     // setInterval(() => {
-                        // console.log(req.responseText);
-                        
-                        const result = JSON.parse(req.responseText);
-                        // console.log(result);
-                        
-                        const temp = result
-                            .filter(item => item.designation.toLowerCase().includes("mortuaire"))
-                        
-                        ajouterQteActesMorgue(temp);                            
-                        setActesMorgue(temp);
-                        
-                        // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
-                        setListeMedoc(result);
-                        setListeMedocSauvegarde(result);
-                        stopChargement();
-                        document.querySelector('.recherche').value = "";
-                        document.querySelector('.recherche').focus();
-                        fetchPrescripteurs();
+                    // console.log(req.responseText);
+
+                    const result = JSON.parse(req.responseText);
+                    // console.log(result);
+
+                    const temp = result
+                        .filter(item => item.designation.toLowerCase().includes("mortuaire"))
+
+                    ajouterQteActesMorgue(temp);
+                    setActesMorgue(temp);
+
+                    // Mise à jour de la liste de médicament et sauvegarde de la même liste pour la gestion du filtrage de médicament
+                    setListeMedoc(result);
+                    setListeMedocSauvegarde(result);
+                    stopChargement();
+                    document.querySelector('.recherche').value = "";
+                    document.querySelector('.recherche').focus();
+                    fetchPrescripteurs();
                     // }, props.delayLoad);
-    
+
                 } else {
                     // Affichage des informations sur l'échec du traitement de la requête
                     console.error(req.status + " " + req.statusText);
@@ -217,8 +217,8 @@ export default function Commande(props) {
             req.addEventListener("error", function () {
                 // La requête n'a pas réussi à atteindre le serveur
                 setMessageErreur('Erreur réseau');
-            });    
-            
+            });
+
             req.send();
         }
     }, [rerender]);
@@ -244,7 +244,7 @@ export default function Commande(props) {
 
     const choisirPrescripteur = (e) => {
         const prescripteur = listePrescripteurs.filter(item => item.id == e.target.id)[0];
-        setPrescripteurChoisi(prescripteur);        
+        setPrescripteurChoisi(prescripteur);
         setPrescripteurRecherche('');
     }
 
@@ -296,7 +296,7 @@ export default function Commande(props) {
                     configurable: true,
                     enumerable: true
                 });
-                
+
                 Object.defineProperty(item, 'prix_total', {
                     value: parseInt(item.prix) * parseInt(item.qte_commander),
                     configurable: true,
@@ -309,7 +309,7 @@ export default function Commande(props) {
     const calculerPrixTotal = () => {
         let prixTotalT = 0;
         if (medocSelect || designation.length > 0 && prix.length > 0) {
-            
+
             prixTotalT = medocCommandes.reduce((som, curr) => som + parseInt(curr.prix_total), 0)
             prixTotalT += montantMateriel;
 
@@ -322,7 +322,7 @@ export default function Commande(props) {
 
         if (!isNaN(valeurReduction))
             netAPayer = netAPayer - (netAPayer * (parseFloat(valeurReduction) / 100))
-        
+
         return isNaN(netAPayer) ? 0 : parseInt(netAPayer);
     }
 
@@ -336,7 +336,7 @@ export default function Commande(props) {
     //         return resteAPayer < 0 ? 0 : parseInt(resteAPayer);
     //     }
     // }
-    
+
     // const calculerRelicat = () => {
     //     let relicat = 0;
     //     if (parseInt(montantVerse) > calculerNetAPayer())
@@ -382,7 +382,7 @@ export default function Commande(props) {
         if (verif_rubrique.length > 0 && prescripteurChoisi.id == 0) {
             setHasPrescripteur(true);
         }
-        
+
         // Desactive le bouton d'ajout quelques secondes
         btnAjout.current.disabled = true;
         setTimeout(() => {
@@ -397,13 +397,13 @@ export default function Commande(props) {
                 configurable: true,
                 enumerable: true
             });
-            
+
             Object.defineProperty(medocSelect[0], 'prix_total', {
                 value: parseInt(medocSelect[0].prix) * parseInt(qteDesire),
                 configurable: true,
                 enumerable: true
             });
-            
+
             medocSelect[0].reduction = false;
             if (medocSelect[0].designation.toLowerCase().includes('morgue')) {
                 setMedocCommandes([...medocCommandes, ...actesMorgue, medocSelect[0]]);
@@ -446,8 +446,8 @@ export default function Commande(props) {
     const idUnique = () => {
         // Création d'un identifiant unique pour la facture
         return Math.floor((1 + Math.random()) * 0x1000000000000)
-               .toString(32)
-               .substring(1).toUpperCase();
+            .toString(32)
+            .substring(1).toUpperCase();
     }
 
     const actualisationHistorique = () => {
@@ -482,7 +482,7 @@ export default function Commande(props) {
 
         req.addEventListener('load', () => {
             // console.log(req.responseText);
-            
+
             setMessageErreur('');
             execGetDateTime();
             actualisationHistorique();
@@ -498,7 +498,7 @@ export default function Commande(props) {
             setMessageErreur('Erreur réseau');
         });
 
-        setTimeout(() => {       
+        setTimeout(() => {
             req.send(data);
         }, props.delayLoad);
     }
@@ -510,11 +510,11 @@ export default function Commande(props) {
                 - pour la mise à jour des stocks de médicaments
                 - pour la mise à jour de l'historique des commandes
         */
-    //    console.log(medocCommandes);
-       const id = idUnique();
-       setidFacture(id);
+        //    console.log(medocCommandes);
+        const id = idUnique();
+        setidFacture(id);
 
-       if (counter > 0) {
+        if (counter > 0) {
             const data = new FormData();
 
             data.append('id', id);
@@ -537,7 +537,7 @@ export default function Commande(props) {
 
             req.addEventListener('load', () => {
                 // console.log(req.responseText);
-                
+
                 setMessageErreur('');
                 execGetDateTime();
                 actualisationHistorique();
@@ -554,12 +554,12 @@ export default function Commande(props) {
                 setMessageErreur('Erreur réseau');
             });
 
-            setTimeout(() => {       
+            setTimeout(() => {
                 req.send(data);
             }, props.delayLoad);
-       } else {
+        } else {
 
-            if(medocCommandes.length > 0) {
+            if (medocCommandes.length > 0) {
 
                 let i = 0;
                 document.querySelector('#valider-facture').disabled = true;
@@ -585,11 +585,11 @@ export default function Commande(props) {
                     // Envoi des données
                     const req2 = new XMLHttpRequest();
                     req2.open('POST', `${nomDns}index.php?enreg_historique_service`);
-                    
+
                     // Une fois la requête charger on vide tout les états
                     req2.addEventListener('load', () => {
                         // console.log(req2.responseText);
-                        
+
                         if (req2.status >= 200 && req2.status < 400) {
                             // console.log(req2.response);
                             setMessageErreur('');
@@ -605,7 +605,7 @@ export default function Commande(props) {
                         // La requête n'a pas réussi à atteindre le serveur
                         setMessageErreur('Erreur réseau');
                     });
-            
+
                     req2.send(data2);
                 })
             } else {
@@ -613,7 +613,7 @@ export default function Commande(props) {
                 // Désactivation de la fenêtre modale de confirmation
                 fermerModalConfirmation();
             }
-       }
+        }
 
     }
 
@@ -666,36 +666,36 @@ export default function Commande(props) {
     }
 
     const handleChange = (e) => {
-        setAutreState({...autreState, [e.target.name]: e.target.value});
+        setAutreState({ ...autreState, [e.target.name]: e.target.value });
     }
 
     const nouveauService = () => {
-        
+
         if (autreState.designation.length > 0 && prix.length > 0 && !isNaN(prix)) {
-            
+
             const data = new FormData();
             data.append('designation', autreState.designation.toUpperCase().trim());
             data.append('prix', prix);
             data.append('categorie', document.getElementById('categorie').value);
-    
+
             const req = new XMLHttpRequest();
             req.open('POST', `${nomDns}nouveau_service.php`);
-    
+
             req.addEventListener('load', () => {
                 if (req.status >= 200 && req.status < 400) {
                     console.log(req.responseText);
-                    
+
                     if (req.responseText.toUpperCase() === ServiceExiste.toUpperCase()) {
                         setMessageErreur('Ce service existe déjà');
                     } else {
                         setMessageErreur('');
-                        setAutreState({designation: '', prix: ''});
+                        setAutreState({ designation: '', prix: '' });
                         setRerender(true);
                         fermerModalPatient();
                     }
                 }
             });
-    
+
             req.send(data);
         }
     }
@@ -705,7 +705,7 @@ export default function Commande(props) {
             return (
                 <Fragment>
                     <CIcon onClick={fermerModalPatient} icon={cilX} size='lg' className=' text-bg-light' role='button' />
-                    <h2 style={{color: '#fff', textAlign: 'center'}}>informations du patient</h2>
+                    <h2 style={{ color: '#fff', textAlign: 'center' }}>informations du patient</h2>
                     <div className="detail-item">
                         <>
 
@@ -719,8 +719,8 @@ export default function Commande(props) {
                             />
                         </>
                         <>
-                            <AfficherPatient 
-                                patientChoisi={patientChoisi} 
+                            <AfficherPatient
+                                patientChoisi={patientChoisi}
                                 fermerModalPatient={fermerModalPatient}
                             />
                         </>
@@ -730,19 +730,19 @@ export default function Commande(props) {
         } else if (option === 'autre') {
             return (
                 <Fragment>
-                    <h2 style={{color: '#fff', textAlign: 'center'}}>Nouveau Service</h2>
-                    <div style={{color: '#fff'}}>
+                    <h2 style={{ color: '#fff', textAlign: 'center' }}>Nouveau Service</h2>
+                    <div style={{ color: '#fff' }}>
                         <p style={styleBox}>
                             <label htmlFor="">Désignation</label>
-                            <input type="text" style={{height: '4vh', width: '40%'}} value={designation.toUpperCase()} onChange={handleChange} name='designation' autoComplete='off' />
+                            <input type="text" style={{ height: '4vh', width: '40%' }} value={designation.toUpperCase()} onChange={handleChange} name='designation' autoComplete='off' />
                         </p>
                         <p style={styleBox}>
                             <label htmlFor="">Prix</label>
-                            <input type="text" style={{height: '4vh', width: '40%'}} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
+                            <input type="text" style={{ height: '4vh', width: '40%' }} value={prix} onChange={handleChange} name='prix' autoComplete='off' />
                         </p>
                         <p style={styleBox}>
                             <label htmlFor="categorie">Catégorie</label>
-                            <select name="categorie" id="categorie" style={{height: '4vh', width: '40%'}}>
+                            <select name="categorie" id="categorie" style={{ height: '4vh', width: '40%' }}>
                                 {CATEGORIES.map(item => (
                                     <option value={item}>{item}</option>
                                 ))}
@@ -750,7 +750,7 @@ export default function Commande(props) {
                         </p>
                         <p className='text-light text-center'>{messageErreur}</p>
                         <p style={styleBox}>
-                            <button className='bootstrap-btn valider' style={{width: '20%', cursor: 'pointer'}} onClick={nouveauService}>Ajouter</button>
+                            <button className='bootstrap-btn valider' style={{ width: '20%', cursor: 'pointer' }} onClick={nouveauService}>Ajouter</button>
                         </p>
                     </div>
                 </Fragment>
@@ -785,7 +785,7 @@ export default function Commande(props) {
 
                 setlistePatient(result);
             }
-            
+
         });
 
         req.send();
@@ -800,7 +800,7 @@ export default function Commande(props) {
         setoption('patient');
         setModalPatient(true);
     }
-    
+
     const fermerModalPatient = () => {
         setMessageErreur('');
         setModalPatient(false);
@@ -842,7 +842,7 @@ export default function Commande(props) {
     }
 
     const handleChangeReduction = (e) => {
-        if(e.target.value.length === 0)
+        if (e.target.value.length === 0)
             setvaleurReduction(0);
         else {
             if (parseInt(e.target.value) > calculerPrixTotal()) {
@@ -867,14 +867,14 @@ export default function Commande(props) {
     // }
 
     const handleChangePatient = (e) => {
-        setNouveauPatient({...nouveauPatient, [e.target.name]: e.target.value});
+        setNouveauPatient({ ...nouveauPatient, [e.target.name]: e.target.value });
     }
 
     const creerCodePatient = () => {
         // Création d'un identifiant unique pour la facture
         return Math.floor((1 + Math.random()) * 0x1000000000)
-               .toString(32)
-               .substring(1).toUpperCase();        
+            .toString(32)
+            .substring(1).toUpperCase();
     }
 
 
@@ -893,7 +893,7 @@ export default function Commande(props) {
             if (req.status >= 200 && req.status < 400) {
                 const result = JSON.parse(req.responseText);
                 if (result.message.toLowerCase() !== 'existe') {
-                    setPatientChoisi({...nouveauPatient, code: nouveauCodePatient});
+                    setPatientChoisi({ ...nouveauPatient, code: nouveauCodePatient });
                     fermerEditerPatient();
                     resetInfosDuPatient();
                     setMsgPatient('');
@@ -908,7 +908,7 @@ export default function Commande(props) {
 
     return (
         <section className="commande">
-            <div onClick={() => setCounter((prev) => prev+1)} style={{width: '200px', height: '150px', position: 'absolute', top: 0, right: 0}}>
+            <div onClick={() => setCounter((prev) => prev + 1)} style={{ width: '200px', height: '150px', position: 'absolute', top: 0, right: 0 }}>
 
             </div>
             <Modal
@@ -945,10 +945,10 @@ export default function Commande(props) {
                 style={customStyles1}
                 contentLabel="validation commande"
             >
-                <h2 style={{color: '#fff'}}>êtes-vous sûr de vouloir valider cette facture ?</h2>
-                <div style={{textAlign: 'center'}} className='modal-button'>
-                    <button ref={annuler}  style={{width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px'}} onClick={fermerModalConfirmation}>Annuler</button>
-                    <button className="valide" style={{width: '20%', height: '5vh', cursor: 'pointer'}} onClick={validerCommande}>Confirmer</button>
+                <h2 style={{ color: '#fff' }}>êtes-vous sûr de vouloir valider cette facture ?</h2>
+                <div style={{ textAlign: 'center' }} className='modal-button'>
+                    <button ref={annuler} style={{ width: '20%', height: '5vh', cursor: 'pointer', marginRight: '10px' }} onClick={fermerModalConfirmation}>Annuler</button>
+                    <button className="valide" style={{ width: '20%', height: '5vh', cursor: 'pointer' }} onClick={validerCommande}>Confirmer</button>
                 </div>
             </Modal>
             <Modal
@@ -957,11 +957,11 @@ export default function Commande(props) {
                 contentLabel="Commande réussie"
             >
                 <CIcon onClick={fermerModalReussi} icon={cilX} size='xl' className=' text-bg-light' role='button' />
-                <h2 style={{color: '#fff'}}>Facture enregistré !</h2>
+                <h2 style={{ color: '#fff' }}>Facture enregistré !</h2>
                 <ReactToPrint
-                    trigger={() => <button style={{color: '#303031', height: '5vh', width: '11vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600'}}>Imprimer</button>}
+                    trigger={() => <button style={{ color: '#303031', height: '5vh', width: '11vw', cursor: 'pointer', fontSize: 'large', fontWeight: '600' }}>Imprimer</button>}
                     content={() => componentRef.current}
-                    // onAfterPrint={fermerModalReussi}
+                // onAfterPrint={fermerModalReussi}
                 />
             </Modal>
             <div className="left-side">
@@ -975,7 +975,7 @@ export default function Commande(props) {
                 <div className="liste-medoc">
                     <h1>Liste des actes</h1>
                     <ul>
-                        {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100}/></div> : listeMedoc.map(item => (
+                        {chargement ? <div className="loader"><Loader type="TailSpin" color="#03ca7e" height={100} width={100} /></div> : listeMedoc.map(item => (
                             <li value={item.id} key={item.id} onClick={afficherInfos}>{extraireCode(item.designation).toUpperCase()}</li>
                         ))}
                     </ul>
@@ -990,34 +990,34 @@ export default function Commande(props) {
                         <div className="service">
                             <div>
                                 <p>Designation</p>
-                                <p style={{fontWeight: '700'}}>{extraireCode(item.designation).toUpperCase()}</p>
+                                <p style={{ fontWeight: '700' }}>{extraireCode(item.designation).toUpperCase()}</p>
                             </div>
-                            <div style={{paddingTop: 10}}>
+                            <div style={{ paddingTop: 10 }}>
                                 <p>Prix</p>
-                                <p style={{fontWeight: '700'}}>{item.prix + ' Fcfa'}</p>
+                                <p style={{ fontWeight: '700' }}>{item.prix + ' Fcfa'}</p>
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className="box" style={{marginLeft: 5}}>
+                <div className="box" style={{ marginLeft: 5 }}>
                     <form onSubmit={ajouterMedoc}>
-                        <input id='qteDesire' type="text" name="qteDesire" value={qteDesire} onChange={(e) => {setQteDesire(e.target.value)}} autoComplete='off' />
-                        <button type='submit' className='bootstrap-btn' ref={btnAjout} style={{margin: '4px', width: '8%'}}>ajouter</button>
+                        <input id='qteDesire' type="text" name="qteDesire" value={qteDesire} onChange={(e) => { setQteDesire(e.target.value) }} autoComplete='off' />
+                        <button type='submit' className='bootstrap-btn' ref={btnAjout} style={{ margin: '4px', width: '8%' }}>ajouter</button>
                         {/* <button className='bootstrap-btn' ref={btnMateriel} style={{backgroundColor: '#6d6f94', marginLeft: '0px', width: '7%'}} onClick={desactiverBoutonMateriel}>+500</button> */}
                     </form>
-                    <div style={{textAlign: 'center'}}>
-                        <button className='btn-patient' style={{ width: '30%'}} onClick={infosPatient}>Infos du patient</button>
+                    <div style={{ textAlign: 'center' }}>
+                        <button className='btn-patient' style={{ width: '30%' }} onClick={infosPatient}>Infos du patient</button>
                     </div>
                     <div>
                         <div>
-                            <input id='montant-reduction' type="text" name="reduction" onChange={handleChangeReduction} autoComplete='off' style={{display: reduction ? 'inline-block' : 'none'}} />
-                            <button className='bootstrap-btn' style={{display: reduction ? 'none' : 'inline-block', backgroundColor: '#6d6f94'}}  onClick={appliquerReduction}>reduction</button>
+                            <input id='montant-reduction' type="text" name="reduction" onChange={handleChangeReduction} autoComplete='off' style={{ display: reduction ? 'inline-block' : 'none' }} />
+                            <button className='bootstrap-btn' style={{ display: reduction ? 'none' : 'inline-block', backgroundColor: '#6d6f94' }} onClick={appliquerReduction}>reduction</button>
                         </div>
                     </div>
-                    <div style={{textAlign: 'center'}}>
+                    <div style={{ textAlign: 'center' }}>
                         <div className='d-flex justify-content-center align-items-center'>
                             <CFormInput
-                                style={{width: '300px'}}
+                                style={{ width: '300px' }}
                                 type="text"
                                 id="prescripteur"
                                 placeholder="Rechercher un prescripteur"
@@ -1034,16 +1034,16 @@ export default function Commande(props) {
                             {/* <a className='text-decoration-none' role='button' onClick={creerPrescripteur}>Creer prescripteur</a> */}
                         </div>
                         <div>
-                            Prescripteur: <span style={{color: '#000', fontWeight: '700'}}>{prescripteurChoisi.id == 0 ? 'Aucun' : prescripteurChoisi.designation}</span>
+                            Prescripteur: <span style={{ color: '#000', fontWeight: '700' }}>{prescripteurChoisi.id == 0 ? 'Aucun' : prescripteurChoisi.designation}</span>
                         </div>
                         {patientChoisi.nom.length > 0 ? (
                             <div>
-                                Patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.nom.toUpperCase()}</span>
+                                Patient: <span style={{ color: '#000', fontWeight: '700' }}>{patientChoisi.nom.toUpperCase()}</span>
                             </div>
                         ) : null}
                         {patientChoisi.nom.length > 0 ? (
                             <div>
-                                Code patient: <span style={{color: '#000', fontWeight: '700'}}>{patientChoisi.code.toUpperCase()}</span>
+                                Code patient: <span style={{ color: '#000', fontWeight: '700' }}>{patientChoisi.code.toUpperCase()}</span>
                             </div>
                         ) : null}
                         {/* {patientChoisi.assurance.toUpperCase() !== assuranceDefaut.toUpperCase() ? (
@@ -1072,7 +1072,7 @@ export default function Commande(props) {
                         </thead>
                         <tbody>
                             {medocCommandes.map(item => (
-                                <tr key={item.id} style={{cursor: 'pointer'}} onClick={() => retirerActe(item.id)}>
+                                <tr key={item.id} style={{ cursor: 'pointer' }} onClick={() => retirerActe(item.id)}>
                                     <td>{extraireCode(item.designation).toUpperCase()}</td>
                                     <td>{item.prix}</td>
                                     <td>{item.qte_commander}</td>
@@ -1085,16 +1085,16 @@ export default function Commande(props) {
                     <div className="valider-annuler">
                         <div className="totaux">
                             <div>
-                                Prix total : <span style={{color: "#012557", fontWeight: "600"}}>{calculerPrixTotal() + ' Fcfa'}</span>
+                                Prix total : <span style={{ color: "#012557", fontWeight: "600" }}>{calculerPrixTotal() + ' Fcfa'}</span>
                             </div>
                             <div>
-                                Réduction : <span style={{color: "#012557", fontWeight: "600"}}>{valeurReduction + '%'}</span>
+                                Réduction : <span style={{ color: "#012557", fontWeight: "600" }}>{valeurReduction + '%'}</span>
                             </div>
-                            <div style={{display: `${parseInt(patientChoisi.type_assurance) === 0 ? 'none' : 'block'}`}}>
-                                Assurance: <span style={{color: '#012557', fontWeight: '700'}}>{patientChoisi.type_assurance + '%'}</span>
+                            <div style={{ display: `${parseInt(patientChoisi.type_assurance) === 0 ? 'none' : 'block'}` }}>
+                                Assurance: <span style={{ color: '#012557', fontWeight: '700' }}>{patientChoisi.type_assurance + '%'}</span>
                             </div>
                             <div>
-                                Net à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerNetAPayer() + ' Fcfa'}</span>
+                                Net à payer : <span style={{ color: "#012557", fontWeight: "600" }}>{calculerNetAPayer() + ' Fcfa'}</span>
                             </div>
                             {/* <div>
                                 Montant versé : <span style={{color: "#012557", fontWeight: "600"}}>{montantVerse > 0 ? montantVerse + ' Fcfa': 0 + ' Fcfa'}</span>
@@ -1106,16 +1106,16 @@ export default function Commande(props) {
                                 Reste à payer : <span style={{color: "#012557", fontWeight: "600"}}>{calculerResteAPayer() + ' Fcfa'}</span>
                             </div> */}
                         </div>
-                        <button 
-                            className='bootstrap-btn annuler' 
+                        <button
+                            className='bootstrap-btn annuler'
                             id='annuler-facture'
                             onClick={annulerCommande}
                         >
                             Annnuler
                         </button>
-                        <button 
-                            className='bootstrap-btn valider' 
-                            id='valider-facture' 
+                        <button
+                            className='bootstrap-btn valider'
+                            id='valider-facture'
                             onClick={demanderConfirmation}
                         >
                             Valider
@@ -1124,7 +1124,7 @@ export default function Commande(props) {
                     </div>
 
                     <div>
-                        <div style={{display: 'none'}}>
+                        <div style={{ display: 'none' }}>
                             <Facture
                                 ref={componentRef}
                                 assurance={patientChoisi.assurance}
